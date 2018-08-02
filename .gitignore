@@ -13,7 +13,6 @@
 bin/
 
 # Gradle & builds
-build
 target
 out
 .gradle
