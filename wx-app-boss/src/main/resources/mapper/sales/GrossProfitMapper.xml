@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.sales.GrossProfitMapper">
+<!-- 毛利战报公共查询条件 -->
+<sql id="GrossProfitCommonCondition">
+				AND T.GROUP_ID = #{groupId}
+		  	  <if test="null!=startDate">
+		        AND t.BILLS_DATE &gt;= to_date(#{startDate},'YYYY-MM-DD')
+		      </if>
+		      <if test="null!=endDate">
+		        AND t.BILLS_DATE &lt;= to_date(#{endDate},'YYYY-MM-DD')
+		      </if>
+              <if test="null!=goodsClassId">
+                   AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
+      			    START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
+              </if>
+              <if test="null!=goodsBrandId">
+                 AND TG.GOODS_BRAND_ID =#{goodsBrandId}
+              </if>
+	          <if test="null!=keyWord">
+				<if test="groupField=='goodsClassName'">AND(UPPER(TGC.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TGC.CODE) LIKE UPPER('%${keyWord}%'))</if>
+				<if test="groupField=='goodsBrandName'">AND(UPPER(TGB.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TGB.CODE) LIKE UPPER('%${keyWord}%'))</if>
+				<if test="groupField=='sectionName'">AND(UPPER(TS.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TS.CODE) LIKE UPPER('%${keyWord}%'))</if>
+				<if test="groupField=='salesManName'">AND(UPPER(TE.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TE.CODE) LIKE UPPER('%${keyWord}%'))</if>             
+				<if test="groupField=='goodsName'">
+					                 AND (UPPER(TGC.NAME) LIKE UPPER('%${keyWord}%')OR 
+				                      UPPER(TGB.NAME) LIKE UPPER('%${keyWord}%')OR 
+				                      UPPER(TG.GOODS_MODEL) LIKE UPPER('%${keyWord}%')OR
+				                      UPPER(TG.NAME) LIKE UPPER('%${keyWord}%')OR 
+				                      UPPER(TG.REM_CODE) LIKE UPPER('%${keyWord}%')OR  
+				                      UPPER(TGS.NO) LIKE UPPER('%${keyWord}%') 
+				                      )
+				</if>
+	          </if>
+              <if test="null!=detailKeyWord">
+                 AND (UPPER(TGC.NAME) LIKE UPPER('%${detailKeyWord}%')OR 
+                      UPPER(TGB.NAME) LIKE UPPER('%${detailKeyWord}%')OR 
+                      UPPER(TG.GOODS_MODEL) LIKE UPPER('%${detailKeyWord}%')OR
+                      UPPER(TG.NAME) LIKE UPPER('%${detailKeyWord}%')OR  
+                      UPPER(TGS.NO) LIKE UPPER('%${detailKeyWord}%') 
+                      )
+              </if>	
+              <if test="null!=salesManId">
+              		AND TE.ID = #{salesManId}
+              </if> 
+              <if test="null!=goodsId">
+              		AND TG.ID=#{goodsId}
+              </if>                          	                        	
+              AND T.COMPANY_ID IN(${companyIds})
+              AND T.SECTION_ID IN(${sectionIds})
+</sql>
+
+<!-- 汇总字段 -->
+<sql id="groups">
+	<if test="groupField=='goodsClassName'">GOODSCLASSID AS ID,GOODSCLASSCODE AS CODE,GOODSCLASSNAME AS NAME</if>
+	<if test="groupField=='goodsBrandName'">GOODSBRANDID AS ID,GOODSBRANDCODE AS CODE,GOODSBRANDNAME AS NAME</if>
+	<if test="groupField=='goodsName'">GOODSID AS ID,GOODSCODE AS CODE,GOODSNAME AS NAME</if>
+	<if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
+	<if test="groupField=='salesManName'">SALESMANID AS ID,SALESMAMCODE AS CODE,SALESMANNAME AS NAME</if>
+</sql>
+<!-- 公共字段 -->
+<sql id="commonFields">
+               TS.ID                                          AS SECTIONID,
+               TS.CODE                                        AS SECTIONCODE,
+               TS.NAME                                        AS SECTIONNAME,
+               TG.ID                                          AS GOODSID,
+               TG.CODE                                        AS GOODSCODE,
+               TG.NAME                                        AS GOODSNAME,
+               TE.ID                                          AS SALESMANID,
+               TE.CODE                                        AS SALESMAMCODE,
+               TE.NAME                                        AS SALESMANNAME,
+               TGC.ID                                         AS GOODSCLASSID,
+               TGC.CODE                                       AS GOODSCLASSCODE,
+               TGC.NAME                                       AS GOODSCLASSNAME,
+               TGB.ID                                         AS GOODSBRANDID,
+               TGB.CODE                                       AS GOODSBRANDCODE,
+               TGB.NAME                                       AS GOODSBRANDNAME,
+</sql>
+
+<!-- 公共关联表 -->
+<sql id="commonTables">
+              JOIN T_COMPANY TC ON T.COMPANY_ID = TC.ID
+              JOIN I_STORAGE IST ON T1.STORAGE_ID = IST.ID
+              JOIN T_SECTION TS  ON IST.SECTION_ID = TS.ID
+              JOIN T_GOODSNAME TG  ON T1.GOODS_ID = TG.ID
+	          LEFT JOIN T_GOODSALIAS TGS  ON TG.ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+	          LEFT JOIN T_GOODSCLASS TGC  ON TG.GOODS_CATEGORY_ID =TGC.ID AND TGC.STATUS = 0
+	          LEFT JOIN T_GOODSBRAND TGB  ON TG.GOODS_BRAND_ID =TGB.ID
+</sql>
+
+<!-- 毛利战报主页零售部分代码 -->
+<sql id="retail">
+		SELECT
+				<include refid="commonFields"/>
+               DECODE(TG.IF_MANAGE_IMEI, '0',T1.GOODS_NUMBER,
+                  JXC_ALL_PCK.CHECK_DIVIDE(T1.GOODS_NUMBER,ABS(T1.GOODS_NUMBER)))AS GOODSQUANTITY,
+               NVL(T1.AMOUNT, 0) - NVL(T1.AMTCOST, 0)				AS GOODSPROFITAMOUNT                                       
+          FROM I_RETAIL T
+              JOIN I_RETAIL_DETAIL T1 ON T1.RETAIL_ID = T.ID
+              LEFT JOIN T_EMPLOYEE TE ON TE.ID =T.SALESMAN_ID   
+			<include refid="commonTables"/>
+         WHERE T.BILLS_STATUS IN ('6', '7')
+           <include refid="GrossProfitCommonCondition"></include>
+</sql>
+
+<!-- 毛利战报主页批发部分代码 -->
+<sql id="sales">
+			SELECT        <include refid="commonFields"/>	               
+			               T1.GOODS_NUMBER                                    AS GOODSQUANTITY, 
+			               NVL(T1.DISCOUNTED_AMOUNT,0) - NVL(T1.COST_PRICE,0) AS GOODSPROFITAMOUNT
+			      FROM I_SALES_MAIN T
+			        JOIN I_SALES_OUTSTRORAGE_NUM T1 ON T.ID=T1.BILLS_MAIN_ID
+			        LEFT JOIN T_EMPLOYEE         TE ON T.MANAGERS_UID=TE.ID  
+					<include refid="commonTables"/>
+			   WHERE  T.BILLS_TYPE IN ('19','20')
+			      <include refid="GrossProfitCommonCondition"></include>
+			 UNION ALL 
+			SELECT         <include refid="commonFields"/>			               
+			               -T1.GOODS_NUMBER                                      AS GOODSQUANTITY, 
+			               -(NVL(T1.DISCOUNTED_AMOUNT,0) - NVL(T1.COST_PRICE,0)) AS GOODSPROFITAMOUNT
+			      FROM I_SALES_MAIN T
+			        JOIN I_SALES_INSTRORAGE_NUM T1 ON T.ID=T1.BILLS_MAIN_ID
+			        LEFT JOIN T_EMPLOYEE         TE ON T.MANAGERS_UID=TE.ID 
+					<include refid="commonTables"/>
+			      WHERE  T.BILLS_TYPE IN ('21','20')
+			      <include refid="GrossProfitCommonCondition"></include>
+</sql>
+<!-- 毛利战报主页核心代码sql片段 -->
+<sql id="codeSqlAndQueryCondition">
+		<if test="NULL==salesType">
+			<include refid="retail"/>
+			UNION ALL
+			<include refid="sales"/>
+		</if>
+		<if test="salesType==1"><include refid="retail"/></if>
+		<if test="salesType==2"><include refid="sales"/></if>
+</sql>
+<!-- 获取毛利战报主页分页集合 -->
+<select id="getGrossProfitData" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+		SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY
+		<if test="canSeeAmount==1">  ,
+			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
+			TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSAVGPROFITAMOUNT
+		</if>
+		  FROM(
+		     SELECT <include refid="groups"/>,GOODSQUANTITY,GOODSPROFITAMOUNT
+		        FROM(
+					  	<include refid="codeSqlAndQueryCondition"/>
+		        )
+		  )
+		  		 GROUP BY ID,CODE,NAME
+		         ORDER BY ID,CODE,NAME
+</select>
+
+<!-- 获取毛利战报主页总计行对象 -->
+<select id="getGrossProfitTotalVo" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+		SELECT SUM(GOODSQUANTITY)AS GOODSQUANTITY
+		<if test="canSeeAmount==1">  ,
+			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
+			TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSAVGPROFITAMOUNT
+		</if>
+		  FROM(
+					  	<include refid="codeSqlAndQueryCondition"/>
+		  )
+</select>
+
+<!-- 获取毛利战报详情页分页集合 -->
+<select id="getGrossProfitDetailData" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+		SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY
+		<if test="canSeeAmount==1">  ,
+			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
+			TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSAVGPROFITAMOUNT
+		</if>
+		  FROM(
+		     SELECT GOODSID AS ID,GOODSCODE AS CODE,GOODSNAME AS NAME,GOODSQUANTITY,GOODSPROFITAMOUNT
+		        FROM(
+					  	<include refid="codeSqlAndQueryCondition"/>
+		        )
+		  )
+		  		 GROUP BY ID,CODE,NAME
+		         ORDER BY ID,CODE,NAME
+</select>
+
+<!-- 获取毛利战报详情页总计行对象 -->
+<select id="getGrossProfitDetailTotalVo" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+		SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY
+		<if test="canSeeAmount==1">  ,
+			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
+			TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSAVGPROFITAMOUNT
+		</if>
+		  FROM(
+		     SELECT <include refid="groups"/>,GOODSQUANTITY,GOODSPROFITAMOUNT
+		        FROM(
+					  	<include refid="codeSqlAndQueryCondition"/>
+		        )
+		  )
+		  		 GROUP BY ID,CODE,NAME
+		         ORDER BY ID,CODE,NAME
+</select>
+</mapper>

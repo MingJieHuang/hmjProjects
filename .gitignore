@@ -1,0 +1,30 @@
+# Intellij
+*.iml
+*.ipr
+*.iws
+.idea
+*.eml
+.shelf
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# Gradle & builds
+build
+target
+out
+.gradle
+classes
+.gradletasknamecache
+
+# log
+logs
+*.log
+
+# config file
+*.properties
+*.yml
+*.YML

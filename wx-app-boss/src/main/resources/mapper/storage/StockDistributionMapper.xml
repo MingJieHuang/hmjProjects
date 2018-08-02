@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.storage.StockDistributionMapper">
+
+	<!-- 查询库存分布主页结果集查询条件 -->
+	<sql id="queryCondition">
+			 where T.GROUP_ID =#{groupId}  AND T.STOCK_NUMBER >0 AND TS.IS_KCFLAG=1
+              <if test="null!=goodsClassId">
+                   AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
+      			    START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
+              </if>
+              <if test="null!=goodsBrandId">
+                 AND TG.GOODS_BRAND_ID =#{goodsBrandId}
+              </if>
+              <if test="null!=keyWord">
+                 AND (UPPER(TGC.NAME) LIKE UPPER('%${keyWord}%')OR 
+                      UPPER(TGB.NAME) LIKE UPPER('%${keyWord}%')OR 
+                      UPPER(TG.GOODS_MODEL) LIKE UPPER('%${keyWord}%')OR
+                      UPPER(TG.NAME) LIKE UPPER('%${keyWord}%')OR  
+                      UPPER(TG.REM_CODE) LIKE UPPER('%${keyWord}%')OR 
+                      UPPER(TGS.NO) LIKE UPPER('%${keyWord}%') 
+                      )
+              </if>
+              <if test="null!=detailKeyWord">
+                 AND (UPPER(TS.NAME) LIKE UPPER('%${detailKeyWord}%')OR 
+                      UPPER(TS.CODE) LIKE UPPER('%${detailKeyWord}%')
+                      )
+              </if>
+              <if test="null!=goodsId">
+              	 AND TG.ID = #{goodsId}
+              </if>
+              AND T.COMPANY_ID IN(${companyIds})
+              AND T.SECTION_ID IN(${sectionIds})
+	</sql>
+	<!-- 库存分布主页核心sql -->
+	<sql id="codeSqlAndQueryCondition">
+	    SELECT   T.GOODS_ID   		 AS goodsId,
+	             TG.NAME      		 AS goodsName,
+	             TG.CODE	  		 AS goodsCode,
+	             TG.CONFIGURE 	     AS goodsConfiguration,
+	             T.STOCK_NUMBER      AS goodsQuantity
+	         FROM I_STOCK_NUM T
+		         LEFT JOIN T_GOODSNAME   TG  ON T.GOODS_ID = TG.ID
+		         LEFT JOIN T_GOODSALIAS TGS  ON T.GOODS_ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+		         LEFT JOIN T_GOODSCLASS TGC  ON TG.GOODS_CATEGORY_ID =TGC.ID AND TGC.STATUS = 0
+		         LEFT JOIN T_GOODSBRAND TGB  ON TG.GOODS_BRAND_ID =TGB.ID
+		         LEFT JOIN T_SECTION 	 TS  ON T.SECTION_ID =TS.ID  AND T.GROUP_ID=T.GROUP_ID AND TS.STATUS=0 AND TS.IS_KCFLAG=1
+	         <include refid="queryCondition"/>	
+	</sql>
+	
+	<!-- 查询库存分布主页结果集(分页) -->
+	<select id="getStockDistrData" resultType="com.phone.erp.boss.vo.storage.StockDistributionVo">
+		SELECT goodsId,goodsName,goodsCode,goodsConfiguration,SUM(goodsQuantity)goodsQuantity
+				FROM(
+					<include refid="codeSqlAndQueryCondition"></include>
+				)
+	          GROUP BY goodsId,goodsName,goodsCode,goodsConfiguration
+	          ORDER BY goodsName	
+	</select>
+
+	<!--         库存分布详情页部门sql                                   -->	
+
+	<!-- 查询库存分布分布详情_部门对象集合 -->
+	<select id="getStockDistrDetailSectionData" resultType="com.phone.erp.boss.vo.storage.SectionGoodsVo">
+		SELECT id,name,code,sum(goodsQuantity)goodsQuantity
+	         FROM(
+				    SELECT   TS.ID   		     AS id,
+				             TS.NAME      		 AS name,
+				             TS.CODE	  		 AS code,
+				             T.STOCK_NUMBER      AS goodsQuantity
+				         FROM I_STOCK_NUM T
+					         LEFT JOIN T_GOODSNAME   TG  ON T.GOODS_ID = TG.ID
+					         LEFT JOIN T_GOODSALIAS TGS  ON T.GOODS_ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+					         LEFT JOIN T_GOODSCLASS TGC  ON TG.GOODS_CATEGORY_ID =TGC.ID AND TGC.STATUS = 0
+					         LEFT JOIN T_GOODSBRAND TGB  ON TG.GOODS_BRAND_ID =TGB.ID
+						     LEFT JOIN T_SECTION 	 TS  ON T.SECTION_ID =TS.ID  AND T.GROUP_ID=T.GROUP_ID AND TS.STATUS=0 
+						     LEFT JOIN I_STORAGE    ISO  ON T.STORAGE_ID =ISO.ID AND T.GROUP_ID=ISO.GROUP_ID		         
+				         <include refid="queryCondition"/>				
+	         )  
+	         GROUP BY id,name,code
+	</select>
+	
+	<!-- 查询库存分布分布详情_仓库对象集合 -->
+	<select id="getStockDistrDetailStorageData" resultType="com.phone.erp.boss.vo.storage.StorageGoodsVo">
+		SELECT id,sectionId,name,code,sum(goodsQuantity)goodsQuantity
+	         FROM(
+				    SELECT   TS.ID   		     AS sectionId,
+				             ISO.ID   		     AS id,
+				             ISO.NAME      		 AS name,
+				             ISO.CODE	  		 AS code,
+				             T.STOCK_NUMBER      AS goodsQuantity
+				         FROM I_STOCK_NUM T
+					         LEFT JOIN T_GOODSNAME   TG  ON T.GOODS_ID = TG.ID
+					         LEFT JOIN T_GOODSALIAS TGS  ON T.GOODS_ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+					         LEFT JOIN T_GOODSCLASS TGC  ON TG.GOODS_CATEGORY_ID =TGC.ID AND TGC.STATUS = 0
+					         LEFT JOIN T_GOODSBRAND TGB  ON TG.GOODS_BRAND_ID =TGB.ID
+						     LEFT JOIN T_SECTION 	 TS  ON T.SECTION_ID =TS.ID  AND T.GROUP_ID=T.GROUP_ID AND TS.STATUS=0 
+						     LEFT JOIN I_STORAGE    ISO  ON T.STORAGE_ID =ISO.ID AND T.GROUP_ID=ISO.GROUP_ID		         
+				         <include refid="queryCondition"/>				
+	         )  
+	         GROUP BY id,sectionId,name,code
+	</select>
+	
+	<!-- 查询库存分布分布详情_商品合计对象 -->
+	<select id="getGoodsSumVo" resultType="com.phone.erp.boss.vo.storage.GoodsSumVo">
+		SELECT id,name,code,sum(goodsQuantity)goodsQuantity
+	         FROM(
+				    SELECT   
+				             TG.ID   		     AS id,
+				             TG.NAME      		 AS name,
+				             TG.CODE	  		 AS code,
+				             T.STOCK_NUMBER      AS goodsQuantity
+				         FROM I_STOCK_NUM T
+					         LEFT JOIN T_GOODSNAME   TG  ON T.GOODS_ID = TG.ID
+					         LEFT JOIN T_GOODSALIAS TGS  ON T.GOODS_ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+					         LEFT JOIN T_GOODSCLASS TGC  ON TG.GOODS_CATEGORY_ID =TGC.ID AND TGC.STATUS = 0
+					         LEFT JOIN T_GOODSBRAND TGB  ON TG.GOODS_BRAND_ID =TGB.ID
+						     LEFT JOIN T_SECTION 	 TS  ON T.SECTION_ID =TS.ID  AND T.GROUP_ID=T.GROUP_ID AND TS.STATUS=0 AND TS.IS_KCFLAG=1
+						     LEFT JOIN I_STORAGE    ISO  ON T.STORAGE_ID =ISO.ID AND T.GROUP_ID=ISO.GROUP_ID		         
+				         <include refid="queryCondition"/>				
+	         )  
+	         GROUP BY id,name,code
+	</select>
+	
+</mapper>
