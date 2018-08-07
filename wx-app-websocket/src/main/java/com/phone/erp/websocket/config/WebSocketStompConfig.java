@@ -30,8 +30,8 @@ public class WebSocketStompConfig extends AbstractWebSocketMessageBrokerConfigur
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		// 设置端点,客户端通过http://localhost:8800/api/v1/ws/webSocketServer来和服务器进行websocket连接,去掉.setAllowedOrigins("*"),由Nginx设置跨域
-		registry.addEndpoint(projectUrlPrefix + "/webSocketServer").withSockJS();
+		// 设置端点,客户端通过http://localhost:8800/api/v1/ws/webSocketServer来和服务器进行websocket连接
+		registry.addEndpoint(projectUrlPrefix + "/webSocketServer").setAllowedOrigins("*").withSockJS();
 	}
 
 	@Override
