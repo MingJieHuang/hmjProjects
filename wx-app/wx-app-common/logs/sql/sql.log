@@ -1,0 +1,30 @@
+2018-07-31 16:09:54.951 logback [http-nio-8801-exec-1] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+ SELECT E.ID, E.CODE, E.NAME, E.PASSWD AS password, E.GROUP_ID AS groupId, G.NAME AS groupName, G.STATUS AS groupStatus, E.COMPANY_ID AS companyId, C.NAME AS companyName, C.STATUS AS companyStatus, E.SECTION_ID AS sectionId, S.NAME AS sectionName, E.IS_OPR AS operatorFlag, EE.MOBILE_NUM AS telephone, E.STATUS, E.REMARK FROM T_EMPLOYEE E JOIN T_GROUP G ON E.GROUP_ID = G.ID JOIN T_COMPANY C ON E.COMPANY_ID = C.ID LEFT JOIN T_SECTION S ON E.SECTION_ID = S.ID LEFT JOIN T_EMPLOYEE_EXT EE ON E.ID = EE.EMPLOYEE_ID WHERE E.LOGIN = '17700000001' AND E.STATUS <> 2 
+	{executed in 9 msec, connection number: [1]}
+2018-07-31 16:09:54.974 logback [http-nio-8801-exec-1] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+ SELECT DISTINCT R.COMPANY_ID AS id, C.CODE, C.NAME, C.STATUS, C.REMARK FROM T_EMPLOYEE_ROLE R JOIN T_COMPANY C ON R.COMPANY_ID = C.ID WHERE R.EMPLOYEE_ID = 2204 
+	{executed in 2 msec, connection number: [2]}
+2018-07-31 16:09:57.527 logback [http-nio-8801-exec-2] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+ SELECT E.ID, E.CODE, E.NAME, E.PASSWD AS password, E.GROUP_ID AS groupId, G.NAME AS groupName, G.STATUS AS groupStatus, E.COMPANY_ID AS companyId, C.NAME AS companyName, C.STATUS AS companyStatus, E.SECTION_ID AS sectionId, S.NAME AS sectionName, E.IS_OPR AS operatorFlag, EE.MOBILE_NUM AS telephone, E.STATUS, E.REMARK FROM T_EMPLOYEE E JOIN T_GROUP G ON E.GROUP_ID = G.ID JOIN T_COMPANY C ON E.COMPANY_ID = C.ID LEFT JOIN T_SECTION S ON E.SECTION_ID = S.ID LEFT JOIN T_EMPLOYEE_EXT EE ON E.ID = EE.EMPLOYEE_ID WHERE E.LOGIN = '17700000001' AND E.STATUS <> 2 
+	{executed in 3 msec, connection number: [3]}
+2018-07-31 16:09:57.532 logback [http-nio-8801-exec-2] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+ SELECT DISTINCT R.COMPANY_ID AS id, C.CODE, C.NAME, C.STATUS, C.REMARK FROM T_EMPLOYEE_ROLE R JOIN T_COMPANY C ON R.COMPANY_ID = C.ID WHERE R.EMPLOYEE_ID = 2204 
+	{executed in 2 msec, connection number: [4]}
+2018-07-31 16:09:58.084 logback [http-nio-8801-exec-3] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+ SELECT E.ID, E.CODE, E.NAME, E.PASSWD AS password, E.GROUP_ID AS groupId, G.NAME AS groupName, G.STATUS AS groupStatus, E.COMPANY_ID AS companyId, C.NAME AS companyName, C.STATUS AS companyStatus, E.SECTION_ID AS sectionId, S.NAME AS sectionName, E.IS_OPR AS operatorFlag, EE.MOBILE_NUM AS telephone, E.STATUS, E.REMARK FROM T_EMPLOYEE E JOIN T_GROUP G ON E.GROUP_ID = G.ID JOIN T_COMPANY C ON E.COMPANY_ID = C.ID LEFT JOIN T_SECTION S ON E.SECTION_ID = S.ID LEFT JOIN T_EMPLOYEE_EXT EE ON E.ID = EE.EMPLOYEE_ID WHERE E.LOGIN = '17700000001' AND E.STATUS <> 2 
+	{executed in 2 msec, connection number: [5]}
+2018-07-31 16:09:58.089 logback [http-nio-8801-exec-3] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:63)
+ SELECT DISTINCT R.COMPANY_ID AS id, C.CODE, C.NAME, C.STATUS, C.REMARK FROM T_EMPLOYEE_ROLE R JOIN T_COMPANY C ON R.COMPANY_ID = C.ID WHERE R.EMPLOYEE_ID = 2204 
+	{executed in 1 msec, connection number: [6]}
+2018-07-31 16:09:58.451 logback [http-nio-8801-exec-2] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:46)
+ DELETE T_EMPLOYEE_WECHAT W WHERE W.OPENID = 'o_spV47Ck4JXV4pPfGBP902Aylv4' AND W.MINI_APP_CODE = '0002' 
+	{executed in 3 msec, connection number: [8]}
+2018-07-31 16:09:58.457 logback [http-nio-8801-exec-2] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:46)
+ INSERT INTO T_EMPLOYEE_WECHAT VALUES (T_EMPLOYEE_WECHAT_SEQ.NEXTVAL, 787, 704, 2204, 'o_spV47Ck4JXV4pPfGBP902Aylv4', 2204, SYSDATE, '0002') 
+	{executed in 2 msec, connection number: [8]}
+2018-07-31 16:09:58.461 logback [http-nio-8801-exec-3] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:46)
+ DELETE T_EMPLOYEE_WECHAT W WHERE W.OPENID = 'o_spV47Ck4JXV4pPfGBP902Aylv4' AND W.MINI_APP_CODE = '0002' 
+	{executed in 12 msec, connection number: [7]}
+2018-07-31 16:09:58.463 logback [http-nio-8801-exec-3] DEBUG jdbc.sqltiming.sqlTimingOccured -  org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:46)
+ INSERT INTO T_EMPLOYEE_WECHAT VALUES (T_EMPLOYEE_WECHAT_SEQ.NEXTVAL, 787, 704, 2204, 'o_spV47Ck4JXV4pPfGBP902Aylv4', 2204, SYSDATE, '0002') 
+	{executed in 2 msec, connection number: [7]}

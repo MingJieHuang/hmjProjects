@@ -1,0 +1,192 @@
+2018-07-30 11:11:54.933 logback [http-nio-8802-exec-1] DEBUG druid.sql.Statement.statementLog - {conn-10006, pstmt-20020} executed. select count(1)
+from T_AUTH_ROLE_FUN_REF T
+join T_EMPLOYEE_ROLE ter on ter.role_id = t.role_id
+and ter.company_id = t.company_id 
+join T_AUTH_MENU_FUN_TEMPLATE ta on T.AUTH_CODE = ta.auth_code 
+	join t_auth_menu tam on ta.menu_code = tam.code
+and tam.status = 0 
+where ter.EMPLOYEE_ID = 2586
+	and ter.company_id = 762
+	and ta.fun_code = 'FW'
+	and t.group_id = 826
+	and tam.code = 'BOSS_CGHZ'
+	and tam.module_code = 'YS_BOSS'
+	and tam.Env_Type = 'APP_BOSS'
+2018-07-30 11:11:54.950 logback [http-nio-8802-exec-1] DEBUG druid.sql.Statement.statementLog - {conn-10006, pstmt-20020} executed. select count(1)
+from T_AUTH_ROLE_FUN_REF T
+join T_EMPLOYEE_ROLE ter on ter.role_id = t.role_id
+and ter.company_id = t.company_id 
+join T_AUTH_MENU_FUN_TEMPLATE ta on T.AUTH_CODE = ta.auth_code 
+	join t_auth_menu tam on ta.menu_code = tam.code
+and tam.status = 0 
+where ter.EMPLOYEE_ID = 2586
+	and ter.company_id = 762
+	and ta.fun_code = 'CKCBJ'
+	and t.group_id = 826
+	and tam.code = 'BOSS_CGHZ'
+	and tam.module_code = 'YS_BOSS'
+	and tam.Env_Type = 'APP_BOSS'
+2018-07-30 11:11:54.976 logback [http-nio-8802-exec-1] DEBUG druid.sql.Statement.statementLog - {conn-10006, pstmt-20021} executed. select distinct T.ID, T.CODE, T.NAME, T.ID as COMPANYID
+from T_COMPANY T
+join T_AUTH_COMPANY_MENU_REF CMR on T.ID = CMR.COMPANY_ID 
+join T_AUTH_MENU M on M.MODULE_CODE = CMR.MODULE_CODE 
+join T_AUTH_MENU_FUN_TEMPLATE MFT on M.CODE = MFT.MENU_CODE 
+join T_AUTH_ROLE_FUN_REF RFR on MFT.AUTH_CODE = RFR.AUTH_CODE
+and RFR.COMPANY_ID = CMR.COMPANY_ID 
+	join T_EMPLOYEE_ROLE ER on RFR.ROLE_ID = ER.ROLE_ID
+and ER.COMPANY_ID = T.ID
+and ER.EMPLOYEE_ID = 2586 
+where M.STATUS = 0
+	and M.IS_NAV = 0
+	and M.ENV_TYPE = 'APP_BOSS'
+	and M.MODULE_CODE = 'YS_BOSS'
+	and M.CODE = 'BOSS_CGHZ'
+2018-07-30 11:11:54.992 logback [http-nio-8802-exec-1] DEBUG druid.sql.Statement.statementLog - {conn-10006, pstmt-20022} executed. select t.id, t.code, t.name, t.parent_id
+	, t.parent_id || ',' || t.name as sectionPath, T.COMPANY_ID as COMPANYID
+from t_section t
+start with t.id in (
+	select to_number(t1.value_code) as id
+	from t_employee_data t1
+	where t1.type_code = 'KSYBM'
+		and t1.employees_id = 2586
+		and t.COMPANY_ID = 762
+)
+connect by t.PARENT_ID = PRIOR t.id
+and t.status = 0
+2018-07-30 11:11:55.002 logback [http-nio-8802-exec-1] DEBUG druid.sql.Statement.statementLog - {conn-10006, pstmt-20023} executed. select t.id as id, t.name as name, t.code as code, t.PARENT_ID as pid
+	, t.parent_id || ',' || t.name as sectionPath, T.COMPANY_ID as COMPANYID
+from t_section t
+where t.COMPANY_ID = 762
+	and t.status = 0
+2018-07-30 11:11:55.338 logback [http-nio-8802-exec-1] DEBUG druid.sql.Statement.statementLog - {conn-10006, pstmt-20024} executed. select count(0)
+from (
+	select ID, CODE, NAME, sum(GOODSQUANTITY) as GOODSQUANTITY
+		, TO_CHAR(sum(GOODSAMOUNT)) as GOODSAMOUNT
+		, TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(sum(GOODSAMOUNT), sum(GOODSQUANTITY)), 2)) as goodsPrice
+	from (
+		select GOODSID as ID, GOODSCODE as CODE, GOODSNAME as NAME, GOODSQUANTITY, GOODSAMOUNT
+		from (
+			select TS.ID as SECTIONID, TS.CODE as SECTIONCODE, TS.NAME as SECTIONNAME, TG.ID as GOODSID, TG.CODE as GOODSCODE
+				, TG.NAME as GOODSNAME, TCU.ID as SUPPLIERID, TCU.CODE as SUPPLIERCODE, TCU.NAME as SUPPLIERNAME
+				, NVL(T1.GOODS_NUMBER, 0) as GOODSQUANTITY
+				, NVL(T1.AMOUNT, 0) as GOODSAMOUNT
+			from I_BILLS_MAIN T
+			join I_INSTRORAGE_NUM T1 on T.ID = T1.BILLS_MAIN_ID 
+			join T_COMPANY TC on T.COMPANY_ID = TC.ID 
+			join I_STORAGE IST on T1.STORAGE_ID = IST.ID 
+			join T_SECTION TS on IST.SECTION_ID = TS.ID 
+			join T_CONTACT_UNIT TCU on T.CONTACTSUNIT_ID = TCU.ID
+			and TCU.STATUS = 0 
+			join T_GOODSNAME TG on T1.GOODS_ID = TG.ID 
+			left join T_GOODSALIAS TGS on TG.ID = TGS.GOODS_ID
+			and T.COMPANY_ID = TGS.COMPANY_ID 
+			left join T_GOODSCLASS TGC on TG.GOODS_CATEGORY_ID = TGC.ID 
+				left join T_GOODSBRAND TGB on TG.GOODS_BRAND_ID = TGB.ID 
+			where T.BILLS_TYPE in ('2', '3')
+				and T.GROUP_ID = 826
+				and (UPPER(TGC.NAME) like UPPER('%苹果%')
+					or UPPER(TGB.NAME) like UPPER('%苹果%')
+					or UPPER(TG.GOODS_MODEL) like UPPER('%苹果%')
+					or UPPER(TG.NAME) like UPPER('%苹果%')
+					or UPPER(TG.REM_CODE) like UPPER('%苹果%')
+					or UPPER(TGS.NO) like UPPER('%苹果%'))
+				and TC.ID in (762)
+				and TS.ID in (2373, 2380, 2376, 2091, 2371, 2375, 1593, 1770, 2377, 2374, 2383, 2370, 2384, 1470, 1591, 1592, 1473, 1594, 1472, 1471, 1398, 2390, 1399, 1400, 1331, 2382, 2381, 1396, 1166, 1167, 1490, 1397, 1611)
+			union all
+			select TS.ID as SECTIONID, TS.CODE as SECTIONCODE, TS.NAME as SECTIONNAME, TG.ID as GOODSID, TG.CODE as GOODSCODE
+				, TG.NAME as GOODSNAME, TCU.ID as SUPPLIERID, TCU.CODE as SUPPLIERCODE, TCU.NAME as SUPPLIERNAME
+				, NVL(-T1.GOODS_NUMBER, 0) as GOODSQUANTITY
+				, NVL(-T1.AMOUNT, 0) as GOODSAMOUNT
+			from I_BILLS_MAIN T
+			join I_OUTSTRORAGE_NUM T1 on T.ID = T1.BILLS_MAIN_ID 
+			join T_COMPANY TC on T.COMPANY_ID = TC.ID 
+			join I_STORAGE IST on T1.STORAGE_ID = IST.ID 
+			join T_SECTION TS on IST.SECTION_ID = TS.ID 
+			join T_CONTACT_UNIT TCU on T.CONTACTSUNIT_ID = TCU.ID
+			and TCU.STATUS = 0 
+			join T_GOODSNAME TG on T1.GOODS_ID = TG.ID 
+			left join T_GOODSALIAS TGS on TG.ID = TGS.GOODS_ID
+			and T.COMPANY_ID = TGS.COMPANY_ID 
+			left join T_GOODSCLASS TGC on TG.GOODS_CATEGORY_ID = TGC.ID 
+				left join T_GOODSBRAND TGB on TG.GOODS_BRAND_ID = TGB.ID 
+			where T.BILLS_TYPE in ('3', '4')
+				and T.GROUP_ID = 826
+				and (UPPER(TGC.NAME) like UPPER('%苹果%')
+					or UPPER(TGB.NAME) like UPPER('%苹果%')
+					or UPPER(TG.GOODS_MODEL) like UPPER('%苹果%')
+					or UPPER(TG.NAME) like UPPER('%苹果%')
+					or UPPER(TG.REM_CODE) like UPPER('%苹果%')
+					or UPPER(TGS.NO) like UPPER('%苹果%'))
+				and TC.ID in (762)
+				and TS.ID in (2373, 2380, 2376, 2091, 2371, 2375, 1593, 1770, 2377, 2374, 2383, 2370, 2384, 1470, 1591, 1592, 1473, 1594, 1472, 1471, 1398, 2390, 1399, 1400, 1331, 2382, 2381, 1396, 1166, 1167, 1490, 1397, 1611)
+		)
+	)
+	group by ID, CODE, NAME
+) table_count
+2018-07-30 11:11:55.454 logback [http-nio-8802-exec-1] DEBUG druid.sql.Statement.statementLog - {conn-10006, pstmt-20025} executed. select TMP_PAGE.*, ROWNUM as ROW_ID
+from (
+	select ID, CODE, NAME, sum(GOODSQUANTITY) as GOODSQUANTITY
+		, TO_CHAR(sum(GOODSAMOUNT)) as GOODSAMOUNT
+		, TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(sum(GOODSAMOUNT), sum(GOODSQUANTITY)), 2)) as goodsPrice
+	from (
+		select GOODSID as ID, GOODSCODE as CODE, GOODSNAME as NAME, GOODSQUANTITY, GOODSAMOUNT
+		from (
+			select TS.ID as SECTIONID, TS.CODE as SECTIONCODE, TS.NAME as SECTIONNAME, TG.ID as GOODSID, TG.CODE as GOODSCODE
+				, TG.NAME as GOODSNAME, TCU.ID as SUPPLIERID, TCU.CODE as SUPPLIERCODE, TCU.NAME as SUPPLIERNAME
+				, NVL(T1.GOODS_NUMBER, 0) as GOODSQUANTITY
+				, NVL(T1.AMOUNT, 0) as GOODSAMOUNT
+			from I_BILLS_MAIN T
+			join I_INSTRORAGE_NUM T1 on T.ID = T1.BILLS_MAIN_ID 
+			join T_COMPANY TC on T.COMPANY_ID = TC.ID 
+			join I_STORAGE IST on T1.STORAGE_ID = IST.ID 
+			join T_SECTION TS on IST.SECTION_ID = TS.ID 
+			join T_CONTACT_UNIT TCU on T.CONTACTSUNIT_ID = TCU.ID
+			and TCU.STATUS = 0 
+			join T_GOODSNAME TG on T1.GOODS_ID = TG.ID 
+			left join T_GOODSALIAS TGS on TG.ID = TGS.GOODS_ID
+			and T.COMPANY_ID = TGS.COMPANY_ID 
+			left join T_GOODSCLASS TGC on TG.GOODS_CATEGORY_ID = TGC.ID 
+				left join T_GOODSBRAND TGB on TG.GOODS_BRAND_ID = TGB.ID 
+			where T.BILLS_TYPE in ('2', '3')
+				and T.GROUP_ID = 826
+				and (UPPER(TGC.NAME) like UPPER('%苹果%')
+					or UPPER(TGB.NAME) like UPPER('%苹果%')
+					or UPPER(TG.GOODS_MODEL) like UPPER('%苹果%')
+					or UPPER(TG.NAME) like UPPER('%苹果%')
+					or UPPER(TG.REM_CODE) like UPPER('%苹果%')
+					or UPPER(TGS.NO) like UPPER('%苹果%'))
+				and TC.ID in (762)
+				and TS.ID in (2373, 2380, 2376, 2091, 2371, 2375, 1593, 1770, 2377, 2374, 2383, 2370, 2384, 1470, 1591, 1592, 1473, 1594, 1472, 1471, 1398, 2390, 1399, 1400, 1331, 2382, 2381, 1396, 1166, 1167, 1490, 1397, 1611)
+			union all
+			select TS.ID as SECTIONID, TS.CODE as SECTIONCODE, TS.NAME as SECTIONNAME, TG.ID as GOODSID, TG.CODE as GOODSCODE
+				, TG.NAME as GOODSNAME, TCU.ID as SUPPLIERID, TCU.CODE as SUPPLIERCODE, TCU.NAME as SUPPLIERNAME
+				, NVL(-T1.GOODS_NUMBER, 0) as GOODSQUANTITY
+				, NVL(-T1.AMOUNT, 0) as GOODSAMOUNT
+			from I_BILLS_MAIN T
+			join I_OUTSTRORAGE_NUM T1 on T.ID = T1.BILLS_MAIN_ID 
+			join T_COMPANY TC on T.COMPANY_ID = TC.ID 
+			join I_STORAGE IST on T1.STORAGE_ID = IST.ID 
+			join T_SECTION TS on IST.SECTION_ID = TS.ID 
+			join T_CONTACT_UNIT TCU on T.CONTACTSUNIT_ID = TCU.ID
+			and TCU.STATUS = 0 
+			join T_GOODSNAME TG on T1.GOODS_ID = TG.ID 
+			left join T_GOODSALIAS TGS on TG.ID = TGS.GOODS_ID
+			and T.COMPANY_ID = TGS.COMPANY_ID 
+			left join T_GOODSCLASS TGC on TG.GOODS_CATEGORY_ID = TGC.ID 
+				left join T_GOODSBRAND TGB on TG.GOODS_BRAND_ID = TGB.ID 
+			where T.BILLS_TYPE in ('3', '4')
+				and T.GROUP_ID = 826
+				and (UPPER(TGC.NAME) like UPPER('%苹果%')
+					or UPPER(TGB.NAME) like UPPER('%苹果%')
+					or UPPER(TG.GOODS_MODEL) like UPPER('%苹果%')
+					or UPPER(TG.NAME) like UPPER('%苹果%')
+					or UPPER(TG.REM_CODE) like UPPER('%苹果%')
+					or UPPER(TGS.NO) like UPPER('%苹果%'))
+				and TC.ID in (762)
+				and TS.ID in (2373, 2380, 2376, 2091, 2371, 2375, 1593, 1770, 2377, 2374, 2383, 2370, 2384, 1470, 1591, 1592, 1473, 1594, 1472, 1471, 1398, 2390, 1399, 1400, 1331, 2382, 2381, 1396, 1166, 1167, 1490, 1397, 1611)
+		)
+	)
+	group by ID, CODE, NAME
+	order by ID, CODE, NAME
+) TMP_PAGE
+where ROWNUM <= 20

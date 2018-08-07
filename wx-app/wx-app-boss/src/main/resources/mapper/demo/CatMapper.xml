@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.demo.CatMapper">
+	<select id="getHeader" resultType="string">
+		select '猫脑袋' from dual
+	</select>
+	<select id="getBody" resultType="string">
+		select '猫身体' from dual
+	</select>
+	<select id="getTail" resultType="string">
+		select '猫尾巴' from dual
+	</select>
+</mapper>

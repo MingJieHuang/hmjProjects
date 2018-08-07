@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.websocket.mapper.login.LoginMapper">
+	<!-- 获取账号登录信息 -->
+	<select id="getLoginStatusVoList" resultType="com.phone.erp.websocket.vo.login.LoginStatusVo">
+	    SELECT S.ID,
+	           S.GROUP_ID 		AS groupId,
+	           S.EMPLOYEE_ID 	AS employeeId,
+	           S.PLATFORM		AS platform,
+	           S.LOGIN_STATUS	AS loginStatus,
+	           S.LOGIN_TIME		AS loginTime,
+	           S.LOGOUT_TIME	AS logoutTime,
+	           S.WS_CLIENT_NAME	AS wsClientName
+	      FROM T_ACCOUNT_STATUS S
+		 WHERE S.PLATFORM = #{platform}
+		   AND S.EMPLOYEE_ID = #{employeeId}
+	</select>
+	
+	<!-- 删除登录状态记录的重复数据 -->
+	<delete id="deleteDuplicatedLoginStatusVo">
+		DELETE FROM T_ACCOUNT_STATUS S
+		 WHERE (S.PLATFORM, S.GROUP_ID, S.EMPLOYEE_ID) IN (SELECT PLATFORM, GROUP_ID, EMPLOYEE_ID FROM T_ACCOUNT_STATUS GROUP BY PLATFORM, GROUP_ID, EMPLOYEE_ID HAVING COUNT(0) > 1)
+		   AND ROWID NOT IN (SELECT MIN(ROWID) FROM T_ACCOUNT_STATUS GROUP BY PLATFORM, GROUP_ID, EMPLOYEE_ID HAVING COUNT(0) > 1)
+	</delete>
+	
+	<!-- 新增登录记录 -->
+	<insert id="insertLoginStatusVo">
+		INSERT INTO T_ACCOUNT_STATUS
+		  (ID,
+		   GROUP_ID,
+		   EMPLOYEE_ID,
+		   PLATFORM,
+		   LOGIN_STATUS,
+		   LOGIN_TIME,
+		   LOGOUT_TIME,
+		   WS_CLIENT_NAME)
+		  SELECT T_ACCOUNT_STATUS_SEQ.NEXTVAL,
+		         T.GROUP_ID,
+		         T.ID,
+		         #{platform},
+		         #{loginStatus},
+		         #{loginTime,jdbcType=DATE},
+		         #{logoutTime,jdbcType=DATE},
+		         #{wsClientName}
+		    FROM T_EMPLOYEE T
+		   WHERE T.ID = #{employeeId}
+	</insert>
+	
+	<!-- 更新登录用户状态信息 -->
+	<update id="updateLoginStatusVo">
+		UPDATE T_ACCOUNT_STATUS
+		   SET LOGIN_STATUS   = #{loginStatus},
+		       LOGIN_TIME     = #{loginTime,jdbcType=DATE},
+		       LOGOUT_TIME    = #{logoutTime,jdbcType=DATE},
+		       WS_CLIENT_NAME = #{wsClientName}
+		 WHERE ID = #{id}
+		<if test="loginStatus == 1">
+		   AND WS_CLIENT_NAME = #{wsClientName}
+		</if>
+	</update>
+	
+	<!-- 获取本角色下的在线用户集合 -->
+	<select id="getRoleOnLineEmployeeVoList" resultType="com.phone.erp.base.vo.employee.EmployeeVo">
+		SELECT E.ID, E.NAME, E.CODE, E.REMARK
+		  FROM T_EMPLOYEE E
+		  JOIN T_ACCOUNT_STATUS S ON E.ID = S.EMPLOYEE_ID AND S.PLATFORM = #{clientType}
+		  JOIN T_EMPLOYEE_ROLE R ON E.ID = R.EMPLOYEE_ID
+		 WHERE S.LOGIN_STATUS = 0
+		   AND R.ROLE_ID = #{roleId}
+	</select>
+	
+	<!-- 获取所有过期的在线用户集合 -->
+	<select id="getExpiredOnLineEmployeeVoList" resultType="com.phone.erp.base.vo.employee.EmployeeVo">
+		SELECT E.ID, E.NAME, E.CODE, E.REMARK
+		  FROM T_EMPLOYEE E
+		  JOIN T_GROUP G ON E.GROUP_ID = G.ID
+	 LEFT JOIN T_ACCOUNT_STATUS S ON E.ID = S.EMPLOYEE_ID AND S.PLATFORM = #{clientType}
+		 WHERE S.LOGIN_STATUS = 0
+		   AND G.END_DATE IS NOT NULL
+		   AND TO_DATE(TO_CHAR(G.END_DATE, 'YYYY-MM-DD') || ',23:59:59', 'YYYY-MM-DD,HH24:MI:SS') &lt;= SYSDATE
+	</select>
+</mapper>

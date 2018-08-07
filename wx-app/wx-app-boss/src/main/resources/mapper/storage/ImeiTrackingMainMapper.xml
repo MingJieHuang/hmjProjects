@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 串号跟踪 -->
+<mapper namespace="com.phone.erp.boss.mapper.storage.ImeiTrackingMainMapper">
+	<!-- 串号跟踪分页查询临时表 -->
+	<sql id="tempTable">
+		WITH TEMP1 AS (
+		SELECT II.ID,
+		       II.IMEI,
+		       II.AUXILIARY_IMEI,
+		       NVL(SI.ONWAY_NUM, 0) AS ONWAY_NUM,
+		       DECODE(SI.ONWAY_NUM, 1, 2,SI.RESERVE2) AS STATUSCODE
+		  FROM I_STOCK_IM SI
+	 LEFT JOIN T_IMEI_INFO II ON SI.COMPANY_ID = II.COMPANY_ID AND II.ID = TO_NUMBER(SI.IMEI)
+		 WHERE SI.COMPANY_ID IN (${companyIds})
+		   AND (II.IMEI LIKE '%${keyWord}' OR II.AUXILIARY_IMEI LIKE '%${keyWord}')
+	  ORDER BY II.ID, SI.RESERVE2, ONWAY_NUM
+		), TEMP2 AS (
+		SELECT DISTINCT II.ID,
+		                II.IMEI,
+		                II.AUXILIARY_IMEI,
+		                0 AS ONWAY_NUM,
+		                0 AS STATUSCODE
+		  FROM T_IMEI_INFO II
+	 LEFT JOIN I_STOCK_IM SI ON SI.COMPANY_ID = II.COMPANY_ID AND II.ID = TO_NUMBER(SI.IMEI)
+		  JOIN I_STOCK_FTP SF ON SF.COMPANY_ID = II.COMPANY_ID AND II.ID = TO_NUMBER(SF.IMEI)
+		 WHERE SI.ID IS NULL
+		   AND II.COMPANY_ID  IN (${companyIds})
+		   AND (II.IMEI LIKE '%${keyWord}' OR II.AUXILIARY_IMEI LIKE '%${keyWord}')
+		),A AS (
+	    SELECT ID, IMEI, AUXILIARY_IMEI, STATUSCODE, ROWNUM RN
+	      FROM (SELECT * FROM TEMP1
+	            UNION ALL
+	            SELECT * FROM TEMP2)
+		)
+	</sql>
+<!-- 获取串号跟踪主页分页集合 -->
+<select id="getPageData" resultType="com.phone.erp.boss.vo.storage.ImeiTrackingMainVo">
+		<include refid="tempTable"/>
+	  SELECT A.ID imeiId, A.IMEI imei, A.AUXILIARY_IMEI auxiliaryImei, A.STATUSCODE STATUSCODE
+	    FROM (SELECT DISTINCT A.ID, MAX(A.RN) OVER(PARTITION BY A.ID) RN FROM A) B
+	    JOIN A ON A.ID = B.ID AND A.RN = B.RN
+</select>
+
+<!-- 获取串号跟踪流水表集合 -->
+<select id="getImeiTrackingDetailData" resultType="com.phone.erp.boss.vo.storage.ImeiTrackingDetailVo">
+	SELECT BILLID,BILLTYPE,BILLCODE,BILLDATE,BILLTYPECODE,SECTIONNAME,STORAGENAME,OPERATORNAME,OPERATIONTIME,REMARK,INOUTSTOCKTYPE,IMEIID,IMEI,AUXILIARYIMEI
+            <if test="NULL==canSeeAmount"> 
+            ,
+            CASE WHEN BILLTYPECODE IN(19,20,21,45,46)THEN to_char(ROUND(GOODSAMOUNT,2)) ELSE '$'
+            END GOODSAMOUNT
+            </if>	
+            <if test="canSeeAmount==1"> 
+            ,
+            to_char(ROUND(GOODSAMOUNT,2)) AS GOODSAMOUNT
+            </if>
+          FROM(
+			      SELECT
+			        T.BILLS_MAIN_ID               		                       AS BILLID,
+			        T1.ID													   AS IMEIID, 
+			        T1.IMEI													   AS IMEI,
+			        T1.AUXILIARY_IMEI      									   AS AUXILIARYIMEI,
+			        TP.CONTENT_1                                               AS BILLTYPE,
+			        TP.CODE                                                    AS BILLTYPECODE, 
+			        GET_COLUMN_NAME(T.SOURCE_TAB,T.BILLS_MAIN_ID,'BILLS_CODE') AS BILLCODE,
+			        TO_CHAR(T.BILLS_DATE,'yyyy-mm-dd')                         AS BILLDATE,                     
+			        TS.NAME                                                    AS SECTIONNAME,
+			        IST.NAME                                                   AS STORAGENAME,
+			        TE.NAME                                                    AS OPERATORNAME,
+			        TO_CHAR(T.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss')             AS OPERATIONTIME,
+			        T.REMARK                                                   AS REMARK,
+			        NVL2(T.STORAGE_FLAG,TP3.CONTENT_1,
+			        DECODE(TOC.FLAG,0,TOC.NAME||'(IN)',TOC.NAME||'(OUT)'))     AS INOUTSTOCKTYPE,
+			          RP_QUERY_PCK.GET_GOODSAMOUNT(PI_BILLS_ID => T.BILLS_MAIN_ID,
+			            PI_TAB => T.SOURCE_TAB,
+			            PI_STORAGE_ID => T.STORAGE_ID,
+			            PI_GOODS_ID => T.GOODS_ID,
+			            PI_IMEI => T.IMEI)                                     AS GOODSAMOUNT
+			
+			      FROM I_IM_SERIAL T
+			        JOIN  T_IMEI_INFO               T1  ON T.IMEI=T1.ID  AND T1.COMPANY_ID = T.COMPANY_ID
+			        JOIN  T_EMPLOYEE                TE  ON TE.ID = T.CREATE_BY 
+			        LEFT JOIN T_PUBLICTABS          TP  ON  TP.TYPE_CODE='DJLX' AND TP.CODE= GET_COLUMN_NAME(T.SOURCE_TAB,T.BILLS_MAIN_ID,'BILLS_TYPE')
+			        LEFT JOIN T_PUBLICTABS          TP3 ON TP3.TYPE_CODE =  'CRKFS'AND TP3.CODE = T.STORAGE_FLAG
+			        LEFT JOIN  T_OTHERSTORAGE_CLASS TOC ON  T.OTHER_STORAGE_ID = TOC.ID
+			        JOIN T_SECTION                  TS  ON TS.ID = T.SECTION_ID
+			        JOIN I_STORAGE                  IST ON IST.ID = T.STORAGE_ID
+			        JOIN T_GOODSNAME                TG  ON TG.ID = T.GOODS_ID
+			        WHERE T1.ID=#{imeiId}
+			        AND T.COMPANY_ID IN (${companyIds})
+			        ORDER BY T.CREATE_DATE
+          )	
+</select>
+
+<!-- 获取串号流水表商品Vo对象 -->
+<select id="getImeiTrackingGoodsVo" resultType="com.phone.erp.boss.vo.storage.ImeiTrackingGoodsVo">
+SELECT ROWNUM,OPERATIONTIME,GOODSID,GOODSCODE,GOODSNAME,GOODSCONFIGURATION,STATUSCODE,IMEIID,IMEI,AUXILIARYIMEI
+            <if test="canSeeAmount==1"> 
+            ,
+            to_char(ROUND(GOODSCOSTAMOUNT,2)) AS GOODSCOSTAMOUNT
+            </if>
+	 FROM(
+	      SELECT
+	        T1.ID                                          AS IMEIID,   
+	        T1.IMEI										   AS IMEI,
+	        T1.AUXILIARY_IMEI      						   AS AUXILIARYIMEI,	                                      
+	        TO_CHAR(T.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss') AS OPERATIONTIME,
+	        TG.ID                                          AS GOODSID,
+	        TG.CODE                                        AS GOODSCODE,
+	        TG.NAME                                        AS GOODSNAME,
+	        TG.CONFIGURE                                   AS GOODSCONFIGURATION,
+	        DECODE(SI.ONWAY_NUM, 1, 2,SI.RESERVE2)         AS STATUSCODE,
+	        T.COST_PRICE                                   AS GOODSCOSTAMOUNT
+	      FROM I_IM_SERIAL T
+	        JOIN  T_IMEI_INFO      T1  ON T.IMEI=T1.ID  AND T1.COMPANY_ID = T.COMPANY_ID
+	        JOIN  I_STOCK_IM       SI  ON TO_NUMBER(SI.IMEI)=T1.ID AND SI.STORAGE_ID=T.STORAGE_ID
+	        JOIN  T_EMPLOYEE       TE  ON TE.ID = T.CREATE_BY 
+	        LEFT JOIN T_PUBLICTABS TP  ON  TP.TYPE_CODE='DJLX' AND TP.CODE= GET_COLUMN_NAME(T.SOURCE_TAB,T.BILLS_MAIN_ID,'BILLS_TYPE')
+	        LEFT JOIN T_PUBLICTABS TP2 ON TP2.TYPE_CODE = 'DJZT' AND TP2.CODE = GET_COLUMN_NAME(T.SOURCE_TAB,T.BILLS_MAIN_ID,'BILLS_STATUS')  
+	        JOIN T_SECTION         TS  ON TS.ID = T.SECTION_ID
+	        JOIN I_STORAGE         IST ON IST.ID = T.STORAGE_ID
+	        JOIN T_GOODSNAME       TG  ON TG.ID = T.GOODS_ID
+	        WHERE T1.ID=#{imeiId}
+	        AND T.COMPANY_ID IN (${companyIds}) 
+	        AND TP2.CODE IN (6,8,10)
+	        ORDER BY T.CREATE_DATE DESC   
+)   WHERE ROWNUM = 1
+</select>
+</mapper>

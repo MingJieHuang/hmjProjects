@@ -1,0 +1,11 @@
+2018-08-07 09:50:07.010 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 2120 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-08-07 09:50:07.017 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-08-07 09:50:11.906 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.392 seconds (JVM running for 5.825)
+2018-08-07 10:21:49.472 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 888 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-08-07 10:21:49.476 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-08-07 10:21:54.248 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.251 seconds (JVM running for 5.689)
+2018-08-07 10:35:32.871 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 12816 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-08-07 10:35:32.875 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-08-07 10:41:44.453 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 7772 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-08-07 10:41:44.458 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-08-07 10:41:49.066 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.075 seconds (JVM running for 5.467)

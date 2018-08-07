@@ -1,0 +1,2 @@
+2018-07-26 11:46:52.115 logback [http-nio-8801-exec-3] ERROR c.p.e.b.e.h.ExceptionActionAdvice.logException - Exception ===== [File][NativeConstructorAccessorImpl.java][Method][newInstance0][Line][-2] ===== [登录公司非法!].
+2018-07-26 11:56:39.067 logback [http-nio-8801-exec-2] ERROR c.p.e.b.e.h.ExceptionActionAdvice.logException - Exception ===== [File][NativeConstructorAccessorImpl.java][Method][newInstance0][Line][-2] ===== [登录公司非法!].

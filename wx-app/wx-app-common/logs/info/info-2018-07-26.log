@@ -1,0 +1,69 @@
+2018-07-26 10:58:37.939 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarting - Starting CommonApplication on HMJ with PID 11408 (F:\workspaces\trunk\wx-app\wx-app-common\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-common)
+2018-07-26 10:58:37.946 logback [main] INFO  c.phone.erp.common.CommonApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-26 10:58:42.232 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarted - Started CommonApplication in 4.765 seconds (JVM running for 5.171)
+2018-07-26 11:01:02.421 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV47Ck4JXV4pPfGBP902Aylv4
+2018-07-26 11:01:02.436 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 1ea4077acea4d2ed4e7490205f915064721e241b
+2018-07-26 11:01:02.436 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 1ea4077acea4d2ed4e7490205f915064721e241b
+2018-07-26 11:12:23.980 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV47Ck4JXV4pPfGBP902Aylv4
+2018-07-26 11:12:23.980 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: bf3883fe8c8b32b4a117af50f5bf38cba7d197fc
+2018-07-26 11:12:23.981 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: bf3883fe8c8b32b4a117af50f5bf38cba7d197fc
+2018-07-26 11:16:26.961 logback [http-nio-8801-exec-6] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:16:26.964 logback [http-nio-8801-exec-6] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 9b0bcec437b43affa6188d7ebaded3b83f4f7ea7
+2018-07-26 11:16:26.965 logback [http-nio-8801-exec-6] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 9b0bcec437b43affa6188d7ebaded3b83f4f7ea7
+2018-07-26 11:26:01.894 logback [http-nio-8801-exec-7] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV47Ck4JXV4pPfGBP902Aylv4
+2018-07-26 11:26:01.897 logback [http-nio-8801-exec-7] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: dad633ad3d7137f2f99b55b9cfe2262748b6271d
+2018-07-26 11:26:01.898 logback [http-nio-8801-exec-7] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: dad633ad3d7137f2f99b55b9cfe2262748b6271d
+2018-07-26 11:41:21.353 logback [http-nio-8801-exec-10] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:41:21.353 logback [http-nio-8801-exec-10] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: a600eed2d601651ffe3a29bf224186135cd62de8
+2018-07-26 11:41:21.354 logback [http-nio-8801-exec-10] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: a600eed2d601651ffe3a29bf224186135cd62de8
+2018-07-26 11:45:39.628 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:45:39.629 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 3b5cbb894d060210b94e0147738dabec4231c001
+2018-07-26 11:45:39.629 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 3b5cbb894d060210b94e0147738dabec4231c001
+2018-07-26 11:47:51.571 logback [http-nio-8801-exec-5] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:47:51.573 logback [http-nio-8801-exec-5] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 2503eb912d19c6650f5643da423eaaab2485cb74
+2018-07-26 11:47:51.574 logback [http-nio-8801-exec-5] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 2503eb912d19c6650f5643da423eaaab2485cb74
+2018-07-26 11:48:57.578 logback [http-nio-8801-exec-9] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV47Ck4JXV4pPfGBP902Aylv4
+2018-07-26 11:48:57.580 logback [http-nio-8801-exec-9] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: bdb4a240428ad0949ded2fe653c78553c97dbbc6
+2018-07-26 11:48:57.581 logback [http-nio-8801-exec-9] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: bdb4a240428ad0949ded2fe653c78553c97dbbc6
+2018-07-26 11:50:06.575 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarting - Starting CommonApplication on HMJ with PID 13132 (F:\workspaces\trunk\wx-app\wx-app-common\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-common)
+2018-07-26 11:50:06.579 logback [main] INFO  c.phone.erp.common.CommonApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-26 11:50:10.841 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarted - Started CommonApplication in 4.741 seconds (JVM running for 5.132)
+2018-07-26 11:51:02.394 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV47Ck4JXV4pPfGBP902Aylv4
+2018-07-26 11:51:02.408 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 0acb87da5c9c2ea7410d2b3d3f87c919dd9b9b99
+2018-07-26 11:51:02.409 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 0acb87da5c9c2ea7410d2b3d3f87c919dd9b9b99
+2018-07-26 11:51:18.984 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:51:18.986 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 7e473130584650e66bc82f45b5c4fbc8d37d893e
+2018-07-26 11:51:18.987 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 7e473130584650e66bc82f45b5c4fbc8d37d893e
+2018-07-26 11:51:32.826 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:51:32.828 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 7e473130584650e66bc82f45b5c4fbc8d37d893e
+2018-07-26 11:51:32.829 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 7e473130584650e66bc82f45b5c4fbc8d37d893e
+2018-07-26 11:54:25.314 logback [http-nio-8801-exec-6] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:54:25.317 logback [http-nio-8801-exec-6] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 0177475dfe2ba5b23cdf104c1dd16cd3e884b00f
+2018-07-26 11:54:25.318 logback [http-nio-8801-exec-6] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 0177475dfe2ba5b23cdf104c1dd16cd3e884b00f
+2018-07-26 11:54:40.228 logback [http-nio-8801-exec-7] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:54:40.230 logback [http-nio-8801-exec-7] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 0177475dfe2ba5b23cdf104c1dd16cd3e884b00f
+2018-07-26 11:54:40.231 logback [http-nio-8801-exec-7] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 0177475dfe2ba5b23cdf104c1dd16cd3e884b00f
+2018-07-26 11:54:41.492 logback [http-nio-8801-exec-8] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV47Ck4JXV4pPfGBP902Aylv4
+2018-07-26 11:54:41.494 logback [http-nio-8801-exec-8] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: f48bc4feb4b22053ba1f4556981a27be8154053a
+2018-07-26 11:54:41.495 logback [http-nio-8801-exec-8] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: f48bc4feb4b22053ba1f4556981a27be8154053a
+2018-07-26 11:55:12.103 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarting - Starting CommonApplication on HMJ with PID 9868 (F:\workspaces\trunk\wx-app\wx-app-common\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-common)
+2018-07-26 11:55:12.107 logback [main] INFO  c.phone.erp.common.CommonApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-26 11:55:16.309 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarted - Started CommonApplication in 4.688 seconds (JVM running for 5.057)
+2018-07-26 11:55:40.515 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:55:40.530 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: 0177475dfe2ba5b23cdf104c1dd16cd3e884b00f
+2018-07-26 11:55:40.530 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: 0177475dfe2ba5b23cdf104c1dd16cd3e884b00f
+2018-07-26 11:56:40.611 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 11:56:40.612 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: ea45df25e6ccf3e7e565f63546cd73f54687b89c
+2018-07-26 11:56:40.613 logback [http-nio-8801-exec-3] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: ea45df25e6ccf3e7e565f63546cd73f54687b89c
+2018-07-26 13:29:26.613 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarting - Starting CommonApplication on HMJ with PID 10016 (F:\workspaces\trunk\wx-app\wx-app-common\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-common)
+2018-07-26 13:29:26.617 logback [main] INFO  c.phone.erp.common.CommonApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-26 13:29:30.778 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarted - Started CommonApplication in 4.613 seconds (JVM running for 4.994)
+2018-07-26 13:54:19.686 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 13:54:19.700 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: e8bf4026ccf09a1595eb96ee5cc0c3084349f0c8
+2018-07-26 13:54:19.700 logback [http-nio-8801-exec-1] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: e8bf4026ccf09a1595eb96ee5cc0c3084349f0c8
+2018-07-26 13:55:00.901 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的openid: o_spV434mPC3PlkEwHPGHjk53EOI
+2018-07-26 13:55:00.902 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信用户的签名: e8bf4026ccf09a1595eb96ee5cc0c3084349f0c8
+2018-07-26 13:55:00.902 logback [http-nio-8801-exec-2] INFO  c.p.erp.base.utils.wechat.WechatUtil.getOpenid - 获取到微信参数的签名: e8bf4026ccf09a1595eb96ee5cc0c3084349f0c8
+2018-07-26 15:02:25.371 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarting - Starting CommonApplication on HMJ with PID 9476 (F:\workspaces\trunk\wx-app\wx-app-common\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-common)
+2018-07-26 15:02:25.378 logback [main] INFO  c.phone.erp.common.CommonApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-26 15:02:29.637 logback [main] INFO  c.phone.erp.common.CommonApplication.logStarted - Started CommonApplication in 4.712 seconds (JVM running for 5.116)
