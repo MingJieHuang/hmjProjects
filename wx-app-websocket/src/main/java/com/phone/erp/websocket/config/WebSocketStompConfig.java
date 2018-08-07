@@ -1,5 +1,6 @@
 package com.phone.erp.websocket.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -24,10 +25,13 @@ import com.phone.erp.websocket.listener.STOMPDisconnectEventListener;
 @SuppressWarnings("deprecation")
 public class WebSocketStompConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
+	@Value("${project.url.prefix}")
+	private String projectUrlPrefix;
+
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		// 设置端点,客户端通过http://localhost:8800/webSocketServer来和服务器进行websocket连接
-		registry.addEndpoint("/webSocketServer").setAllowedOrigins("*").withSockJS();
+		// 设置端点,客户端通过http://localhost:8800/api/v1/ws/webSocketServer来和服务器进行websocket连接
+		registry.addEndpoint(projectUrlPrefix + "/webSocketServer").setAllowedOrigins("*").withSockJS();
 	}
 
 	@Override
