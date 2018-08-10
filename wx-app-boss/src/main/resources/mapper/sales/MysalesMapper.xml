@@ -115,7 +115,7 @@
 </sql>
 
 <!-- 我的销量主页分页集合 -->
-<select id="getMySalesData" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
+<select id="getPageData" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
 	SELECT ID,
 	       CODE,
 	       NAME,
@@ -140,7 +140,7 @@
 </select>
 
 <!-- 我的销量主页公司总计行对象 -->
-<select id="getMySalesTotalVo" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
+<select id="getTotalVo" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
 	SELECT 
 	       'Company' NODETYPE,
 	       GOODSQUANTITY,
@@ -160,7 +160,7 @@
 </select>
 
 <!-- 我的销量详情页页分页集合 -->
-<select id="getMySalesDetailData" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
+<select id="getDetailPageData" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
 	SELECT ID,CODE,NAME,GOODSQUANTITY,
 	       TO_CHAR(GOODSAMOUNT)GOODSAMOUNT
 	       <if test="canSeeAmount==1">  ,
@@ -181,7 +181,7 @@
 </select>
 
 <!-- 我的销量详情页总计对象 -->
-<select id="getMySalesDetailTotalVo" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
+<select id="getDetailTotalVo" resultType="com.phone.erp.boss.vo.sales.MySalesVo">
 	SELECT <if test="nodeType==Section">ID,CODE,NAME,</if>
 	       GOODSQUANTITY,
 	       TO_CHAR(GOODSAMOUNT)GOODSAMOUNT

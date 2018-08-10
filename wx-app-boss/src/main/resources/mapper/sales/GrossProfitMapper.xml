@@ -136,7 +136,7 @@
 		<if test="salesType==2"><include refid="sales"/></if>
 </sql>
 <!-- 获取毛利战报主页分页集合 -->
-<select id="getGrossProfitData" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+<select id="getPageData" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
 		SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY
 		<if test="canSeeAmount==1">  ,
 			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
@@ -153,7 +153,7 @@
 </select>
 
 <!-- 获取毛利战报主页总计行对象 -->
-<select id="getGrossProfitTotalVo" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+<select id="getTotalVo" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
 		SELECT SUM(GOODSQUANTITY)AS GOODSQUANTITY
 		<if test="canSeeAmount==1">  ,
 			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
@@ -165,7 +165,7 @@
 </select>
 
 <!-- 获取毛利战报详情页分页集合 -->
-<select id="getGrossProfitDetailData" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+<select id="getDetailPageData" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
 		SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY
 		<if test="canSeeAmount==1">  ,
 			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
@@ -182,7 +182,7 @@
 </select>
 
 <!-- 获取毛利战报详情页总计行对象 -->
-<select id="getGrossProfitDetailTotalVo" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
+<select id="getDetailTotalVo" resultType="com.phone.erp.boss.vo.sales.GrossProfitVo">
 		SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY
 		<if test="canSeeAmount==1">  ,
 			TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,

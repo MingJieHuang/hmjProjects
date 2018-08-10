@@ -98,7 +98,7 @@
 </sql>
 
 <!-- 获取采购汇总主页分页集合 -->
-<select id="getPurchaseCollectData" resultType="com.phone.erp.boss.vo.purchase.PurchaseCollectVo">
+<select id="getPageData" resultType="com.phone.erp.boss.vo.purchase.PurchaseCollectVo">
 		SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY
 		<if test="canSeeAmount==1">  ,
 			TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT,
@@ -115,7 +115,7 @@
 </select>
 
 <!-- 获取采购汇总总计行对象 -->
-<select id="getPurchaseCollectTotalVo" resultType="com.phone.erp.boss.vo.purchase.PurchaseCollectVo">
+<select id="getTotalVo" resultType="com.phone.erp.boss.vo.purchase.PurchaseCollectVo">
 		SELECT SUM(GOODSQUANTITY) GOODSQUANTITY
 		<if test="canSeeAmount==1">  ,
 			TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT,

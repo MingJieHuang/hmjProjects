@@ -49,7 +49,7 @@
 	</sql>
 	
 	<!-- 查询库存分布主页结果集(分页) -->
-	<select id="getStockDistrData" resultType="com.phone.erp.boss.vo.storage.StockDistributionVo">
+	<select id="getPageData" resultType="com.phone.erp.boss.vo.storage.StockDistributionVo">
 		SELECT goodsId,goodsName,goodsCode,goodsConfiguration,SUM(goodsQuantity)goodsQuantity
 				FROM(
 					<include refid="codeSqlAndQueryCondition"></include>

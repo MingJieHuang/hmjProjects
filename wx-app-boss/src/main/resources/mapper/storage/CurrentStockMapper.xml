@@ -49,7 +49,7 @@
 	</sql>
 	
 	<!-- 查询实时库存主页结果集(分页) -->
-	<select id="getCurrentStockData" resultType="com.phone.erp.boss.vo.storage.CurrentStockVo">
+	<select id="getPageData" resultType="com.phone.erp.boss.vo.storage.CurrentStockVo">
 		SELECT goodsId,goodsName,goodsCode,goodsConfiguration,SUM(goodsQuantity)goodsQuantity
 	            <if test="canSeeAmount==1">   
 	           ,to_char(SUM(goodsAmount)) AS goodsAmount,
@@ -63,7 +63,7 @@
 	</select>
 	
 	<!-- 查询实时库存主页结总计行对象 -->
-	<select id="getCurrentStockTotal" resultType="com.phone.erp.boss.vo.storage.CurrentStockVo">
+	<select id="getTotalVo" resultType="com.phone.erp.boss.vo.storage.CurrentStockVo">
 		SELECT  SUM(goodsQuantity)goodsQuantity
 	            <if test="canSeeAmount==1">   
 	           ,to_char(SUM(goodsAmount)) AS goodsAmount,

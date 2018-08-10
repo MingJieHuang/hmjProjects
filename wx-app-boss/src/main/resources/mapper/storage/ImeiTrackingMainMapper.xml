@@ -35,7 +35,7 @@
 		)
 	</sql>
 <!-- 获取串号跟踪主页分页集合 -->
-<select id="getImeiTrackingMainData" resultType="com.phone.erp.boss.vo.storage.ImeiTrackingMainVo">
+<select id="getPageData" resultType="com.phone.erp.boss.vo.storage.ImeiTrackingMainVo">
 		<include refid="tempTable"/>
 	  SELECT A.ID imeiId, A.IMEI imei, A.AUXILIARY_IMEI auxiliaryImei, A.STATUSCODE STATUSCODE
 	    FROM (SELECT DISTINCT A.ID, MAX(A.RN) OVER(PARTITION BY A.ID) RN FROM A) B
