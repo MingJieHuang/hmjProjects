@@ -1,7 +1,7 @@
 package com.phone.erp.websocket.enums;
 
-import com.phone.erp.base.exception.bussiness.AssertFailedException;
 import com.phone.erp.base.utils.Assert;
+import org.chrisli.utils.exception.AssertFailedException;
 
 /**
  * [WebSocket操作动作]

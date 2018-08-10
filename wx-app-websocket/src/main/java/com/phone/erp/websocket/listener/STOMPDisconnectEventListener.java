@@ -9,21 +9,21 @@ import com.phone.erp.websocket.vo.WebSocketUser;
 
 /**
  * [STOMP断开连接事件监听器]
- * 
+ *
  * @author Chris li[黎超]
  * @version [版本, 2017-04-12]
  * @see
  */
 public class STOMPDisconnectEventListener implements ApplicationListener<SessionDisconnectEvent> {
 
-	@Autowired
-	private WebSocketSessionRegistryService webSocketSessionRegistryService;
+    @Autowired
+    private WebSocketSessionRegistryService webSocketSessionRegistryService;
 
-	@Override
-	public void onApplicationEvent(SessionDisconnectEvent event) {
-		WebSocketUser webSocketUser = (WebSocketUser) event.getUser();
-		// 将用户注册到在线用户集合中去
-		webSocketSessionRegistryService.removeWebSocketUser(webSocketUser);
-	}
+    @Override
+    public void onApplicationEvent(SessionDisconnectEvent event) {
+        WebSocketUser webSocketUser = (WebSocketUser) event.getUser();
+        // 将用户注册到在线用户集合中去
+        webSocketSessionRegistryService.removeWebSocketUser(webSocketUser);
+    }
 
 }

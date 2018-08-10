@@ -1,22 +1,17 @@
-package com.phone.erp.base.exception.handler;
+package com.phone.erp.base.exception;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.phone.erp.base.Result;
+import com.phone.erp.base.enums.ErrorCode;
+import com.phone.erp.base.exception.bussiness.*;
+import org.chrisli.utils.exception.AssertFailedException;
+import org.chrisli.utils.exception.FrameworkException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.phone.erp.base.Result;
-import com.phone.erp.base.enums.ErrorCode;
-import com.phone.erp.base.exception.FrameworkException;
-import com.phone.erp.base.exception.bussiness.AssertFailedException;
-import com.phone.erp.base.exception.bussiness.AutoLoginFailedException;
-import com.phone.erp.base.exception.bussiness.LoginFailedException;
-import com.phone.erp.base.exception.bussiness.NotLoggedInException;
-import com.phone.erp.base.exception.bussiness.PermissionDeniedException;
-import com.phone.erp.base.exception.bussiness.RequestFailedException;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * [系统异常处理]

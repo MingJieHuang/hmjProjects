@@ -1,20 +1,19 @@
 package com.phone.erp.base.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.phone.erp.base.Constants;
 import com.phone.erp.base.config.DevModelConfig;
 import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.enums.MiniApp;
 import com.phone.erp.base.utils.Assert;
-import com.phone.erp.base.utils.json.JsonUtil;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
+import org.apache.commons.lang.StringUtils;
+import org.chrisli.utils.json.JsonUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * [Controller的基类,提供公用方法]
