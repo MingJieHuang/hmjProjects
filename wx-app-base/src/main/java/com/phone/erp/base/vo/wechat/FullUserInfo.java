@@ -4,66 +4,67 @@ import java.io.Serializable;
 
 /**
  * [小程序从微信中获取的完整用户信息]
- * 
+ *
  * @author Chris li[黎超]
  * @version [版本, 2017-04-12]
  * @see
  */
 public class FullUserInfo implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	private String errMsg;
-	private String rawData;
-	private UserInfo userInfo;
-	private String encryptedData;
-	private String iv;
-	private String signature;
+    private static final long serialVersionUID = 1L;
 
-	public String getErrMsg() {
-		return errMsg;
-	}
+    private String errMsg;
+    private String rawData;
+    private UserInfo userInfo;
+    private String encryptedData;
+    private String iv;
+    private String signature;
 
-	public void setErrMsg(String errMsg) {
-		this.errMsg = errMsg;
-	}
+    public String getErrMsg() {
+        return errMsg;
+    }
 
-	public String getRawData() {
-		return rawData;
-	}
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
+    }
 
-	public void setRawData(String rawData) {
-		this.rawData = rawData;
-	}
+    public String getRawData() {
+        return rawData;
+    }
 
-	public UserInfo getUserInfo() {
-		return userInfo;
-	}
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
 
-	public void setUserInfo(UserInfo userInfo) {
-		this.userInfo = userInfo;
-	}
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
 
-	public String getEncryptedData() {
-		return encryptedData;
-	}
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
-	public void setEncryptedData(String encryptedData) {
-		this.encryptedData = encryptedData;
-	}
+    public String getEncryptedData() {
+        return encryptedData;
+    }
 
-	public String getIv() {
-		return iv;
-	}
+    public void setEncryptedData(String encryptedData) {
+        this.encryptedData = encryptedData;
+    }
 
-	public void setIv(String iv) {
-		this.iv = iv;
-	}
+    public String getIv() {
+        return iv;
+    }
 
-	public String getSignature() {
-		return signature;
-	}
+    public void setIv(String iv) {
+        this.iv = iv;
+    }
 
-	public void setSignature(String signature) {
-		this.signature = signature;
-	}
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
 }

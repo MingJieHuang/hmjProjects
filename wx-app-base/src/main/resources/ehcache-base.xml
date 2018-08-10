@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        
+
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="ehcache.xsd"
-             updateCheck="false" monitoring="autodetect">
-    
+         updateCheck="false" monitoring="autodetect">
+
     <diskStore path="java.io.tmp"/>
 
     <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"/>
@@ -19,7 +19,7 @@
             diskPersistent="false"
             diskExpiryThreadIntervalSeconds="120"
             memoryStoreEvictionPolicy="LRU"
-            />
+    />
 
     <cache name="SystemCache"
            maxElementsInMemory="100000"

@@ -1,21 +1,5 @@
 package com.phone.erp.base.aop;
 
-import java.lang.reflect.Method;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.phone.erp.base.Constants;
 import com.phone.erp.base.annotation.AuthValidate;
 import com.phone.erp.base.aop.base.BaseAspect;
@@ -24,9 +8,23 @@ import com.phone.erp.base.config.DevModelConfig;
 import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.enums.MiniApp;
 import com.phone.erp.base.utils.Assert;
-import com.phone.erp.base.utils.encrypt.JwtUtil;
-import com.phone.erp.base.utils.json.JsonUtil;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
+import org.apache.commons.lang.StringUtils;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.chrisli.utils.encrypt.JwtUtil;
+import org.chrisli.utils.json.JsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 
 /**
  * [权限切面]
@@ -46,7 +44,7 @@ public class AuthAspect extends BaseAspect {
 	@Autowired
 	private AppConfig appConfig;
 
-	@Pointcut("@annotation(com.phone.erp.base.annotation.AuthValidate) and @annotation(org.springframework.web.bind.annotation.RequestMapping) and execution(public * com.phone.erp..controller..*Controller.*(..))")
+	@Pointcut("@annotation(com.phone.erp.base.annotation.AuthValidate) && @annotation(org.springframework.web.bind.annotation.RequestMapping) && execution(public * com.phone.erp..controller..*Controller.*(..))")
 	public void authAspect() {
 
 	}
@@ -85,7 +83,6 @@ public class AuthAspect extends BaseAspect {
 		// TODO 验证权限
 		logger.debug(curEmp.toString());
 		logger.debug(validate.toString());
-
 	}
 
 }

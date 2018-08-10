@@ -15,14 +15,13 @@ import com.phone.erp.websocket.listener.STOMPDisconnectEventListener;
 
 /**
  * [WebSocket STOMP配置]
- * 
+ *
  * @author Chris li[黎超]
  * @version [版本, 2017-04-12]
  * @see
  */
 @Configuration
 @EnableWebSocketMessageBroker
-@SuppressWarnings("deprecation")
 public class WebSocketStompConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
 	@Value("${project.url.prefix}")
