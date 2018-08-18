@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 销售排行 -->
+<mapper namespace="com.phone.erp.boss.mapper.sales.SalesRankingMapper">
+    <!-- 获取销售排行主页分页 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.sales.SalesRankingVo">
+        select 1 goodsAmount from dual
+    </select>
+</mapper>

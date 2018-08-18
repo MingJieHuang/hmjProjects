@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 进销对比 -->
+<mapper namespace="com.phone.erp.boss.mapper.purchase.PurchaseSalesCompareMapper">
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.purchase.PurchaseSalesCompareVo">
+        SELECT 1 id  FROM dual
+    </select>
+</mapper>

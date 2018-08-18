@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 我的资金 -->
+<mapper namespace="com.phone.erp.boss.mapper.contact.MyMoneyMapper">
+    <!-- 我的资金获取主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.contact.MyMoneyVo">
+        SELECT 1 id FROM  dual
+    </select>
+</mapper>
