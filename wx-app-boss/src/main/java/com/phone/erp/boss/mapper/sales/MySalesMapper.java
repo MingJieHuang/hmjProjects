@@ -29,18 +29,18 @@ public interface MySalesMapper extends ReportBaseMapper<MySalesVo>{
 	 *//*
 	MySalesVo getMySalesTotalVo(Map<String, Object> map);*/
 
-	/**
+/*	*//**
 	 * [获取我的销量详情页分页集合数据]
 	 * @author HMJ
 	 * @version [版本,2018-7-17] 
-	 */
+	 *//*
 	Page<MySalesVo> getMySalesDetailData(Map<String, Object> map);
 
-	/**
+	*//**
 	 * [获取我的销量详情页总计行对象]
 	 * @author HMJ
 	 * @version [版本,2018-7-17] 
-	 */
-	MySalesVo getMySalesDetailTotalVo(Map<String, Object> map);
+	 *//*
+	MySalesVo getMySalesDetailTotalVo(Map<String, Object> map);*/
 
 }
