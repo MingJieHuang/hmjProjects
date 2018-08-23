@@ -3,6 +3,7 @@ package com.phone.erp.boss.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.phone.erp.boss.vo.common.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,6 @@ import com.phone.erp.base.utils.Assert;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.boss.service.BossCommonService;
 import com.phone.erp.boss.util.BossReportUtil;
-import com.phone.erp.boss.vo.common.BossCompanyVo;
-import com.phone.erp.boss.vo.common.BossContactUnitVo;
-import com.phone.erp.boss.vo.common.BossMenuVo;
-import com.phone.erp.boss.vo.common.BossQueryVo;
-import com.phone.erp.boss.vo.common.GoodsBrandVo;
-import com.phone.erp.boss.vo.common.GoodsClassVo;
 
 
 /**
@@ -112,8 +107,6 @@ public class BossCommonController extends BaseController {
 	 * 获取商品品牌集合
 	 * @author hmj
 	 * @param keyWord 模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
 	 * @version [版本,2018-7-10]
 	 */
 	@AuthValidate
@@ -137,9 +130,6 @@ public class BossCommonController extends BaseController {
 	/**
 	 * 获取公司部门集合
 	 * @author hmj
-	 * @param keyWord:模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
 	 * @version [版本,2018-7-10]
 	 */
 	@AuthValidate
@@ -159,11 +149,10 @@ public class BossCommonController extends BaseController {
 		}
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
+
 	/**
 	 * 获取用户可使用公司下往来单位(供应商、客户)分页集合
 	 * @author hmj
-	 * @param keyWord 模糊查询(供应商编码,供应商名称)
-	 * @param menuCode 报表菜单码
 	 * @version [版本,2018-7-18]
 	 */
 	@AuthValidate
@@ -171,20 +160,90 @@ public class BossCommonController extends BaseController {
 	@ResponseBody
 	public Result getContactUnits(BossQueryVo queryVo){
 		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
-		LoginEmployeeVo employeeVo = super.getCurrentEmployeeVo();
-		Assert.notNull(employeeVo, ErrorCode.NOT_LOGGED_IN);
-		queryVo.setEmployeeVo(employeeVo);
+		setCurrentEmp(queryVo);
 		Result result = new Result();
 		String descStr = "获取用户可使用公司下往来单位(供应商、客户)分页集合";
 		List<BossContactUnitVo> dataList = new ArrayList<BossContactUnitVo>();
 		try {
 			dataList = bossCommonService.getContactUnits(queryVo);
 			result.put("dataList", dataList);
-			
+
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
 		}
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
-	
+
+
+	/**
+	 * 获取运营商名称集合(三大运营商)
+	 * @author hmj
+	 * @version [版本,2018-8-22]
+	 */
+	@AuthValidate
+	@RequestMapping("/getOperators")
+	@ResponseBody
+	public Result getOperators(BossQueryVo queryVo){
+		Result result = new Result();
+		String descStr = "获取运营商名称集合";
+		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		try {
+			dataList = bossCommonService.getOperators(queryVo);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
+	/**
+	 * 获取运营商单位集合
+	 * @author hmj
+	 * @version [版本,2018-8-22]
+	 */
+	@AuthValidate
+	@RequestMapping("/getOperatorUnits")
+	@ResponseBody
+	public Result getOperatorUnits(BossQueryVo queryVo){
+		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
+		setCurrentEmp(queryVo);
+		Result result = new Result();
+		String descStr = "获取运营商单位集合";
+		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		try {
+			dataList = bossCommonService.getOperatorUnits(queryVo);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
+	/**
+	 * 获取运营商业务名称分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-23]
+	 */
+	@AuthValidate
+	@RequestMapping("/getOperatorNamePage")
+	@ResponseBody
+	public Result getOperatorNamePage(BossQueryVo queryVo){
+		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
+		setCurrentEmp(queryVo);
+		Result result = new Result();
+		String descStr = "获取运营商业务名称分页集合";
+		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		try {
+			dataList = bossCommonService.getOperatorNamePage(queryVo);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
+
+	//--------------------------工具方法---------------
+	protected void setCurrentEmp(BossQueryVo queryVo) {
+		LoginEmployeeVo employeeVo = super.getCurrentEmployeeVo();
+		Assert.notNull(employeeVo, ErrorCode.NOT_LOGGED_IN);
+		queryVo.setEmployeeVo(employeeVo);
+	}
 }

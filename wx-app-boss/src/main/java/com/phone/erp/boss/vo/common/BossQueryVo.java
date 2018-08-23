@@ -70,7 +70,13 @@ public class BossQueryVo {
 	private Long imeiId;
 	//29.destStr 方法描述 
 	private String destStr;
-	
+	//30,operatorId 运营商名称id
+	private Long operatorId;
+	//31,operatorUnitId 运营商单位id
+	private Long operatorUnitId;
+	//32,operatorNameId 运营商业务id
+	private Long operatorNameId;
+
 	public Long getGroupId() {
 		return groupId;
 	}
@@ -253,5 +259,28 @@ public class BossQueryVo {
 	public void setDestStr(String destStr) {
 		this.destStr = destStr;
 	}
-	
+
+	public Long getOperatorId() {
+		return operatorId;
+	}
+
+	public void setOperatorId(Long operatorId) {
+		this.operatorId = operatorId;
+	}
+
+	public Long getOperatorUnitId() {
+		return operatorUnitId;
+	}
+
+	public void setOperatorUnitId(Long operatorUnitId) {
+		this.operatorUnitId = operatorUnitId;
+	}
+
+	public Long getOperatorNameId() {
+		return operatorNameId;
+	}
+
+	public void setOperatorNameId(Long operatorNameId) {
+		this.operatorNameId = operatorNameId;
+	}
 }

@@ -3,14 +3,10 @@ package com.phone.erp.boss.service;
 import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.Page;
 import com.phone.erp.base.Result;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
-import com.phone.erp.boss.vo.common.BossCompanyVo;
-import com.phone.erp.boss.vo.common.BossContactUnitVo;
-import com.phone.erp.boss.vo.common.BossMenuVo;
-import com.phone.erp.boss.vo.common.BossQueryVo;
-import com.phone.erp.boss.vo.common.GoodsBrandVo;
-import com.phone.erp.boss.vo.common.GoodsClassVo;
+import com.phone.erp.boss.vo.common.*;
 
 /**
  * [Boos公共业务层]
@@ -108,4 +104,29 @@ public interface BossCommonService {
 	 */
 	public Map<String, Object> getParamMap(BossQueryVo queryVo) throws Exception;
 
+	/**
+	 * [获取运营商名称集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-22]
+	 * @throws Exception
+	 * @param queryVo
+	 */
+	public List<BossConditionVo> getOperators(BossQueryVo queryVo) throws Exception;
+
+	/**
+	 * [获取运营商单位集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-22]
+	 * @throws Exception
+	 * @param queryVo
+	 */
+	List<BossConditionVo> getOperatorUnits(BossQueryVo queryVo) throws Exception;
+	/**
+	 * [获取运营商业务名称分页集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-23]
+	 * @throws Exception
+	 * @param queryVo
+	 */
+	List<BossConditionVo> getOperatorNamePage(BossQueryVo queryVo) throws Exception;
 }

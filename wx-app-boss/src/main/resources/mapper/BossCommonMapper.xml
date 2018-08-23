@@ -78,7 +78,48 @@
 			      OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
 			      )
 			    </if>	
-	</select>		 
+	</select>
+
+	<!-- 运营商名称组件 -->
+	<select id="getOperators" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT DECODE(P.CODE, '2', -2, '3', -3, -4) ID, P.CODE AS CODE, P.CONTENT_1 AS NAME FROM T_PUBLICTABS P
+			WHERE P.TYPE_CODE = 'YYS'
+				<if test="keyWord!=null">
+					AND P.CONTENT_1 LIKE UPPER('%${keyWord}%')
+				</if>
+	</select>
+	<!-- 运营商单位集合 -->
+	<select id="getOperatorUnits" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT DISTINCT TCU.ID AS ID, TCU.CODE AS CODE, TCU.NAME AS NAME
+			FROM T_BUSINESS_ARCH T
+			JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
+			WHERE T.COMPANY_ID IN (${companyIds})
+			AND TCU.STATUS = 0
+			<if test="keyWord!=null">
+				AND (UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')
+				OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
+				)
+			</if>
+		ORDER BY TCU.CODE
+
+	</select>
+    <!-- 运营商业务名称分页集合 -->
+    <select id="getOperatorNamePage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+        SELECT C.ID              AS id,
+                C.BIZ_NAME       AS name,
+                C.BIZ_CODE       AS code,
+                C.REMARK
+          FROM T_BUSINESS_ARCH C
+         LEFT JOIN T_BUSINESS_CLASS CL ON C.BUSINESS_CLASS_ID = CL.ID
+         LEFT JOIN T_CONTACT_UNIT CU ON C.CONTACTSUNIT_ID = CU.ID
+        where C.STATUS = 0
+           AND C.COMPANY_ID in (${companyIds})
+        <if test="keyWord!=null">
+            AND (UPPER(C.BIZ_NAME) LIKE UPPER('%${keyWord}%')
+            OR UPPER( C.BIZ_CODE) LIKE UPPER('%${keyWord}%')
+            )
+        </if>
+    </select>
 <!--  BOSS公共组件区END  -->
 
 
@@ -142,4 +183,5 @@
 		                    start with t.id =#{sectionId} connect by t.parent_id = prior t.id
 		                
 	</select>
+
 </mapper>

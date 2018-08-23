@@ -3,12 +3,8 @@ package com.phone.erp.boss.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.phone.erp.boss.vo.common.BossCompanyVo;
-import com.phone.erp.boss.vo.common.BossContactUnitVo;
-import com.phone.erp.boss.vo.common.BossMenuVo;
-import com.phone.erp.boss.vo.common.BossSectionVo;
-import com.phone.erp.boss.vo.common.GoodsBrandVo;
-import com.phone.erp.boss.vo.common.GoodsClassVo;
+import com.github.pagehelper.Page;
+import com.phone.erp.boss.vo.common.*;
 
 /**
  * [Boss小程序mapper接口]
@@ -82,4 +78,24 @@ public interface BossCommonMapper {
 	 */
 	public List<BossContactUnitVo> getContactUnits(Map<String, Object> map);
 
+	/**
+	 * [获取运营商名称集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-22]
+	 * @param map
+	 */
+	public List<BossConditionVo> getOperators(Map<String, Object> map);
+
+	/**
+	 * [获取运营商单位集合]
+	 * @param map
+	 * @return
+	 */
+	public Page<BossConditionVo> getOperatorUnits(Map<String, Object> map);
+	/**
+	 * [获取运营商业务名称分页集合]
+	 * @param map
+	 * @return
+	 */
+	public Page<BossConditionVo> getOperatorNamePage(Map<String, Object> map);
 }
