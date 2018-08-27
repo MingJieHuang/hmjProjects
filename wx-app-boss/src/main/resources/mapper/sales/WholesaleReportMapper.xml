@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.sales.WholesaleReportMapper">
+<!-- 批发战报 -->
+    <!-- 获取批发战报主页分页参数 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.sales.WholesaleReportVo">
+         SELECT '批发战报获取主页分页集合'NAME FROM dual
+    </select>
+
+    <!-- 获取批发战报主页总计行对象 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.sales.WholesaleReportVo">
+         SELECT '批发战报获取总计行对象' NAME  FROM dual
+    </select>
+    
+</mapper>

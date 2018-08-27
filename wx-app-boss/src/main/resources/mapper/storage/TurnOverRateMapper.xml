@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.storage.TurnOverRateMapper">
+<!-- 周转率分析 -->
+    <!-- 获取周转率分析主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.storage.TurnOverRateVo">
+         SELECT '周转率分析'NAME FROM dual
+    </select>
+    
+</mapper>
