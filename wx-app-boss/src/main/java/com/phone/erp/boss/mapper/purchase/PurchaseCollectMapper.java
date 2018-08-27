@@ -12,6 +12,7 @@ import com.phone.erp.boss.vo.purchase.PurchaseCollectVo;
 
 public interface PurchaseCollectMapper extends ReportBaseMapper<PurchaseCollectVo>{
 
+
 /*	*//**
 	 * [采购汇总主页分页集合]
 	 * @author HMJ

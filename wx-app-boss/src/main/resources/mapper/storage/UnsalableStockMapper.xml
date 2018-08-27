@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.storage.UnsalableStockMapper">
+    <!-- 滞销库存 -->
+    <!-- 获取滞销库存主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+         SELECT '主页分页集合' NAME FROM dual
+    </select>
+    <!-- 获取滞销库存主页总计行 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+         SELECT '主页总计行对象'NAME FROM dual
+    </select>
+    <!-- 获取滞销库存详情页分页集合 -->
+    <select id="getDetailPageData" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+         SELECT '详情页分页集合'NAME FROM dual
+    </select>
+    <!-- 获取滞销库存详情页总计行对象 -->
+    <select id="getDetailTotalVo" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+         SELECT '详情页总计行对象'NAME FROM dual
+    </select>
+    
+
+</mapper>

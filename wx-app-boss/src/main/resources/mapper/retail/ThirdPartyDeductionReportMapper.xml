@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.retail.ThirdPartyDeductionReportMapper">
+<!-- 第三方抵扣战报 -->
+    <!-- 获取第三方抵统计主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.ThirdPartyDeductionReportVo">
+         SELECT '第三方抵扣战报主页分页集合'NAME FROM dual
+    </select>
+    <!-- 第三方抵扣战报主页总计行对象 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.retail.ThirdPartyDeductionReportVo">
+         SELECT '第三抵扣战报总计行对象'NAME FROM dual
+    </select>
+    
+</mapper>

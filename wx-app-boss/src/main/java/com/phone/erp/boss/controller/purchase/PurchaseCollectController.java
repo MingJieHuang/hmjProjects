@@ -24,7 +24,7 @@ import com.phone.erp.boss.vo.common.BossQueryVo;
 @RequestMapping("${project.url.prefix}/report/purchase/purchaseCollect")
 public class PurchaseCollectController extends ReportBaseController {
 	@Autowired
-	private PurchaseCollectService PurchaseCollectService; 
+	private PurchaseCollectService PurchaseCollectService;
 	/**
 	 * 获取采购汇总主页数据
 	 * @author hmj
