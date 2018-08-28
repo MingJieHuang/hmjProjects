@@ -98,4 +98,13 @@ public interface BossCommonMapper {
 	 * @return
 	 */
 	public Page<BossConditionVo> getOperatorNamePage(Map<String, Object> map);
+
+	/**
+	 * 获取抵扣单位分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+    public Page<BossConditionVo> getDeductionUnitsPage(Map<String, Object> map);
+
+	public Page<BossConditionVo> getActivityNamesPage(Map<String, Object> map);
 }

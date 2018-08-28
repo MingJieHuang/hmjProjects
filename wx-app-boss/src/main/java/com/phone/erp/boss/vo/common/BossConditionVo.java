@@ -8,5 +8,16 @@ import com.phone.erp.base.vo.BaseResultVo;
  * @create 2018-08-22 16:09
  */
 public class BossConditionVo extends BaseResultVo{
+/**
+*第三方抵扣单位名称
+*/
+private String deductionUnitName;
 
+    public String getDeductionUnitName() {
+        return deductionUnitName;
+    }
+
+    public void setDeductionUnitName(String deductionUnitName) {
+        this.deductionUnitName = deductionUnitName;
+    }
 }

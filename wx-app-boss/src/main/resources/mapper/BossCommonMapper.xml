@@ -120,12 +120,42 @@
             )
         </if>
     </select>
+    <!-- 获取抵扣单位分页集合 -->
+    <select id="getDeductionUnitsPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT
+			DISTINCT TCU.ID AS ID,
+			TCU.CODE         AS CODE,
+			TCU.NAME         AS NAME
+		FROM I_COUPON T
+			JOIN T_CONTACT_UNIT TCU ON T.CONTACT_UNIT_ID = TCU.ID AND T.COMPANY_ID = TCU.COMPANY_ID
+        where T.STATUS = 0
+           AND T.COMPANY_ID in (${companyIds})
+        <if test="keyWord!=null">
+            AND (UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')
+            OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
+            )
+        </if>
+		ORDER BY TCU.NAME
+    </select>
+	<!-- 获取抵扣活动分页集合 -->
+    <select id="getActivityNamesPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT
+			   DISTINCT T.ID          AS ID,
+			   T.COUPON_CODE          AS CODE,
+			   T.COUPON_NAME          AS NAME,
+			   TCU.NAME                AS DEDUCTIONUNITNAME
+		FROM I_COUPON T
+		    JOIN T_CONTACT_UNIT TCU ON T.CONTACT_UNIT_ID = TCU.ID AND T.COMPANY_ID = TCU.COMPANY_ID
+		where T.STATUS = 0
+		AND T.COMPANY_ID in (${companyIds})
+		<if test="keyWord!=null">
+			AND (UPPER(T.COUPON_CODE) LIKE UPPER('%${keyWord}%')
+			OR UPPER(T.COUPON_NAME) LIKE UPPER('%${keyWord}%')
+			)
+		</if>
+		ORDER BY T.COUPON_NAME
+    </select>
 <!--  BOSS公共组件区END  -->
-
-
-
-
-
 
 	<!-- 获取报表权限记录数量（有权限会有一条记录，返回值为1，没有权限返回值为0） -->
 	<select id="getAuthCodeNumber" resultType="long">

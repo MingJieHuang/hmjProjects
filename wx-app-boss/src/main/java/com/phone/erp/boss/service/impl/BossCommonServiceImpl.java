@@ -156,16 +156,7 @@ public class BossCommonServiceImpl implements BossCommonService {
      */
     @Override
     public List<BossConditionVo> getOperatorUnits(BossQueryVo queryVo) throws Exception {
-        List<BossCompanyVo> menuCodeCompanyList = getMenuCodeCompanyList(queryVo.getEmployeeVo(), queryVo.getMenuCode());
-        Map<String,Object> map = new HashMap<String, Object>();
-        if (CollectionUtils.isNotEmpty(menuCodeCompanyList)){
-            map.put("companyIds",BossReportUtil.getFieldStr(menuCodeCompanyList, "id"));
-        }
-        if (StringUtils.isNotBlank(queryVo.getKeyWord())){
-            map.put("keyWord",queryVo.getKeyWord());
-        }
-        //设置分页参数
-        PageHelper.startPage(queryVo.getPage(), queryVo.getPageSize());
+        Map<String, Object> map = getConditionMap(queryVo, true);
         return bossCommonMapper.getOperatorUnits(map).getResult();
     }
 
@@ -177,17 +168,53 @@ public class BossCommonServiceImpl implements BossCommonService {
      */
     @Override
     public List<BossConditionVo> getOperatorNamePage(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo, true);
+        return bossCommonMapper.getOperatorNamePage(map).getResult();
+    }
+    /**
+     * 获取抵扣单位分页集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    @Override
+    public List<BossConditionVo> getDeductionUnitsPage(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,true);
+        return bossCommonMapper.getDeductionUnitsPage(map).getResult();
+    }
+    /**
+     * 获取抵扣活动分页集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    @Override
+    public List<BossConditionVo> getActivityNamesPage(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,true);
+        return bossCommonMapper.getActivityNamesPage(map).getResult();
+    }
+
+    /**
+     * 获取报表组件查询map
+     * @param queryVo
+     * @param isQueryPage 是否分页
+     * @return
+     * @throws Exception
+     */
+    private Map<String, Object> getConditionMap(BossQueryVo queryVo,Boolean isQueryPage) throws Exception {
         List<BossCompanyVo> menuCodeCompanyList = getMenuCodeCompanyList(queryVo.getEmployeeVo(), queryVo.getMenuCode());
         Map<String,Object> map = new HashMap<String, Object>();
         if (CollectionUtils.isNotEmpty(menuCodeCompanyList)){
-            map.put("companyIds",BossReportUtil.getFieldStr(menuCodeCompanyList, "id"));
+            map.put("companyIds", BossReportUtil.getFieldStr(menuCodeCompanyList, "id"));
         }
         if (StringUtils.isNotBlank(queryVo.getKeyWord())){
             map.put("keyWord",queryVo.getKeyWord());
         }
-        //设置分页参数
-        PageHelper.startPage(queryVo.getPage(), queryVo.getPageSize());
-        return bossCommonMapper.getOperatorNamePage(map).getResult();
+        if (isQueryPage){
+            //设置分页参数
+            Integer page = queryVo.getPage();
+            Integer pageSize = queryVo.getPageSize();
+            PageHelper.startPage(page==null?1:page,pageSize==null?20:pageSize);
+        }
+        return map;
     }
     /********************************** BOSS公共组件区 END *********************************************/
 

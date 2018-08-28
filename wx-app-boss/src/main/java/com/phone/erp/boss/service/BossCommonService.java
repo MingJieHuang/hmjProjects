@@ -52,10 +52,6 @@ public interface BossCommonService {
 	 * @author hmj
 	 * @param keyWord
 	 *            模糊查询
-	 * @param page
-	 *            当前页码
-	 * @param pageSize
-	 *            每页最大显示数
 	 * @version [版本,2018-7-10]
 	 */
 	public List<GoodsBrandVo> getGoodsBrandList(LoginEmployeeVo employeeVo,String keyWord);
@@ -129,4 +125,16 @@ public interface BossCommonService {
 	 * @param queryVo
 	 */
 	List<BossConditionVo> getOperatorNamePage(BossQueryVo queryVo) throws Exception;
+	/**
+	 * 获取抵扣单位分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+    List<BossConditionVo> getDeductionUnitsPage(BossQueryVo queryVo) throws Exception;
+	/**
+	 * 获取抵扣活动分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	List<BossConditionVo> getActivityNamesPage(BossQueryVo queryVo) throws Exception;
 }
