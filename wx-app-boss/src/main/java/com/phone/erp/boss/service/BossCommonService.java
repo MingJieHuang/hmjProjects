@@ -137,4 +137,16 @@ public interface BossCommonService {
 	 * @version [版本,2018-8-28]
 	 */
 	List<BossConditionVo> getActivityNamesPage(BossQueryVo queryVo) throws Exception;
+	/**
+	 * 获取分期商名称分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	List<BossConditionVo> getInstallmentfeesPage(BossQueryVo queryVo) throws Exception;
+    /**
+     * 获取分期业务名称分页集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    List<BossConditionVo> getInstallmentBusinessPage(BossQueryVo queryVo) throws Exception;
 }

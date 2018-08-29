@@ -8,10 +8,23 @@ import com.phone.erp.base.vo.BaseResultVo;
  * @create 2018-08-22 16:09
  */
 public class BossConditionVo extends BaseResultVo{
-/**
-*第三方抵扣单位名称
-*/
-private String deductionUnitName;
+    /**
+    *第三方抵扣单位名称
+    */
+    private String deductionUnitName;
+
+    /**
+    *分期商名称
+    */
+    private String installmentfeesName;
+
+    public String getInstallmentfeesName() {
+        return installmentfeesName;
+    }
+
+    public void setInstallmentfeesName(String installmentfeesName) {
+        this.installmentfeesName = installmentfeesName;
+    }
 
     public String getDeductionUnitName() {
         return deductionUnitName;

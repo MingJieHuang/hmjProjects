@@ -107,4 +107,16 @@ public interface BossCommonMapper {
     public Page<BossConditionVo> getDeductionUnitsPage(Map<String, Object> map);
 
 	public Page<BossConditionVo> getActivityNamesPage(Map<String, Object> map);
+	/**
+	 * 获取分期商名称分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	public Page<BossConditionVo> getInstallmentfeesPage(Map<String, Object> map);
+    /**
+     * 获取分期业务名称分页集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    public Page<BossConditionVo> getInstallmentBusinessPage(Map<String, Object> map);
 }

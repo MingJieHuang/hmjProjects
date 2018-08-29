@@ -155,6 +155,39 @@
 		</if>
 		ORDER BY T.COUPON_NAME
     </select>
+	<!-- 获取分期商名称分页集合 -->
+    <select id="getInstallmentfeesPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+        SELECT DISTINCT TCU.ID   AS ID,
+            TCU.CODE          AS CODE,
+            TCU.NAME          AS NAME
+        FROM T_INSTALLMENTFEE T
+           JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
+		where T.STATUS = 0
+		AND T.COMPANY_ID in (${companyIds})
+		<if test="keyWord!=null">
+			AND (UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')
+			OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
+			)
+		</if>
+		ORDER BY TCU.NAME
+    </select>
+	<!-- 获取分期业务名称分页集合 -->
+    <select id="getInstallmentBusinessPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+        SELECT DISTINCT    T.ID AS ID,
+            T.INSTAL_VALUE_CODE AS NAME,
+            TCU.NAME             AS  INSTALLMENTFEESNAME
+        FROM T_INSTALLMENTFEE T
+          JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
+		where T.STATUS = 0
+		AND T.COMPANY_ID in (${companyIds})
+		<if test="keyWord!=null">
+			AND UPPER(T.INSTAL_VALUE_CODE) LIKE UPPER('%${keyWord}%')
+		</if>
+		ORDER BY  T.INSTAL_VALUE_CODE
+    </select>
+
+
+
 <!--  BOSS公共组件区END  -->
 
 	<!-- 获取报表权限记录数量（有权限会有一条记录，返回值为1，没有权限返回值为0） -->

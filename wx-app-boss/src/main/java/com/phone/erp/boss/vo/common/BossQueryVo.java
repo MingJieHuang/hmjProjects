@@ -76,6 +76,10 @@ public class BossQueryVo {
 	private Long operatorUnitId;
 	//32,operatorNameId 运营商业务id
 	private Long operatorNameId;
+	//33,installmentBusinessId 分期业务id
+	private Long installmentBusinessId;
+	//34,installmentfeesId 分期商id
+	private Long installmentfeesId;
 
 	public Long getGroupId() {
 		return groupId;
@@ -282,5 +286,21 @@ public class BossQueryVo {
 
 	public void setOperatorNameId(Long operatorNameId) {
 		this.operatorNameId = operatorNameId;
+	}
+
+	public Long getInstallmentBusinessId() {
+		return installmentBusinessId;
+	}
+
+	public void setInstallmentBusinessId(Long installmentBusinessId) {
+		this.installmentBusinessId = installmentBusinessId;
+	}
+
+	public Long getInstallmentfeesId() {
+		return installmentfeesId;
+	}
+
+	public void setInstallmentfeesId(Long installmentfeesId) {
+		this.installmentfeesId = installmentfeesId;
 	}
 }

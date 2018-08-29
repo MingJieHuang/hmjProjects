@@ -30,13 +30,13 @@ public class OperatorServiceVo extends BaseResultVo{
     private String actualReceivables;
 
     /**
-    *佣金均价
-    */
+     *佣金均价
+     */
     private String commissionAvg;
 
     /**
-    *数量
-    */
+     *数量
+     */
     private Long goodsQuantity;
 
     public Long getOperatorUnitId() {

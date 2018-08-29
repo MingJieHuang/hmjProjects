@@ -84,11 +84,11 @@
                 TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE), SUM(GOODSQUANTITY)),2))AS COMMISSIONAVG
             </if>
             FROM(
-                  SELECT <include refid="commonFields"/>,GOODSQUANTITY,ACTUALRECEIVABLES,COMMISSIONESTIMATE
-                        FROM (
-                                <include refid="codeSqlAndQueryCondition"/>
-                              )
-                )
+            SELECT <include refid="commonFields"/>,GOODSQUANTITY,ACTUALRECEIVABLES,COMMISSIONESTIMATE
+            FROM (
+            <include refid="codeSqlAndQueryCondition"/>
+            )
+            )
             GROUP BY <include refid="groups"/>
             ORDER BY <include refid="groups"/>
         </select>

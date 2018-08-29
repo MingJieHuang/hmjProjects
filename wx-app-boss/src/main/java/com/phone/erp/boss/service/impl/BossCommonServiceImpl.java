@@ -191,7 +191,29 @@ public class BossCommonServiceImpl implements BossCommonService {
         Map<String, Object> map = getConditionMap(queryVo,true);
         return bossCommonMapper.getActivityNamesPage(map).getResult();
     }
+    /**
+     * 获取分期商名称分页集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    @Override
+    public List<BossConditionVo> getInstallmentfeesPage(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,true);
+        return bossCommonMapper.getInstallmentfeesPage(map).getResult();
+    }
+    /**
+     * 获取分期业务名称分页集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    @Override
+    public List<BossConditionVo> getInstallmentBusinessPage(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,true);
+        return bossCommonMapper.getInstallmentBusinessPage(map).getResult();
+    }
 
+
+    /********************************** BOSS公共组件区 END *********************************************/
     /**
      * 获取报表组件查询map
      * @param queryVo
@@ -216,8 +238,6 @@ public class BossCommonServiceImpl implements BossCommonService {
         }
         return map;
     }
-    /********************************** BOSS公共组件区 END *********************************************/
-
     /**
      * [获取报表权限]
      *
@@ -512,6 +532,14 @@ public class BossCommonServiceImpl implements BossCommonService {
         //设置运营商业务ID参数
         if (null!= queryVo.getOperatorNameId()){
             map.put("operatorNameId",queryVo.getOperatorNameId());
+        }
+        //设置分期商ID参数
+        if (null!= queryVo.getInstallmentfeesId()){
+            map.put("installmentfeesId",queryVo.getInstallmentfeesId());
+        }
+        //设置分期业务ID参数
+        if (null!= queryVo.getInstallmentBusinessId()){
+            map.put("installmentBusinessId",queryVo.getInstallmentBusinessId());
         }
         return map;
     }

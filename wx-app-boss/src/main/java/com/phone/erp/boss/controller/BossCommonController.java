@@ -283,6 +283,50 @@ public class BossCommonController extends BaseController {
 		}
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
+	/**
+	 * 获取分期商名称分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	@AuthValidate
+	@RequestMapping("/getInstallmentfeesPage")
+	@ResponseBody
+	public Result getInstallmentfeesPage(BossQueryVo queryVo){
+		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
+		setCurrentEmp(queryVo);
+		Result result = new Result();
+		String descStr = "获取分期商名称分页集合";
+		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		try {
+			dataList = bossCommonService.getInstallmentfeesPage(queryVo);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
+	/**
+	 * 获取分期业务名称分页集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	@AuthValidate
+	@RequestMapping("/getInstallmentBusinessPage")
+	@ResponseBody
+	public Result getInstallmentBusinessPage(BossQueryVo queryVo){
+		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
+		setCurrentEmp(queryVo);
+		Result result = new Result();
+		String descStr = "获取分期业务名称分页集合";
+		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		try {
+			dataList = bossCommonService.getInstallmentBusinessPage(queryVo);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
 
 	//--------------------------工具方法---------------
 	protected void setCurrentEmp(BossQueryVo queryVo) {
