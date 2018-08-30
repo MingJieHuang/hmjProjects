@@ -1,11 +1,13 @@
 package com.phone.erp.boss.vo.sales;
 
+import com.phone.erp.base.vo.BaseResultVo;
+
 /**
  * [销售排行vo类]
  * @author hmj
  * @create 2018-08-18 13:49
  */
-public class SalesRankingVo {
+public class SalesRankingVo extends BaseResultVo{
 
     /**
      * 数量

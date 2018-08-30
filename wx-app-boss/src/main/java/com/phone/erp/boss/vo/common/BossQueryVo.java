@@ -80,6 +80,10 @@ public class BossQueryVo {
 	private Long installmentBusinessId;
 	//34,installmentfeesId 分期商id
 	private Long installmentfeesId;
+	//35,accountTypeId 资金账户类型id
+	private Long accountTypeId;
+	//36,rankingGist 排行依据goodsQuantity数量,goodsAmount金额,goodsProfitAmount毛利
+	private String rankingGist;
 
 	public Long getGroupId() {
 		return groupId;
@@ -302,5 +306,21 @@ public class BossQueryVo {
 
 	public void setInstallmentfeesId(Long installmentfeesId) {
 		this.installmentfeesId = installmentfeesId;
+	}
+
+	public Long getAccountTypeId() {
+		return accountTypeId;
+	}
+
+	public void setAccountTypeId(Long accountTypeId) {
+		this.accountTypeId = accountTypeId;
+	}
+
+	public String getRankingGist() {
+		return rankingGist;
+	}
+
+	public void setRankingGist(String rankingGist) {
+		this.rankingGist = rankingGist;
 	}
 }

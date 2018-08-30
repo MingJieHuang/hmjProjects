@@ -211,6 +211,15 @@ public class BossCommonServiceImpl implements BossCommonService {
         Map<String, Object> map = getConditionMap(queryVo,true);
         return bossCommonMapper.getInstallmentBusinessPage(map).getResult();
     }
+    /**
+     * 获取资金账户类型集合
+     * @author hmj
+     * @version [版本,2018-8-30]
+     */
+    @Override
+    public List<BossConditionVo> getAccountTypes(BossQueryVo queryVo) throws Exception {
+        return bossCommonMapper.getAccountTypes();
+    }
 
 
     /********************************** BOSS公共组件区 END *********************************************/
@@ -540,6 +549,14 @@ public class BossCommonServiceImpl implements BossCommonService {
         //设置分期业务ID参数
         if (null!= queryVo.getInstallmentBusinessId()){
             map.put("installmentBusinessId",queryVo.getInstallmentBusinessId());
+        }
+        //设置资金账户类型ID参数
+        if (null!= queryVo.getAccountTypeId()){
+            map.put("accountTypeId",queryVo.getAccountTypeId());
+        }
+        //设置排行依据参数
+        if (StringUtils.isNotBlank(queryVo.getRankingGist())){
+            map.put("rankingGist",queryVo.getRankingGist());
         }
         return map;
     }

@@ -327,6 +327,26 @@ public class BossCommonController extends BaseController {
 		}
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
+	/**
+	 * 获取资金账户类型集合
+	 * @author hmj
+	 * @version [版本,2018-8-30]
+	 */
+	@AuthValidate
+	@RequestMapping("/getAccountTypes")
+	@ResponseBody
+	public Result getAccountTypes(BossQueryVo queryVo){
+		Result result = new Result();
+		String descStr = "获取资金账户类型集合";
+		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		try {
+			dataList = bossCommonService.getAccountTypes(queryVo);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
 
 	//--------------------------工具方法---------------
 	protected void setCurrentEmp(BossQueryVo queryVo) {

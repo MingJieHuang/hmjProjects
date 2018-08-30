@@ -185,6 +185,15 @@
 		</if>
 		ORDER BY  T.INSTAL_VALUE_CODE
     </select>
+	<!-- 获取资金账户类型集合 -->
+    <select id="getAccountTypes" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+			SELECT
+			   ID          AS ID,
+			   CODE        AS CODE,
+			   T.CONTENT_1 AS NAME
+		  FROM T_PUBLICTABS T
+		  WHERE T.TYPE_CODE = 'ZJZHLX'
+    </select>
 
 
 
