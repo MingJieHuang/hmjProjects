@@ -24,6 +24,8 @@ public interface ReportBaseService{
 	
 	//查询详情页总计行对象方法
 	public Result getDetailTotalVo(BossQueryVo queryVo, Map<String, Object> paramMap, Result result)throws Exception ;
-	
+	//查询主页集合方法(不分页)
+	public Result getDataList(BossQueryVo queryVo, Map<String, Object> paramMap, Result result)throws Exception ;
+
 	
 }

@@ -9,4 +9,5 @@ import com.phone.erp.boss.vo.retail.TodayReportVo;
  * @create 2018-08-18 17:37
  */
 public interface TodayReportMapper extends ReportBaseMapper<TodayReportVo>{
+
 }

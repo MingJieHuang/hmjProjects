@@ -24,5 +24,5 @@ public class TodayReportServieImpl extends ReportBaseServiceImpl<TodayReportVo,T
     public void setBaseMapper(TodayReportMapper todayReportMapper) {
         super.setMapper(todayReportMapper);
     }
-    
+
 }

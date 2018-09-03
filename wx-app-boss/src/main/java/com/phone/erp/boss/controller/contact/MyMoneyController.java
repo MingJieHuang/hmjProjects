@@ -25,7 +25,7 @@ public class MyMoneyController extends ReportBaseController {
     private MyMoneyService myMoneyService;
 
     /**
-     * [我的资金获取主页分页结婚]
+     * [我的资金获取主页分页集合]
      * @param queryVo
      * @return
      * @throws Exception

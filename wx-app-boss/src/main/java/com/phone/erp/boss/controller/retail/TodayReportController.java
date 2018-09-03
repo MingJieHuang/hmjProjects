@@ -21,25 +21,25 @@ import java.util.Map;
 @RequestMapping("${project.url.prefix}/report/retail/todayReport")
 public class TodayReportController extends ReportBaseController {
     @Autowired
-    private TodayReportService toDayReportService;
+    private TodayReportService todayReportService;
 
     /**
-     * [今日战报获取主页分页集合]
+     * [今日战报获取主页(不分页)集合]
      * @param queryVo
      * @return
      * @throws Exception
      */
     @AuthValidate
-    @RequestMapping("/getPageData")
+    @RequestMapping("/getDataList")
     @ResponseBody
-    public Result getPageData(BossQueryVo queryVo) throws Exception{
+    public Result getDataList(BossQueryVo queryVo) throws Exception{
         setCurrentEmp(queryVo);
         queryVo.setMenuCode("BOSS_JRZB");//设置菜单码
         queryVo.setDestStr("获取今日战报主页分页数据");
         //这里设置断言和特殊查询参数
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
-        return toDayReportService.getPageData(queryVo, paramMap, result);
+        return todayReportService.getDataList(queryVo, paramMap, result);
     }
 
     /**
@@ -57,7 +57,7 @@ public class TodayReportController extends ReportBaseController {
         queryVo.setDestStr("获取今日战报主页总计行数据");
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
-        return toDayReportService.getTotalVo(queryVo, paramMap, result);
+        return todayReportService.getTotalVo(queryVo, paramMap, result);
     }
 
 
