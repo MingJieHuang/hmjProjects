@@ -28,10 +28,10 @@
     	</sql>
     <!-- 汇总字段 -->
     <sql id="groups">
-        <if test="groupField=='goodsClassName'">GOODSCLASSID AS ID,GOODSCLASSCODE AS CODE,GOODSCLASSNAME AS NAME</if>
-        <if test="groupField=='goodsBrandName'">GOODSBRANDID AS ID,GOODSBRANDCODE AS CODE,GOODSBRANDNAME AS NAME</if>
         <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
         <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMAMCODE AS CODE,SALESMANNAME AS NAME</if>
+        <if test="groupField=='goodsBrandName'">GOODSBRANDID AS ID,GOODSBRANDCODE AS CODE,GOODSBRANDNAME AS NAME</if>
+        <if test="groupField=='goodsModelName'">NULL AS ID,NULL AS CODE,GOODSMODELNAME AS NAME</if>
     </sql>
     <!-- 公共字段 -->
     <sql id="commonFields">
@@ -41,9 +41,7 @@
         TE.ID                                          AS SALESMANID,
         TE.CODE                                        AS SALESMAMCODE,
         TE.NAME                                        AS SALESMANNAME,
-        TGC.ID                                         AS GOODSCLASSID,
-        TGC.CODE                                       AS GOODSCLASSCODE,
-        TGC.NAME                                       AS GOODSCLASSNAME,
+        TG.GOODS_MODEL                                 AS GOODSMODELNAME,
         TGB.ID                                         AS GOODSBRANDID,
         TGB.CODE                                       AS GOODSBRANDCODE,
         TGB.NAME                                       AS GOODSBRANDNAME,
