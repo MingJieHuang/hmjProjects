@@ -96,7 +96,8 @@
         <select id="getTotalVo" resultType="com.phone.erp.boss.vo.retail.OperatorServiceVo" >
             SELECT SUM(GOODSQUANTITY)AS GOODSQUANTITY,
                     SUM(ACTUALRECEIVABLES) AS ACTUALRECEIVABLES,
-                    SUM(COMMISSIONESTIMATE) AS COMMISSIONESTIMATE
+                    SUM(COMMISSIONESTIMATE) AS COMMISSIONESTIMATE,
+                    ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE),SUM(GOODSQUANTITY))*100,2) AS COMMISSIONAVG
                   FROM (
                       <include refid="codeSqlAndQueryCondition"/>
                   )
