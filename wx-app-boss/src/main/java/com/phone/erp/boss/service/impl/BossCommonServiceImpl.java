@@ -156,60 +156,60 @@ public class BossCommonServiceImpl implements BossCommonService {
      */
     @Override
     public List<BossConditionVo> getOperatorUnits(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo, true);
-        return bossCommonMapper.getOperatorUnits(map).getResult();
+        Map<String, Object> map = getConditionMap(queryVo, false);
+        return bossCommonMapper.getOperatorUnits(map);
     }
 
     /**
-     * 获取运营商业务名称分页集合
+     * 获取运营商业务名称集合
      * @param queryVo
      * @return
      * @throws Exception
      */
     @Override
-    public List<BossConditionVo> getOperatorNamePage(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo, true);
-        return bossCommonMapper.getOperatorNamePage(map).getResult();
+    public List<BossConditionVo> getOperatorNameList(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo, false);
+        return bossCommonMapper.getOperatorNameList(map);
     }
     /**
-     * 获取抵扣单位分页集合
+     * 获取抵扣单位集合
      * @author hmj
      * @version [版本,2018-8-28]
      */
     @Override
-    public List<BossConditionVo> getDeductionUnitsPage(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,true);
-        return bossCommonMapper.getDeductionUnitsPage(map).getResult();
+    public List<BossConditionVo> getDeductionUnitsList(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,false);
+        return bossCommonMapper.getDeductionUnitsList(map);
     }
     /**
-     * 获取抵扣活动分页集合
+     * 获取抵扣活动集合
      * @author hmj
      * @version [版本,2018-8-28]
      */
     @Override
-    public List<BossConditionVo> getActivityNamesPage(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,true);
-        return bossCommonMapper.getActivityNamesPage(map).getResult();
+    public List<BossConditionVo> getActivityNamesList(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,false);
+        return bossCommonMapper.getActivityNamesList(map);
     }
     /**
-     * 获取分期商名称分页集合
+     * 获取分期商名称集合
      * @author hmj
      * @version [版本,2018-8-28]
      */
     @Override
-    public List<BossConditionVo> getInstallmentfeesPage(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,true);
-        return bossCommonMapper.getInstallmentfeesPage(map).getResult();
+    public List<BossConditionVo> getInstallmentfeesList(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,false);
+        return bossCommonMapper.getInstallmentfeesList(map);
     }
     /**
-     * 获取分期业务名称分页集合
+     * 获取分期业务名称集合
      * @author hmj
      * @version [版本,2018-8-28]
      */
     @Override
-    public List<BossConditionVo> getInstallmentBusinessPage(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,true);
-        return bossCommonMapper.getInstallmentBusinessPage(map).getResult();
+    public List<BossConditionVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,false);
+        return bossCommonMapper.getInstallmentBusinessList(map);
     }
     /**
      * 获取资金账户类型集合

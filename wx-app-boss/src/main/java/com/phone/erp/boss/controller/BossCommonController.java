@@ -218,21 +218,21 @@ public class BossCommonController extends BaseController {
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
 	/**
-	 * 获取运营商业务名称分页集合
+	 * 获取运营商业务名称集合
 	 * @author hmj
 	 * @version [版本,2018-8-23]
 	 */
 	@AuthValidate
-	@RequestMapping("/getOperatorNamePage")
+	@RequestMapping("/getOperatorNameList")
 	@ResponseBody
-	public Result getOperatorNamePage(BossQueryVo queryVo){
+	public Result getOperatorNameList(BossQueryVo queryVo){
 		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
 		setCurrentEmp(queryVo);
 		Result result = new Result();
-		String descStr = "获取运营商业务名称分页集合";
+		String descStr = "获取运营商业务名称集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getOperatorNamePage(queryVo);
+			dataList = bossCommonService.getOperatorNameList(queryVo);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
@@ -240,21 +240,21 @@ public class BossCommonController extends BaseController {
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
 	/**
-	 * 获取抵扣单位分页集合
+	 * 获取抵扣单位集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
 	@AuthValidate
-	@RequestMapping("/getDeductionUnitsPage")
+	@RequestMapping("/getDeductionUnitsList")
 	@ResponseBody
-	public Result getDeductionUnitsPage(BossQueryVo queryVo){
+	public Result getDeductionUnitsList(BossQueryVo queryVo){
 		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
 		setCurrentEmp(queryVo);
 		Result result = new Result();
-		String descStr = "获取抵扣单位分页集合";
+		String descStr = "获取抵扣单位集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getDeductionUnitsPage(queryVo);
+			dataList = bossCommonService.getDeductionUnitsList(queryVo);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
@@ -262,21 +262,21 @@ public class BossCommonController extends BaseController {
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
 	/**
-	 * 获取抵扣活动分页集合
+	 * 获取抵扣活动集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
 	@AuthValidate
-	@RequestMapping("/getActivityNamesPage")
+	@RequestMapping("/getActivityNamesList")
 	@ResponseBody
-	public Result getActivityNamesPage(BossQueryVo queryVo){
+	public Result getActivityNamesList(BossQueryVo queryVo){
 		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
 		setCurrentEmp(queryVo);
 		Result result = new Result();
-		String descStr = "获取抵扣活动分页集合";
+		String descStr = "获取抵扣活动集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getActivityNamesPage(queryVo);
+			dataList = bossCommonService.getActivityNamesList(queryVo);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
@@ -284,21 +284,21 @@ public class BossCommonController extends BaseController {
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
 	/**
-	 * 获取分期商名称分页集合
+	 * 获取分期商名称集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
 	@AuthValidate
-	@RequestMapping("/getInstallmentfeesPage")
+	@RequestMapping("/getInstallmentfeesList")
 	@ResponseBody
-	public Result getInstallmentfeesPage(BossQueryVo queryVo){
+	public Result getInstallmentfeesList(BossQueryVo queryVo){
 		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
 		setCurrentEmp(queryVo);
 		Result result = new Result();
-		String descStr = "获取分期商名称分页集合";
+		String descStr = "获取分期商名称集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getInstallmentfeesPage(queryVo);
+			dataList = bossCommonService.getInstallmentfeesList(queryVo);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
@@ -306,21 +306,21 @@ public class BossCommonController extends BaseController {
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
 	/**
-	 * 获取分期业务名称分页集合
+	 * 获取分期业务名称集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
 	@AuthValidate
-	@RequestMapping("/getInstallmentBusinessPage")
+	@RequestMapping("/getInstallmentBusinessList")
 	@ResponseBody
-	public Result getInstallmentBusinessPage(BossQueryVo queryVo){
+	public Result getInstallmentBusinessList(BossQueryVo queryVo){
 		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
 		setCurrentEmp(queryVo);
 		Result result = new Result();
-		String descStr = "获取分期业务名称分页集合";
+		String descStr = "获取分期业务名称集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getInstallmentBusinessPage(queryVo);
+			dataList = bossCommonService.getInstallmentBusinessList(queryVo);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);

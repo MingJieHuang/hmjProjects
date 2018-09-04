@@ -103,8 +103,8 @@
 		ORDER BY TCU.CODE
 
 	</select>
-    <!-- 运营商业务名称分页集合 -->
-    <select id="getOperatorNamePage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+    <!-- 运营商业务名称集合 -->
+    <select id="getOperatorNameList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
         SELECT C.ID              AS id,
                 C.BIZ_NAME       AS name,
                 C.BIZ_CODE       AS code,
@@ -120,8 +120,8 @@
             )
         </if>
     </select>
-    <!-- 获取抵扣单位分页集合 -->
-    <select id="getDeductionUnitsPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+    <!-- 获取抵扣单位集合 -->
+    <select id="getDeductionUnitsList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
 		SELECT
 			DISTINCT TCU.ID AS ID,
 			TCU.CODE         AS CODE,
@@ -137,8 +137,8 @@
         </if>
 		ORDER BY TCU.NAME
     </select>
-	<!-- 获取抵扣活动分页集合 -->
-    <select id="getActivityNamesPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+	<!-- 获取抵扣活动集合 -->
+    <select id="getActivityNamesList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
 		SELECT
 			   DISTINCT T.ID          AS ID,
 			   T.COUPON_CODE          AS CODE,
@@ -155,8 +155,8 @@
 		</if>
 		ORDER BY T.COUPON_NAME
     </select>
-	<!-- 获取分期商名称分页集合 -->
-    <select id="getInstallmentfeesPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+	<!-- 获取分期商名称集合 -->
+    <select id="getInstallmentfeesList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
         SELECT DISTINCT TCU.ID   AS ID,
             TCU.CODE          AS CODE,
             TCU.NAME          AS NAME
@@ -171,8 +171,8 @@
 		</if>
 		ORDER BY TCU.NAME
     </select>
-	<!-- 获取分期业务名称分页集合 -->
-    <select id="getInstallmentBusinessPage" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+	<!-- 获取分期业务名称集合 -->
+    <select id="getInstallmentBusinessList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
         SELECT DISTINCT    T.ID AS ID,
             T.INSTAL_VALUE_CODE AS NAME,
             TCU.NAME             AS  INSTALLMENTFEESNAME

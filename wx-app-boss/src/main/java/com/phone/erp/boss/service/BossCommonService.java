@@ -118,37 +118,37 @@ public interface BossCommonService {
 	 */
 	List<BossConditionVo> getOperatorUnits(BossQueryVo queryVo) throws Exception;
 	/**
-	 * [获取运营商业务名称分页集合]
+	 * [获取运营商业务名称集合]
 	 * @author HMJ
 	 * @version [版本,2018-8-23]
 	 * @throws Exception
 	 * @param queryVo
 	 */
-	List<BossConditionVo> getOperatorNamePage(BossQueryVo queryVo) throws Exception;
+	List<BossConditionVo> getOperatorNameList(BossQueryVo queryVo) throws Exception;
 	/**
-	 * 获取抵扣单位分页集合
+	 * 获取抵扣单位集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
-    List<BossConditionVo> getDeductionUnitsPage(BossQueryVo queryVo) throws Exception;
+    List<BossConditionVo> getDeductionUnitsList(BossQueryVo queryVo) throws Exception;
 	/**
-	 * 获取抵扣活动分页集合
+	 * 获取抵扣活动集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
-	List<BossConditionVo> getActivityNamesPage(BossQueryVo queryVo) throws Exception;
+	List<BossConditionVo> getActivityNamesList(BossQueryVo queryVo) throws Exception;
 	/**
-	 * 获取分期商名称分页集合
+	 * 获取分期商名称集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
-	List<BossConditionVo> getInstallmentfeesPage(BossQueryVo queryVo) throws Exception;
+	List<BossConditionVo> getInstallmentfeesList(BossQueryVo queryVo) throws Exception;
     /**
-     * 获取分期业务名称分页集合
+     * 获取分期业务名称集合
      * @author hmj
      * @version [版本,2018-8-28]
      */
-    List<BossConditionVo> getInstallmentBusinessPage(BossQueryVo queryVo) throws Exception;
+    List<BossConditionVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception;
 	/**
 	 * 获取资金账户类型集合
 	 * @author hmj

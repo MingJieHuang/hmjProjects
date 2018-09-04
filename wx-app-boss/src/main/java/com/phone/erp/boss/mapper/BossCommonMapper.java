@@ -91,34 +91,34 @@ public interface BossCommonMapper {
 	 * @param map
 	 * @return
 	 */
-	public Page<BossConditionVo> getOperatorUnits(Map<String, Object> map);
+	public List<BossConditionVo> getOperatorUnits(Map<String, Object> map);
 	/**
 	 * [获取运营商业务名称分页集合]
 	 * @param map
 	 * @return
 	 */
-	public Page<BossConditionVo> getOperatorNamePage(Map<String, Object> map);
+	public List<BossConditionVo> getOperatorNameList(Map<String, Object> map);
 
 	/**
-	 * 获取抵扣单位分页集合
+	 * 获取抵扣单位集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
-    public Page<BossConditionVo> getDeductionUnitsPage(Map<String, Object> map);
+    public List<BossConditionVo> getDeductionUnitsList(Map<String, Object> map);
 
-	public Page<BossConditionVo> getActivityNamesPage(Map<String, Object> map);
+	public List<BossConditionVo> getActivityNamesList(Map<String, Object> map);
 	/**
-	 * 获取分期商名称分页集合
+	 * 获取分期商名称集合
 	 * @author hmj
 	 * @version [版本,2018-8-28]
 	 */
-	public Page<BossConditionVo> getInstallmentfeesPage(Map<String, Object> map);
+	public List<BossConditionVo> getInstallmentfeesList(Map<String, Object> map);
     /**
-     * 获取分期业务名称分页集合
+     * 获取分期业务名称集合
      * @author hmj
      * @version [版本,2018-8-28]
      */
-    public Page<BossConditionVo> getInstallmentBusinessPage(Map<String, Object> map);
+    public List<BossConditionVo> getInstallmentBusinessList(Map<String, Object> map);
 	/**
 	 * 获取资金账户类型集合
 	 * @author hmj
