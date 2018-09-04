@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -23,7 +25,14 @@ public class BossReportUtil {
 	/*
      * -----------------------------------直接调用------------------------------------
 	 */
-
+    /**
+     * 获取当前服务器日期 yyyy-mm-dd
+     */
+    public static String getCurDate(){
+        Calendar cale = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(cale.getTime());
+    }
     /**
      * 拼接一个集合中对象的某一个字段,已逗号分隔,如:获取公司ids
      *

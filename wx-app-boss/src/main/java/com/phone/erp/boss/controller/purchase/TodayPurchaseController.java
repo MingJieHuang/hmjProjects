@@ -2,6 +2,7 @@ package com.phone.erp.boss.controller.purchase;
 
 import com.phone.erp.base.Result;
 import com.phone.erp.base.annotation.AuthValidate;
+import com.phone.erp.base.utils.Assert;
 import com.phone.erp.boss.controller.ReportBaseController;
 import com.phone.erp.boss.service.purchase.TodayPurchaseService;
 import com.phone.erp.boss.vo.common.BossQueryVo;
@@ -37,6 +38,7 @@ public class TodayPurchaseController extends ReportBaseController {
         queryVo.setMenuCode("BOSS_JRCG");//设置菜单码
         queryVo.setDestStr("获取今日采购主页分页数据");
         //这里设置断言和特殊查询参数
+        Assert.notNull(queryVo.getStartDate(), "日期参数不能为空");
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
         return todayPurchaseService.getPageData(queryVo, paramMap, result);
@@ -55,6 +57,7 @@ public class TodayPurchaseController extends ReportBaseController {
         setCurrentEmp(queryVo);
         queryVo.setMenuCode("BOSS_JRCG");//设置菜单码
         queryVo.setDestStr("获取今日采购主页总计行数据");
+        Assert.notNull(queryVo.getStartDate(), "日期参数不能为空");
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
         return todayPurchaseService.getTotalVo(queryVo, paramMap, result);

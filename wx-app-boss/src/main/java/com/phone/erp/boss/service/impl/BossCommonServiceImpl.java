@@ -558,6 +558,10 @@ public class BossCommonServiceImpl implements BossCommonService {
         if (StringUtils.isNotBlank(queryVo.getRankingGist())){
             map.put("rankingGist",queryVo.getRankingGist());
         }
+        //设置排序字段参数
+        if (StringUtils.isNotBlank(queryVo.getOrderField())){
+            map.put("orderField",queryVo.getOrderField());
+        }
         return map;
     }
 

@@ -2,8 +2,127 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.phone.erp.boss.mapper.storage.StockRatioMapper">
 <!-- 库存占比 -->
-<!-- 获取库存占比首页分页集合 -->
-<select id="getPageData" resultType="com.phone.erp.boss.vo.storage.StockRatioVo">
-     SELECT 1 id FROM dual
-</select>
+         <sql id="commonFields">
+             TGC.ID                   AS GOODSCLASSID,
+             TGC.CODE                 AS GOODSCLASSCODE,
+             TGC.NAME                 AS GOODSCLASSNAME,
+             TGB.ID                   AS GOODSBRANDID,
+             TGB.CODE                 AS GOODSBRANDCODE,
+             TGB.NAME                 AS GOODSBRANDNAME,
+         </sql>
+          <sql id="groups">
+               <if test="groupField=='goodsClassName'">GOODSCLASSID,GOODSCLASSCODE,GOODSCLASSNAME</if>
+               <if test="groupField=='goodsBrandName'">GOODSBRANDID,GOODSBRANDCODE,GOODSBRANDNAME</if>
+          </sql>
+          <sql id="orders">
+              <if test="orderField=='goodsQuantity'">GOODSQUANTITY</if>
+              <if test="orderField=='goodsAmount'">GOODSAMOUNT</if>
+          </sql>
+          <sql id="groupField">
+               <if test="groupField=='goodsClassName'">GOODSCLASSID AS ID,GOODSCLASSCODE AS CODE,GOODSCLASSNAME AS NAME</if>
+               <if test="groupField=='goodsBrandName'">GOODSBRANDID AS ID,GOODSBRANDCODE AS CODE,GOODSBRANDNAME AS NAME</if>
+          </sql>
+     <!-- 公共查询条件 -->
+     	<sql id="queryCondition">
+                    <if test="null!=goodsClassId">
+                        AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
+                        START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
+                    </if>
+                    <if test="null!=keyWord">
+                        AND (UPPER(TGC.NAME) LIKE UPPER('%${keyWord}%')OR
+                        UPPER(TGB.NAME) LIKE UPPER('%${keyWord}%')OR
+                        UPPER(TG.GOODS_MODEL) LIKE UPPER('%${keyWord}%')OR
+                        UPPER(TG.NAME) LIKE UPPER('%${keyWord}%')OR
+                        UPPER(TG.CODE) LIKE UPPER('%${keyWord}%')
+                        )
+                    </if>
+                       AND T.COMPANY_ID IN(${companyIds})
+                       AND T.SECTION_ID IN(${sectionIds})
+     	</sql>
+     <!-- 核心sql -->
+     	<sql id="codeSqlAndQueryCondition">
+             WITH  base_tab AS (
+                  SELECT <include refid="groups"/> ,SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT
+                      FROM(
+                            <!-- 实时库存数量商品 -->
+                            SELECT
+                            <include refid="commonFields"/>
+                            T.STOCK_NUMBER           AS GOODSQUANTITY,
+                            T.AMOUNT                 AS GOODSAMOUNT
+                            FROM I_STOCK_NUM T
+                            JOIN I_STORAGE         IST ON T.STORAGE_ID=IST.ID
+                            JOIN T_COMPANY 		     TC  ON T.COMPANY_ID = TC.ID
+                            JOIN T_SECTION 		     TS  ON IST.SECTION_ID = TS.ID
+                            JOIN T_GOODSNAME       TG  ON T.GOODS_ID=TG.ID
+                            JOIN T_GOODSCLASS 	   TGC ON TG.GOODS_CATEGORY_ID = TGC.ID
+                            LEFT JOIN T_GOODSBRAND TGB ON TG.GOODS_BRAND_ID = TGB.ID
+                            WHERE T.STOCK_NUMBER !=0
+                            AND TG.IF_MANAGE_IMEI=0
+                            <include refid="queryCondition"/>
+                            UNION ALL
+                            <!-- 实时库存串号商品 -->
+                            SELECT
+                            <include refid="commonFields"/>
+                            1                        AS GOODSQUANTITY,
+                            DECODE(TG.VALUATION_METHODS,1,T.COST_PRICE,JXC_ALL_PCK.CHECK_DIVIDE(T1.AMOUNT,T1.STOCK_NUMBER))     AS GOODSAMOUNT
+                            FROM  I_STOCK_IM T
+                            JOIN I_STOCK_NUM        T1  ON T1.ID = T.STOCK_NUMBER_ID
+                            JOIN I_STORAGE          IST ON T.STORAGE_ID=IST.ID
+                            JOIN T_COMPANY 		     TC  ON T.COMPANY_ID = TC.ID
+                            JOIN T_SECTION 		     TS  ON IST.SECTION_ID = TS.ID
+                            JOIN T_GOODSNAME        TG  ON T.GOODS_ID=TG.ID
+                            JOIN T_GOODSCLASS 	     TGC ON TG.GOODS_CATEGORY_ID = TGC.ID
+                            LEFT JOIN T_GOODSBRAND  TGB ON TG.GOODS_BRAND_ID = TGB.ID
+                            WHERE T.RESERVE2 = '1'
+                            AND TG.IF_MANAGE_IMEI=1
+                            <include refid="queryCondition"/>
+                            UNION ALL
+                            <!-- 实时库存在途 -->
+                            SELECT
+                            <include refid="commonFields"/>
+                            T1.GOODS_NUMBER          AS GOODSQUANTITY,
+                            T1.COST_PRICE            AS GOODSAMOUNT
+                            FROM I_BILLS_MAIN T
+                            JOIN I_OUTSTRORAGE_OTHERS_NUM     T1 ON T1.BILLS_MAIN_ID = T.ID
+                            JOIN I_STORAGE           IST ON T1.STORAGE_ID = IST.ID
+                            JOIN T_COMPANY 		       TC  ON T.COMPANY_ID = TC.ID
+                            JOIN T_SECTION 		       TS  ON IST.SECTION_ID = TS.ID
+                            JOIN T_GOODSNAME         TG  ON T1.GOODS_ID=TG.ID
+                            JOIN T_GOODSCLASS 	     TGC ON TG.GOODS_CATEGORY_ID = TGC.ID
+                            LEFT JOIN T_GOODSBRAND   TGB ON TG.GOODS_BRAND_ID = TGB.ID
+                            WHERE T.BILLS_STATUS = '8'
+                            AND T.BILLS_TYPE IN (7,8)
+                            <include refid="queryCondition"/>
+                     ) GROUP BY <include refid="groups"/>
+                       ORDER BY <include refid="orders"/> DESC
+             ),total_tab AS (
+                  SELECT SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT FROM base_tab
+             ),rowNum_tab AS (
+                  SELECT rownum rn,<include refid="groupField"/>,GOODSQUANTITY,GOODSAMOUNT FROM base_tab
+            ),top5_tab AS (
+                  SELECT ID,CODE,NAME,GOODSQUANTITY,GOODSAMOUNT FROM rowNum_tab WHERE RN &lt;=4
+                UNION ALL
+                  SELECT NULL ID,NULL CODE,'other'NAME ,SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT FROM rowNum_tab WHERE RN &gt;=4
+            ),t AS (
+                SELECT top5_tab.ID,top5_tab.CODE,top5_tab.NAME,top5_tab.GOODSQUANTITY,top5_tab.GOODSAMOUNT,
+                        total_tab.GOODSQUANTITY TOTALQUANTITY, total_tab.GOODSAMOUNT TOTALAMOUNT
+                  FROM top5_tab,total_tab
+            )
+            SELECT * FROM t
+     	</sql>
+          <!-- 获取库存占比首页(不分页)集合 -->
+    <select id="getDataList" resultType="com.phone.erp.boss.vo.storage.StockRatioVo">
+        SELECT ID,CODE,NAME
+            <if test="orderField=='goodsQuantity'">,
+                GOODSQUANTITY,
+                ROUND(JXC_ALL_PCK.CHECK_DIVIDE(GOODSQUANTITY,TOTALQUANTITY)*100,2)||'%' AS GOODSQUANTITYRATIO
+            </if>
+            <if test="orderField=='goodsAmount'">,
+                ROUND(GOODSAMOUNT)GOODSAMOUNT,
+                ROUND(JXC_ALL_PCK.CHECK_DIVIDE(GOODSAMOUNT,TOTALAMOUNT)*100,2) AS GOODSAMOUNTRATIO
+            </if>
+        FROM(
+              <include refid="codeSqlAndQueryCondition"/>
+             )
+     </select>
 </mapper>

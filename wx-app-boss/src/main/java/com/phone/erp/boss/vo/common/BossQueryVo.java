@@ -84,6 +84,8 @@ public class BossQueryVo {
 	private Long accountTypeId;
 	//36,rankingGist 排行依据goodsQuantity数量,goodsAmount金额,goodsProfitAmount毛利
 	private String rankingGist;
+	//37,排序字段
+	private String orderField;
 
 	public Long getGroupId() {
 		return groupId;
@@ -322,5 +324,13 @@ public class BossQueryVo {
 
 	public void setRankingGist(String rankingGist) {
 		this.rankingGist = rankingGist;
+	}
+
+	public String getOrderField() {
+		return orderField;
+	}
+
+	public void setOrderField(String orderField) {
+		this.orderField = orderField;
 	}
 }
