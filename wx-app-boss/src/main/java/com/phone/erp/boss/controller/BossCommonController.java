@@ -1,15 +1,5 @@
 package com.phone.erp.boss.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.phone.erp.boss.vo.common.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.phone.erp.base.Result;
 import com.phone.erp.base.annotation.AuthValidate;
 import com.phone.erp.base.controller.BaseController;
@@ -18,6 +8,15 @@ import com.phone.erp.base.utils.Assert;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.boss.service.BossCommonService;
 import com.phone.erp.boss.util.BossReportUtil;
+import com.phone.erp.boss.vo.common.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -318,7 +317,7 @@ public class BossCommonController extends BaseController {
 		setCurrentEmp(queryVo);
 		Result result = new Result();
 		String descStr = "获取分期业务名称集合";
-		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		List<InstallmentBusinessVo> dataList = new ArrayList<InstallmentBusinessVo>();
 		try {
 			dataList = bossCommonService.getInstallmentBusinessList(queryVo);
 			result.put("dataList", dataList);

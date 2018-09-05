@@ -172,17 +172,28 @@
 		ORDER BY TCU.NAME
     </select>
 	<!-- 获取分期业务名称集合 -->
-    <select id="getInstallmentBusinessList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
-        SELECT DISTINCT    T.ID AS ID,
-            T.INSTAL_VALUE_CODE AS NAME,
-            TCU.NAME             AS  INSTALLMENTFEESNAME
-        FROM T_INSTALLMENTFEE T
-          JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
+		<resultMap id="InstallmentBusiness_RM" type="com.phone.erp.boss.vo.common.InstallmentBusinessVo">
+			<id column="INSTALLMENTFEESID" property="id"/>
+			<result column="INSTALLMENTFEESCODE" property="name"/>
+			<result column="INSTALLMENTFEESNAME" property="code"/>
+			<collection property="installmentBusinessList" ofType="com.phone.erp.boss.vo.common.BossConditionVo">
+				<id column="ID" property="id"/>
+				<result column="NAME" property="name"/>
+			</collection>
+		</resultMap>
+    <select id="getInstallmentBusinessList" resultMap="InstallmentBusiness_RM">
+		SELECT DISTINCT    T.ID AS ID,
+			T.INSTAL_VALUE_CODE AS NAME,
+			TCU.ID             AS  INSTALLMENTFEESID,
+			TCU.CODE             AS  INSTALLMENTFEESCODE,
+			TCU.NAME             AS  INSTALLMENTFEESNAME
+		FROM T_INSTALLMENTFEE T
+			JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
 		where T.STATUS = 0
-		AND T.COMPANY_ID in (${companyIds})
-		<if test="keyWord!=null">
-			AND UPPER(T.INSTAL_VALUE_CODE) LIKE UPPER('%${keyWord}%')
-		</if>
+			AND T.COMPANY_ID in (${companyIds})
+			<if test="keyWord!=null">
+				AND UPPER(T.INSTAL_VALUE_CODE) LIKE UPPER('%${keyWord}%')
+			</if>
 		ORDER BY  T.INSTAL_VALUE_CODE
     </select>
 	<!-- 获取资金账户类型集合 -->

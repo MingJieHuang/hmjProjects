@@ -1,10 +1,9 @@
 package com.phone.erp.boss.mapper;
 
+import com.phone.erp.boss.vo.common.*;
+
 import java.util.List;
 import java.util.Map;
-
-import com.github.pagehelper.Page;
-import com.phone.erp.boss.vo.common.*;
 
 /**
  * [Boss小程序mapper接口]
@@ -118,7 +117,7 @@ public interface BossCommonMapper {
      * @author hmj
      * @version [版本,2018-8-28]
      */
-    public List<BossConditionVo> getInstallmentBusinessList(Map<String, Object> map);
+    public List<InstallmentBusinessVo> getInstallmentBusinessList(Map<String, Object> map);
 	/**
 	 * 获取资金账户类型集合
 	 * @author hmj

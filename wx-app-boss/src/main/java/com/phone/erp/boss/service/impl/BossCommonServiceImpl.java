@@ -207,7 +207,7 @@ public class BossCommonServiceImpl implements BossCommonService {
      * @version [版本,2018-8-28]
      */
     @Override
-    public List<BossConditionVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception {
+    public List<InstallmentBusinessVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception {
         Map<String, Object> map = getConditionMap(queryVo,false);
         return bossCommonMapper.getInstallmentBusinessList(map);
     }

@@ -148,7 +148,7 @@ public interface BossCommonService {
      * @author hmj
      * @version [版本,2018-8-28]
      */
-    List<BossConditionVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception;
+    List<InstallmentBusinessVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception;
 	/**
 	 * 获取资金账户类型集合
 	 * @author hmj
