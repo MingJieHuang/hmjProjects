@@ -562,6 +562,10 @@ public class BossCommonServiceImpl implements BossCommonService {
         if (StringUtils.isNotBlank(queryVo.getOrderField())){
             map.put("orderField",queryVo.getOrderField());
         }
+        //设置库龄天数参数
+        if (null!=queryVo.getStockAge()){
+            map.put("stockAge",queryVo.getStockAge());
+        }
         return map;
     }
 

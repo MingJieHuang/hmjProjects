@@ -86,6 +86,8 @@ public class BossQueryVo {
 	private String rankingGist;
 	//37,排序字段
 	private String orderField;
+	//38,库龄天数
+	private Long stockAge;
 
 	public Long getGroupId() {
 		return groupId;
@@ -332,5 +334,13 @@ public class BossQueryVo {
 
 	public void setOrderField(String orderField) {
 		this.orderField = orderField;
+	}
+
+	public Long getStockAge() {
+		return stockAge;
+	}
+
+	public void setStockAge(Long stockAge) {
+		this.stockAge = stockAge;
 	}
 }
