@@ -574,7 +574,10 @@ public class BossCommonServiceImpl implements BossCommonService {
         if (null!=queryVo.getActivityNamesId()){
             map.put("activityNamesId",queryVo.getActivityNamesId());
         }
+        //设置增值服务id参数
+        if (null!=queryVo.getServiceId()){
+            map.put("serviceId",queryVo.getServiceId());
+        }
         return map;
     }
-
 }

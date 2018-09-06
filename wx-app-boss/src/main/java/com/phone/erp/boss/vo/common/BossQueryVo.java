@@ -92,6 +92,8 @@ public class BossQueryVo {
 	private Long deductionUnitsId;
 	//40,第三方抵扣活动id
 	private Long activityNamesId;
+	//41,增值服务id
+	private Long serviceId;
 
 	public Long getGroupId() {
 		return groupId;
@@ -362,5 +364,13 @@ public class BossQueryVo {
 
 	public void setActivityNamesId(Long activityNamesId) {
 		this.activityNamesId = activityNamesId;
+	}
+
+	public Long getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
 	}
 }

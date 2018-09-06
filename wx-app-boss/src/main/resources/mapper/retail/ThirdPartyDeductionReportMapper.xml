@@ -6,13 +6,6 @@
     	<sql id="queryCondition">
         			 where T.GROUP_ID =#{groupId}
         			  AND R.BILLS_STATUS =6
-                <if test="null!=goodsClassId">
-                    AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
-                    START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
-                </if>
-                <if test="null!=goodsBrandId">
-                    AND TG.GOODS_BRAND_ID =#{goodsBrandId}
-                </if>
                 <if test="null!=deductionUnitsId">
                     AND TCU.ID=#{deductionUnitsId}
                 </if>
@@ -68,7 +61,6 @@
                             LEFT JOIN T_COMPANY TC ON R.COMPANY_ID = TC.ID
                             LEFT JOIN T_SECTION TS ON R.SECTION_ID = TS.ID
                             LEFT JOIN T_CONTACT_UNIT TCU ON IC.CONTACT_UNIT_ID = TCU.ID
-                            LEFT JOIN T_GOODSNAME TG ON TG.ID =T1.GOODS_ID
                           <include refid="queryCondition"/>
     	</sql>
     <!-- 获取第三方抵统计主页分页集合 -->

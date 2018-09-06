@@ -29,16 +29,33 @@ public class AssetProfileController extends ReportBaseController {
      * 创建时间:2018/8/27
      */
     @AuthValidate
-    @RequestMapping("/getPageData")
+    @RequestMapping("/getDataList")
     @ResponseBody
-    public Result getPageData(BossQueryVo queryVo) throws Exception{
+    public Result getDataList(BossQueryVo queryVo) throws Exception{
         setCurrentEmp(queryVo);
         queryVo.setMenuCode("BOSS_ZCGY");//设置菜单码
-        queryVo.setDestStr("获取资产概要主页分页数据");
+        queryVo.setDestStr("获取资产概要主页数据");
         //这里设置断言和特殊查询参数
         Result result= new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
-        return assetProfileService.getPageData(queryVo, paramMap, result);
+        return assetProfileService.getDataList(queryVo, paramMap, result);
+    }
+
+    /**
+     * [获取资产概要总额]
+     * 作者:hmj
+     * 创建时间:2018/9/6
+     */
+    @AuthValidate
+    @RequestMapping("/getTotalVo")
+    @ResponseBody
+    public Result getTotalVo(BossQueryVo queryVo) throws Exception{
+        setCurrentEmp(queryVo);
+        queryVo.setMenuCode("BOSS_ZCGY");//设置菜单码
+        queryVo.setDestStr("获取资产概要主页总计行数据");
+        Result result = new Result();
+        Map<String, Object> paramMap = getParamMap(queryVo,result);
+        return assetProfileService.getTotalVo(queryVo, paramMap, result);
     }
 
 }

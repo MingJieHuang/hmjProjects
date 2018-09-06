@@ -5,7 +5,7 @@
     <!-- 公共查询条件 -->
     	<sql id="queryCondition">
                   <if test="null!=accountTypeId">
-                      TP0.ID =#{accountTypeId}
+                      AND TP0.ID =#{accountTypeId}
                   </if>
                       AND T.COMPANY_ID IN(${companyIds})
                       AND T.SECTION_ID IN(${sectionIds})
