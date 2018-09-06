@@ -2,13 +2,99 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.phone.erp.boss.mapper.retail.ThirdPartyDeductionReportMapper">
 <!-- 第三方抵扣战报 -->
+    <!-- 公共查询条件 -->
+    	<sql id="queryCondition">
+        			 where T.GROUP_ID =#{groupId}
+        			  AND R.BILLS_STATUS =6
+                <if test="null!=goodsClassId">
+                    AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
+                    START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
+                </if>
+                <if test="null!=goodsBrandId">
+                    AND TG.GOODS_BRAND_ID =#{goodsBrandId}
+                </if>
+                <if test="null!=deductionUnitsId">
+                    AND TCU.ID=#{deductionUnitsId}
+                </if>
+                <if test="null!=activityNamesId">
+                    AND IC.ID =#{activityNamesId}
+                </if>
+                <if test="null!=keyWord">
+                    <if test="groupField=='sectionName'">AND(UPPER(TS.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TS.CODE) LIKE UPPER('%${keyWord}%'))</if>
+                    <if test="groupField=='salesManName'">AND(UPPER(TE.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TE.CODE) LIKE UPPER('%${keyWord}%'))</if>
+                    <if test="groupField=='couponName'">AND(UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%'))</if>
+                    <if test="groupField=='contactunitName'">AND(UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%'))</if>
+                </if>
+                      AND R.COMPANY_ID IN(${companyIds})
+                      AND R.SECTION_ID IN(${sectionIds})
+    	</sql>
+    <sql id="commonFields">
+        <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
+        <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMAMCODE AS CODE,SALESMANNAME AS NAME</if>
+        <if test="groupField=='couponName'">COUPONID AS ID,COUPONCODE AS CODE,COUPONNAME AS NAME,CONTACTUNITID,CONTACTUNITCODE,CONTACTUNITNAME</if>
+        <if test="groupField=='contactunitName'">CONTACTUNITID AS ID,CONTACTUNITCODE AS CODE,CONTACTUNITNAME AS NAME</if>
+    </sql>
+    <!-- 汇总字段 -->
+    <sql id="groups">
+        <if test="groupField=='sectionName'">ID,CODE,NAME</if>
+        <if test="groupField=='salesManName'">ID,CODE,NAME</if>
+        <if test="groupField=='couponName'">ID,CODE,NAME,CONTACTUNITID,CONTACTUNITCODE,CONTACTUNITNAME</if>
+        <if test="groupField=='contactunitName'">ID,CODE,NAME</if>
+    </sql>
+
+    <!-- 核心sql -->
+    	<sql id="codeSqlAndQueryCondition">
+                        SELECT DISTINCT T.ID,
+                            TS.ID                          AS SECTIONID,
+                            TS.NAME                        AS SECTIONNAME,
+                            TS.CODE                        AS SECTIONCODE,
+                            TE.ID                          AS SALESMANID,
+                            TE.NAME                        AS SALESMANNAME,
+                            TE.CODE                        AS SALESMANCODE,
+                            IC.ID                          AS COUPONID,
+                            IC.COUPON_NAME                 AS COUPONNAME,
+                            IC.COUPON_CODE                 AS COUPONCODE,
+                            TCU.ID                         AS CONTACTUNITID,
+                            TCU.NAME                       AS CONTACTUNITNAME,
+                            TCU.CODE                       AS CONTACTUNITCODE,
+                            DECODE(R.BILLS_TYPE,45,1,-1)   AS GOODSQUANTITY,
+                            T.AMOUNT                       AS GOODSAMOUNT
+                        FROM I_RETAIL_COUPON T
+                            JOIN I_COUPON IC ON T.COUPON_ID =IC.ID
+                            JOIN I_RETAIL R ON T.RETAIL_ID = R.ID
+                            LEFT JOIN I_RETAIL_DETAIL T1 ON R.ID = T1.RETAIL_ID
+                            LEFT JOIN T_EMPLOYEE TE ON T.SALESMAN1 = TE.ID
+                            LEFT JOIN I_STORAGE IST ON T1.STORAGE_ID = IST.ID
+                            LEFT JOIN T_COMPANY TC ON R.COMPANY_ID = TC.ID
+                            LEFT JOIN T_SECTION TS ON R.SECTION_ID = TS.ID
+                            LEFT JOIN T_CONTACT_UNIT TCU ON IC.CONTACT_UNIT_ID = TCU.ID
+                            LEFT JOIN T_GOODSNAME TG ON TG.ID =T1.GOODS_ID
+                          <include refid="queryCondition"/>
+    	</sql>
     <!-- 获取第三方抵统计主页分页集合 -->
     <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.ThirdPartyDeductionReportVo">
-         SELECT '第三方抵扣战报主页分页集合'NAME FROM dual
+        SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY
+            <if test="canSeeAmount==1">  ,
+                TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSPRICE,
+                TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
+            </if>
+            FROM(
+                  SELECT <include refid="commonFields"/>,GOODSQUANTITY,GOODSAMOUNT
+                    FROM (
+                        <include refid="codeSqlAndQueryCondition"/>
+                    )
+            )
+        GROUP BY <include refid="groups"/>
+        ORDER BY <include refid="groups"/>
     </select>
     <!-- 第三方抵扣战报主页总计行对象 -->
     <select id="getTotalVo" resultType="com.phone.erp.boss.vo.retail.ThirdPartyDeductionReportVo">
-         SELECT '第三抵扣战报总计行对象'NAME FROM dual
+         SELECT SUM (GOODSQUANTITY)GOODSQUANTITY
+                <if test="canSeeAmount==1">  ,
+                    TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSPRICE,
+                    TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
+                </if>
+              FROM ( <include refid="codeSqlAndQueryCondition"/>)
     </select>
     
 </mapper>

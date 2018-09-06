@@ -88,6 +88,10 @@ public class BossQueryVo {
 	private String orderField;
 	//38,库龄天数
 	private Long stockAge;
+	//39,第三方抵扣单位id
+	private Long deductionUnitsId;
+	//40,第三方抵扣活动id
+	private Long activityNamesId;
 
 	public Long getGroupId() {
 		return groupId;
@@ -342,5 +346,21 @@ public class BossQueryVo {
 
 	public void setStockAge(Long stockAge) {
 		this.stockAge = stockAge;
+	}
+
+	public Long getDeductionUnitsId() {
+		return deductionUnitsId;
+	}
+
+	public void setDeductionUnitsId(Long deductionUnitsId) {
+		this.deductionUnitsId = deductionUnitsId;
+	}
+
+	public Long getActivityNamesId() {
+		return activityNamesId;
+	}
+
+	public void setActivityNamesId(Long activityNamesId) {
+		this.activityNamesId = activityNamesId;
 	}
 }

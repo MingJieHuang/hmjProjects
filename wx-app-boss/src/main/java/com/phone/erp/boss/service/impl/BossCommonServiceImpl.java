@@ -566,6 +566,14 @@ public class BossCommonServiceImpl implements BossCommonService {
         if (null!=queryVo.getStockAge()){
             map.put("stockAge",queryVo.getStockAge());
         }
+        //设置第三方抵扣单位id参数
+        if (null!=queryVo.getDeductionUnitsId()){
+            map.put("deductionUnitsId",queryVo.getDeductionUnitsId());
+        }
+        //设置第三方抵扣活动id参数
+        if (null!=queryVo.getActivityNamesId()){
+            map.put("activityNamesId",queryVo.getActivityNamesId());
+        }
         return map;
     }
 
