@@ -83,14 +83,14 @@ public interface BossCommonMapper {
 	 * @version [版本,2018-8-22]
 	 * @param map
 	 */
-	public List<BossConditionVo> getOperators(Map<String, Object> map);
+	public List<BossConditionVo> getOperatorList(Map<String, Object> map);
 
 	/**
 	 * [获取运营商单位集合]
 	 * @param map
 	 * @return
 	 */
-	public List<BossConditionVo> getOperatorUnits(Map<String, Object> map);
+	public List<BossConditionVo> getOperatorUnitList(Map<String, Object> map);
 	/**
 	 * [获取运营商业务名称分页集合]
 	 * @param map
@@ -123,5 +123,5 @@ public interface BossCommonMapper {
 	 * @author hmj
 	 * @version [版本,2018-8-30]
 	 */
-    public List<BossConditionVo> getAccountTypes();
+    public List<BossConditionVo> getAccountTypeList();
 }

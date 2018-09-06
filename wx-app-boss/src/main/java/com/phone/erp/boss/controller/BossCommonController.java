@@ -180,14 +180,14 @@ public class BossCommonController extends BaseController {
 	 * @version [版本,2018-8-22]
 	 */
 	@AuthValidate
-	@RequestMapping("/getOperators")
+	@RequestMapping("/getOperatorList")
 	@ResponseBody
-	public Result getOperators(BossQueryVo queryVo){
+	public Result getOperatorList(BossQueryVo queryVo){
 		Result result = new Result();
 		String descStr = "获取运营商名称集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getOperators(queryVo);
+			dataList = bossCommonService.getOperatorList(queryVo);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
@@ -200,16 +200,16 @@ public class BossCommonController extends BaseController {
 	 * @version [版本,2018-8-22]
 	 */
 	@AuthValidate
-	@RequestMapping("/getOperatorUnits")
+	@RequestMapping("/getOperatorUnitList")
 	@ResponseBody
-	public Result getOperatorUnits(BossQueryVo queryVo){
+	public Result getOperatorUnitList(BossQueryVo queryVo){
 		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
 		setCurrentEmp(queryVo);
 		Result result = new Result();
 		String descStr = "获取运营商单位集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getOperatorUnits(queryVo);
+			dataList = bossCommonService.getOperatorUnitList(queryVo);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
@@ -332,14 +332,14 @@ public class BossCommonController extends BaseController {
 	 * @version [版本,2018-8-30]
 	 */
 	@AuthValidate
-	@RequestMapping("/getAccountTypes")
+	@RequestMapping("/getAccountTypeList")
 	@ResponseBody
-	public Result getAccountTypes(BossQueryVo queryVo){
+	public Result getAccountTypeList(){
 		Result result = new Result();
 		String descStr = "获取资金账户类型集合";
 		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
 		try {
-			dataList = bossCommonService.getAccountTypes(queryVo);
+			dataList = bossCommonService.getAccountTypeList();
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);

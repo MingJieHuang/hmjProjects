@@ -107,7 +107,7 @@ public interface BossCommonService {
 	 * @throws Exception
 	 * @param queryVo
 	 */
-	public List<BossConditionVo> getOperators(BossQueryVo queryVo) throws Exception;
+	public List<BossConditionVo> getOperatorList(BossQueryVo queryVo) throws Exception;
 
 	/**
 	 * [获取运营商单位集合]
@@ -116,7 +116,7 @@ public interface BossCommonService {
 	 * @throws Exception
 	 * @param queryVo
 	 */
-	List<BossConditionVo> getOperatorUnits(BossQueryVo queryVo) throws Exception;
+	List<BossConditionVo> getOperatorUnitList(BossQueryVo queryVo) throws Exception;
 	/**
 	 * [获取运营商业务名称集合]
 	 * @author HMJ
@@ -154,5 +154,5 @@ public interface BossCommonService {
 	 * @author hmj
 	 * @version [版本,2018-8-30]
 	 */
-    List<BossConditionVo> getAccountTypes(BossQueryVo queryVo) throws Exception;
+    List<BossConditionVo> getAccountTypeList() throws Exception;
 }

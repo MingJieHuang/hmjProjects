@@ -81,7 +81,7 @@
 	</select>
 
 	<!-- 运营商名称组件 -->
-	<select id="getOperators" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+	<select id="getOperatorList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
 		SELECT DECODE(P.CODE, '2', -2, '3', -3, -4) ID, P.CODE AS CODE, P.CONTENT_1 AS NAME FROM T_PUBLICTABS P
 			WHERE P.TYPE_CODE = 'YYS'
 				<if test="keyWord!=null">
@@ -89,7 +89,7 @@
 				</if>
 	</select>
 	<!-- 运营商单位集合 -->
-	<select id="getOperatorUnits" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+	<select id="getOperatorUnitList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
 		SELECT DISTINCT TCU.ID AS ID, TCU.CODE AS CODE, TCU.NAME AS NAME
 			FROM T_BUSINESS_ARCH T
 			JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
@@ -197,7 +197,7 @@
 		ORDER BY  T.INSTAL_VALUE_CODE
     </select>
 	<!-- 获取资金账户类型集合 -->
-    <select id="getAccountTypes" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+    <select id="getAccountTypeList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
 			SELECT
 			   ID          AS ID,
 			   CODE        AS CODE,

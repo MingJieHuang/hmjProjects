@@ -140,13 +140,13 @@ public class BossCommonServiceImpl implements BossCommonService {
      * @param queryVo
      */
     @Override
-    public List<BossConditionVo> getOperators(BossQueryVo queryVo) throws Exception {
+    public List<BossConditionVo> getOperatorList(BossQueryVo queryVo) throws Exception {
         //如果keyWord非空设置参数
         Map<String,Object> map = map = new HashMap<String, Object>();
         if (StringUtils.isNotBlank(queryVo.getKeyWord())){
             map.put("keyWord",queryVo.getKeyWord());
         }
-        return bossCommonMapper.getOperators(map);
+        return bossCommonMapper.getOperatorList(map);
     }
 
     /**
@@ -155,9 +155,9 @@ public class BossCommonServiceImpl implements BossCommonService {
      * @return
      */
     @Override
-    public List<BossConditionVo> getOperatorUnits(BossQueryVo queryVo) throws Exception {
+    public List<BossConditionVo> getOperatorUnitList(BossQueryVo queryVo) throws Exception {
         Map<String, Object> map = getConditionMap(queryVo, false);
-        return bossCommonMapper.getOperatorUnits(map);
+        return bossCommonMapper.getOperatorUnitList(map);
     }
 
     /**
@@ -217,8 +217,8 @@ public class BossCommonServiceImpl implements BossCommonService {
      * @version [版本,2018-8-30]
      */
     @Override
-    public List<BossConditionVo> getAccountTypes(BossQueryVo queryVo) throws Exception {
-        return bossCommonMapper.getAccountTypes();
+    public List<BossConditionVo> getAccountTypeList() throws Exception {
+        return bossCommonMapper.getAccountTypeList();
     }
 
 
