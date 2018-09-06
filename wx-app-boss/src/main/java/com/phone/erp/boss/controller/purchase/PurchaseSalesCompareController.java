@@ -41,5 +41,21 @@ public class PurchaseSalesCompareController extends ReportBaseController {
         Map<String, Object> paramMap = getParamMap(queryVo,result);
         return purchaseSalesCompareService.getPageData(queryVo, paramMap, result);
     }
-
+    /**
+     * [获取进销对比主页总计行对象]
+     * 作者:hmj
+     * 创建时间:2018/9/6
+     */
+    @AuthValidate
+    @RequestMapping("/getTotalVo")
+    @ResponseBody
+    public Result getTotalVo(BossQueryVo queryVo) throws Exception{
+        setCurrentEmp(queryVo);
+        queryVo.setMenuCode("BOSS_JXDB");//设置菜单码
+        queryVo.setDestStr("获取进销对比主页总计行数据");
+        Result result = new Result();
+        Map<String, Object> paramMap = getParamMap(queryVo,result);
+        return purchaseSalesCompareService.getTotalVo(queryVo, paramMap, result);
+    }
+    
 }

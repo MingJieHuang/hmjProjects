@@ -117,9 +117,11 @@
     <select id="getPageData" resultType="com.phone.erp.boss.vo.purchase.PurchaseSalesCompareVo">
                     SELECT ID,CODE,NAME,
                            SUM(PURCHASEQUANTITY)PURCHASEQUANTITY,
+                           SUM(SALESQUANTITY)SALESQUANTITY
+                      <if test="canSeeAmount==1">  ,
                            SUM(PURCHASEAMOUNT)PURCHASEAMOUNT,
-                           SUM(SALESQUANTITY)SALESQUANTITY,
                            SUM(SALESAMOUNT)SALESAMOUNT
+                      </if>
                      FROM
                           (
                             <include refid="codeSqlAndQueryCondition"/>
@@ -127,4 +129,19 @@
                            GROUP BY ID,CODE,NAME
                            ORDER BY NAME
     </select>
+    <!-- 获取进销对比主页总计行对象 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.purchase.PurchaseSalesCompareVo">
+                    SELECT
+                        SUM(PURCHASEQUANTITY)PURCHASEQUANTITY,
+                        SUM(SALESQUANTITY)SALESQUANTITY
+                        <if test="canSeeAmount==1">  ,
+                            SUM(PURCHASEAMOUNT)PURCHASEAMOUNT,
+                            SUM(SALESAMOUNT)SALESAMOUNT
+                        </if>
+                    FROM
+                        (
+                            <include refid="codeSqlAndQueryCondition"/>
+                        )
+    </select>
+    
 </mapper>
