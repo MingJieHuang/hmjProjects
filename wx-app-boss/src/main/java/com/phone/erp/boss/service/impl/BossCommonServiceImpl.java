@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.phone.erp.base.Result;
 import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.utils.Assert;
+import com.phone.erp.base.vo.company.CompanyVo;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.boss.mapper.BossCommonMapper;
 import com.phone.erp.boss.service.BossCommonService;
@@ -219,6 +220,19 @@ public class BossCommonServiceImpl implements BossCommonService {
     @Override
     public List<BossConditionVo> getAccountTypeList() throws Exception {
         return bossCommonMapper.getAccountTypeList();
+    }
+    /**
+     * 获取公司集合
+     * @author hmj
+     * @version [版本,2018-9-07]
+     */
+    @Override
+    public List<BossCompanyVo> getCompanyList(LoginEmployeeVo employeeVo, String menuCode) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("menuCode", menuCode);
+        map.put("employeeId", employeeVo.getId());
+        List<BossCompanyVo> companyList = bossCommonMapper.getMenuCodeCompanyList(map);
+        return companyList;
     }
 
 

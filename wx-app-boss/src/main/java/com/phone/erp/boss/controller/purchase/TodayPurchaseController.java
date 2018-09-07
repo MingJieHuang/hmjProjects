@@ -34,13 +34,14 @@ public class TodayPurchaseController extends ReportBaseController {
     @RequestMapping("/getPageData")
     @ResponseBody
     public Result getPageData(BossQueryVo queryVo) throws Exception{
+        Assert.notNull(queryVo.getStartDate(), "日期参数不能为空");
         setCurrentEmp(queryVo);
         queryVo.setMenuCode("BOSS_JRCG");//设置菜单码
         queryVo.setDestStr("获取今日采购主页分页数据");
         //这里设置断言和特殊查询参数
-        Assert.notNull(queryVo.getStartDate(), "日期参数不能为空");
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
+        paramMap.put("companyIds",queryVo.getEmployeeVo().getCompanyId());
         return todayPurchaseService.getPageData(queryVo, paramMap, result);
     }
 
@@ -54,12 +55,13 @@ public class TodayPurchaseController extends ReportBaseController {
     @RequestMapping("/getTotalVo")
     @ResponseBody
     public Result getTotalVo(BossQueryVo queryVo) throws Exception{
+        Assert.notNull(queryVo.getStartDate(), "日期参数不能为空");
         setCurrentEmp(queryVo);
         queryVo.setMenuCode("BOSS_JRCG");//设置菜单码
         queryVo.setDestStr("获取今日采购主页总计行数据");
-        Assert.notNull(queryVo.getStartDate(), "日期参数不能为空");
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
+        paramMap.put("companyIds",queryVo.getEmployeeVo().getCompanyId());
         return todayPurchaseService.getTotalVo(queryVo, paramMap, result);
 
     }

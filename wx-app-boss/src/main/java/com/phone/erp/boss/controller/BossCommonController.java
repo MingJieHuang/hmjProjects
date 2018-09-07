@@ -5,6 +5,7 @@ import com.phone.erp.base.annotation.AuthValidate;
 import com.phone.erp.base.controller.BaseController;
 import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.utils.Assert;
+import com.phone.erp.base.vo.company.CompanyVo;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.boss.service.BossCommonService;
 import com.phone.erp.boss.util.BossReportUtil;
@@ -142,6 +143,28 @@ public class BossCommonController extends BaseController {
 		List<BossCompanyVo> dataList = new ArrayList<BossCompanyVo>();
 		try {
 			dataList = bossCommonService.getMenuCodeCompanyList(employeeVo,menuCode);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
+	/**
+	 * 获取公司集合
+	 * @author hmj
+	 * @version [版本,2018-9-07]
+	 */
+	@AuthValidate
+	@RequestMapping("/getCompanyList")
+	@ResponseBody
+	public Result getCompanyList(String menuCode){
+		LoginEmployeeVo employeeVo = super.getCurrentEmployeeVo();
+		Assert.notNull(employeeVo, ErrorCode.NOT_LOGGED_IN);
+		Result result = new Result();
+		String descStr = "获取公司部门集合";
+		List<BossCompanyVo> dataList = new ArrayList<BossCompanyVo>();
+		try {
+			dataList = bossCommonService.getCompanyList(employeeVo,menuCode);
 			result.put("dataList", dataList);
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);

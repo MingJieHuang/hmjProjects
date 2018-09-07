@@ -3,24 +3,20 @@
 <mapper namespace="com.phone.erp.boss.mapper.storage.StockRatioMapper">
 <!-- 库存占比 -->
          <sql id="commonFields">
-             TGC.ID                   AS GOODSCLASSID,
-             TGC.CODE                 AS GOODSCLASSCODE,
-             TGC.NAME                 AS GOODSCLASSNAME,
-             TGB.ID                   AS GOODSBRANDID,
-             TGB.CODE                 AS GOODSBRANDCODE,
-             TGB.NAME                 AS GOODSBRANDNAME,
+             <if test="groupField=='goodsClassName'">
+                 TGC.ID                   AS ID,
+                 TGC.CODE                 AS CODE,
+                 TGC.NAME                 AS NAME,
+             </if>
+             <if test="groupField=='goodsBrandName'">
+                 TGB.ID                   AS ID,
+                 TGB.CODE                 AS CODE,
+                 TGB.NAME                 AS NAME,
+             </if>
          </sql>
-          <sql id="groups">
-               <if test="groupField=='goodsClassName'">GOODSCLASSID,GOODSCLASSCODE,GOODSCLASSNAME</if>
-               <if test="groupField=='goodsBrandName'">GOODSBRANDID,GOODSBRANDCODE,GOODSBRANDNAME</if>
-          </sql>
           <sql id="orders">
               <if test="orderField=='goodsQuantity'">GOODSQUANTITY</if>
               <if test="orderField=='goodsAmount'">GOODSAMOUNT</if>
-          </sql>
-          <sql id="groupField">
-               <if test="groupField=='goodsClassName'">GOODSCLASSID AS ID,GOODSCLASSCODE AS CODE,GOODSCLASSNAME AS NAME</if>
-               <if test="groupField=='goodsBrandName'">GOODSBRANDID AS ID,GOODSBRANDCODE AS CODE,GOODSBRANDNAME AS NAME</if>
           </sql>
      <!-- 公共查询条件 -->
      	<sql id="queryCondition">
@@ -42,7 +38,7 @@
      <!-- 核心sql -->
      	<sql id="codeSqlAndQueryCondition">
              WITH  base_tab AS (
-                  SELECT <include refid="groups"/> ,SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT
+                  SELECT ID,CODE,NAME ,SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT
                       FROM(
                             <!-- 实时库存数量商品 -->
                             SELECT
@@ -93,12 +89,12 @@
                             WHERE T.BILLS_STATUS = '8'
                             AND T.BILLS_TYPE IN (7,8)
                             <include refid="queryCondition"/>
-                     ) GROUP BY <include refid="groups"/>
-                       ORDER BY <include refid="orders"/> DESC
+                     ) GROUP BY ID,CODE,NAME
+                        ORDER BY <include refid="orders"/> DESC
              ),total_tab AS (
                   SELECT SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT FROM base_tab
              ),rowNum_tab AS (
-                  SELECT rownum rn,<include refid="groupField"/>,GOODSQUANTITY,GOODSAMOUNT FROM base_tab
+                  SELECT rownum rn,ID,CODE,NAME ,GOODSQUANTITY,GOODSAMOUNT FROM base_tab
             ),top5_tab AS (
                   SELECT ID,CODE,NAME,GOODSQUANTITY,GOODSAMOUNT FROM rowNum_tab WHERE RN &lt;=4
                 UNION ALL

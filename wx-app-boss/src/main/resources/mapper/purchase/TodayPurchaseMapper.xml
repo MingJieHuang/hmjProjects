@@ -19,7 +19,6 @@
                     )
                 </if>
                   AND T.COMPANY_ID IN(${companyIds})
-                  AND T.SECTION_ID IN(${sectionIds})
     	</sql>
     <!-- 核心sql -->
     	<sql id="codeSqlAndQueryCondition">

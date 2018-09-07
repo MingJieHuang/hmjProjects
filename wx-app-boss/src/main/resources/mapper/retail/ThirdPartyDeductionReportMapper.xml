@@ -4,8 +4,14 @@
 <!-- 第三方抵扣战报 -->
     <!-- 公共查询条件 -->
     	<sql id="queryCondition">
-        			 where T.GROUP_ID =#{groupId}
-        			  AND R.BILLS_STATUS =6
+        	 where T.GROUP_ID =#{groupId}
+        			AND R.BILLS_STATUS =6
+                <if test="null!=startDate">
+                    AND R.BILLS_DATE &gt;= to_date(#{startDate},'YYYY-MM-DD')
+                </if>
+                <if test="null!=endDate">
+                    AND R.BILLS_DATE &lt;= to_date(#{endDate},'YYYY-MM-DD')
+                </if>
                 <if test="null!=deductionUnitsId">
                     AND TCU.ID=#{deductionUnitsId}
                 </if>
@@ -21,47 +27,50 @@
                       AND R.COMPANY_ID IN(${companyIds})
                       AND R.SECTION_ID IN(${sectionIds})
     	</sql>
-    <sql id="commonFields">
-        <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
-        <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMAMCODE AS CODE,SALESMANNAME AS NAME</if>
-        <if test="groupField=='couponName'">COUPONID AS ID,COUPONCODE AS CODE,COUPONNAME AS NAME,CONTACTUNITID,CONTACTUNITCODE,CONTACTUNITNAME</if>
-        <if test="groupField=='contactunitName'">CONTACTUNITID AS ID,CONTACTUNITCODE AS CODE,CONTACTUNITNAME AS NAME</if>
-    </sql>
-    <!-- 汇总字段 -->
     <sql id="groups">
         <if test="groupField=='sectionName'">ID,CODE,NAME</if>
         <if test="groupField=='salesManName'">ID,CODE,NAME</if>
-        <if test="groupField=='couponName'">ID,CODE,NAME,CONTACTUNITID,CONTACTUNITCODE,CONTACTUNITNAME</if>
+        <if test="groupField=='couponName'">CONTACTUNITID,CONTACTUNITCODE,CONTACTUNITNAME,ID,CODE,NAME</if>
         <if test="groupField=='contactunitName'">ID,CODE,NAME</if>
     </sql>
-
     <!-- 核心sql -->
     	<sql id="codeSqlAndQueryCondition">
-                        SELECT DISTINCT T.ID,
-                            TS.ID                          AS SECTIONID,
-                            TS.NAME                        AS SECTIONNAME,
-                            TS.CODE                        AS SECTIONCODE,
-                            TE.ID                          AS SALESMANID,
-                            TE.NAME                        AS SALESMANNAME,
-                            TE.CODE                        AS SALESMANCODE,
-                            IC.ID                          AS COUPONID,
-                            IC.COUPON_NAME                 AS COUPONNAME,
-                            IC.COUPON_CODE                 AS COUPONCODE,
-                            TCU.ID                         AS CONTACTUNITID,
-                            TCU.NAME                       AS CONTACTUNITNAME,
-                            TCU.CODE                       AS CONTACTUNITCODE,
-                            DECODE(R.BILLS_TYPE,45,1,-1)   AS GOODSQUANTITY,
-                            T.AMOUNT                       AS GOODSAMOUNT
-                        FROM I_RETAIL_COUPON T
-                            JOIN I_COUPON IC ON T.COUPON_ID =IC.ID
-                            JOIN I_RETAIL R ON T.RETAIL_ID = R.ID
-                            LEFT JOIN I_RETAIL_DETAIL T1 ON R.ID = T1.RETAIL_ID
-                            LEFT JOIN T_EMPLOYEE TE ON T.SALESMAN1 = TE.ID
-                            LEFT JOIN I_STORAGE IST ON T1.STORAGE_ID = IST.ID
-                            LEFT JOIN T_COMPANY TC ON R.COMPANY_ID = TC.ID
-                            LEFT JOIN T_SECTION TS ON R.SECTION_ID = TS.ID
-                            LEFT JOIN T_CONTACT_UNIT TCU ON IC.CONTACT_UNIT_ID = TCU.ID
-                          <include refid="queryCondition"/>
+                SELECT DISTINCT T.ID BILLID,
+                  <if test="groupField=='sectionName'">
+                      TS.ID                          AS ID,
+                      TS.NAME                        AS NAME,
+                      TS.CODE                        AS CODE,
+                  </if>
+                  <if test="groupField=='salesManName'">
+                      TE.ID                          AS ID,
+                      TE.NAME                        AS NAME,
+                      TE.CODE                        AS CODE,
+                  </if>
+                  <if test="groupField=='couponName'">
+                      IC.ID                          AS ID,
+                      IC.COUPON_NAME                 AS NAME,
+                      IC.COUPON_CODE                 AS CODE,
+                      TCU.ID                         AS CONTACTUNITID,
+                      TCU.NAME                       AS CONTACTUNITNAME,
+                      TCU.CODE                       AS CONTACTUNITCODE,
+                  </if>
+                  <if test="groupField=='contactunitName'">
+                        TCU.ID                         AS ID,
+                        TCU.NAME                       AS NAME,
+                        TCU.CODE                       AS CODE,
+                  </if>
+                    DECODE(R.BILLS_TYPE,45,1,-1)   AS GOODSQUANTITY,
+                    T.AMOUNT                       AS GOODSAMOUNT
+                FROM I_RETAIL_COUPON T
+                    JOIN I_COUPON IC ON T.COUPON_ID =IC.ID
+                    JOIN I_RETAIL R ON T.RETAIL_ID = R.ID
+                    LEFT JOIN I_RETAIL_DETAIL T1 ON R.ID = T1.RETAIL_ID
+                    LEFT JOIN T_EMPLOYEE TE ON T.SALESMAN1 = TE.ID
+                    LEFT JOIN I_STORAGE IST ON T1.STORAGE_ID = IST.ID
+                    LEFT JOIN T_COMPANY TC ON R.COMPANY_ID = TC.ID
+                    LEFT JOIN T_SECTION TS ON R.SECTION_ID = TS.ID
+                    LEFT JOIN T_CONTACT_UNIT TCU ON IC.CONTACT_UNIT_ID = TCU.ID
+                  <include refid="queryCondition"/>
     	</sql>
     <!-- 获取第三方抵统计主页分页集合 -->
     <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.ThirdPartyDeductionReportVo">
@@ -71,10 +80,7 @@
                 TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
             </if>
             FROM(
-                  SELECT <include refid="commonFields"/>,GOODSQUANTITY,GOODSAMOUNT
-                    FROM (
                         <include refid="codeSqlAndQueryCondition"/>
-                    )
             )
         GROUP BY <include refid="groups"/>
         ORDER BY <include refid="groups"/>

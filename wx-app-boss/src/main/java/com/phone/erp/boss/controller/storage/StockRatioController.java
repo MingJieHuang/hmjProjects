@@ -43,6 +43,7 @@ public class StockRatioController extends ReportBaseController {
         //这里设置断言和特殊查询参数,设置当前日期
         queryVo.setStartDate(BossReportUtil.getCurDate());
         Assert.notNull(queryVo.getGroupField(),"分组字段参数不为空!");
+        Assert.notNull(queryVo.getOrderField(),"排序字段参数不为空!");
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
         return stockRatioService.getDataList(queryVo, paramMap, result);
