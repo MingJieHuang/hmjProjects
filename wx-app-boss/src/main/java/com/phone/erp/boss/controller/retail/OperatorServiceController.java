@@ -2,6 +2,7 @@ package com.phone.erp.boss.controller.retail;
 
 import com.phone.erp.base.Result;
 import com.phone.erp.base.annotation.AuthValidate;
+import com.phone.erp.base.utils.Assert;
 import com.phone.erp.boss.controller.ReportBaseController;
 import com.phone.erp.boss.service.retail.OperatorServiceService;
 import com.phone.erp.boss.vo.common.BossQueryVo;
@@ -33,6 +34,7 @@ public class OperatorServiceController extends ReportBaseController {
     @RequestMapping("/getPageData")
     @ResponseBody
     public Result getPageData(BossQueryVo queryVo) throws Exception{
+        Assert.notNull(queryVo.getGroupField(), "分组参数不能为空!!");
         setCurrentEmp(queryVo);
         queryVo.setMenuCode("BOSS_YYSYWZB");//设置菜单码
         queryVo.setDestStr("获取运营商业务战报主页分页数据");

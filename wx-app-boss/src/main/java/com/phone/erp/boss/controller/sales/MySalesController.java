@@ -29,15 +29,7 @@ public class MySalesController extends ReportBaseController {
 	/**
 	 * 获取我的销量主页数据
 	 * @author hmj
-	 * @param keyWord 模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
-	 * @param goodsClassId 商品一级分类id
-	 * @param goodsBrandId 商品品牌id
-	 * @param menuCode 报表菜单码
-	 * @param salesType 销售类型  全部:空 ,零售:1,销售:2
-	 * @param startDate 查询起始时间
-	 * @param endDate 查询截止时间
+	 * @param queryVo
 	 * @version [版本,2018-7-16]
 	 * @throws Exception 
 	 */
@@ -55,13 +47,7 @@ public class MySalesController extends ReportBaseController {
 	/**
 	 * 获取我的销量主页总计行对象
 	 * @author hmj
-	 * @param keyWord 模糊查询
-	 * @param goodsClassId 商品一级分类id
-	 * @param goodsBrandId 商品品牌id
-	 * @param menuCode 报表菜单码
-	 * @param salesType 销售类型  全部:空 ,零售:1,销售:2
-	 * @param startDate 查询起始时间
-	 * @param endDate 查询截止时间
+	 * @param queryVo
 	 * @version [版本,2018-7-16]
 	 * @throws Exception 
 	 */
@@ -79,19 +65,7 @@ public class MySalesController extends ReportBaseController {
 	/**
 	 * 获取我的销量详情页数据
 	 * @author hmj
-	 * @param nodeType 单击的对象类型:"Company"或者"Section"
-	 * @param sectionId 只有当nodeType="Section"时才有值
-	 * @param CompanySectionParam 当前选中的公司部门参数
-	 * @param keyWord 模糊查询
-	 * @param sectionWord 主页模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
-	 * @param goodsClassId 商品一级分类id
-	 * @param goodsBrandId 商品品牌id
-	 * @param menuCode 报表菜单码
-	 * @param salesType 销售类型  全部:空 ,零售:1,销售:2
-	 * @param startDate 查询起始时间
-	 * @param endDate 查询截止时间
+	 * @param queryVo
 	 * @version [版本,2018-7-16]
 	 * @throws Exception 
 	 */
@@ -114,17 +88,7 @@ public class MySalesController extends ReportBaseController {
 	/**
 	 * 获取我的销量详情页总计行对象
 	 * @author hmj
-	 * @param nodeType 单击的对象类型:"Company"或者"Section"
-	 * @param sectionId 只有当nodeType="Section"时才有值
-	 * @param CompanySectionParam 当前选中的公司部门参数
-	 * @param keyWord 模糊查询
-	 * @param sectionWord 主页模糊查询
-	 * @param goodsClassId 商品一级分类id
-	 * @param goodsBrandId 商品品牌id
-	 * @param menuCode 报表菜单码
-	 * @param salesType 销售类型  全部:空 ,零售:1,销售:2
-	 * @param startDate 查询起始时间
-	 * @param endDate 查询截止时间
+	 * @param queryVo
 	 * @version [版本,2018-7-16]
 	 * @throws Exception 
 	 */

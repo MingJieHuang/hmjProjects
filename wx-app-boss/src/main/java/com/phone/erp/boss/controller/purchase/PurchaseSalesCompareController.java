@@ -18,7 +18,7 @@ import java.util.Map;
  * @create 2018-08-18 16:53
  */
 @Controller
-@RequestMapping("${project.url.prefix}/reprot/purchase/purchaseSalesCompare")
+@RequestMapping("${project.url.prefix}/report/purchase/purchaseSalesCompare")
 public class PurchaseSalesCompareController extends ReportBaseController {
     @Autowired
     PurchaseSalesCompareService purchaseSalesCompareService;

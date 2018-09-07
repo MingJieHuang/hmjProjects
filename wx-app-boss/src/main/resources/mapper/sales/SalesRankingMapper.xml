@@ -26,25 +26,34 @@
             AND T.COMPANY_ID IN(${companyIds})
             AND T.SECTION_ID IN(${sectionIds})
     	</sql>
-    <!-- 汇总字段 -->
-    <sql id="groups">
-        <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
-        <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMAMCODE AS CODE,SALESMANNAME AS NAME</if>
-        <if test="groupField=='goodsBrandName'">GOODSBRANDID AS ID,GOODSBRANDCODE AS CODE,GOODSBRANDNAME AS NAME</if>
-        <if test="groupField=='goodsModelName'">NULL AS ID,NULL AS CODE,GOODSMODELNAME AS NAME</if>
+    <!-- 排序字段 -->
+    <sql id="orders">
+        <if test="rankingGist=='goodsQuantity'">GOODSQUANTITY</if>
+        <if test="rankingGist=='goodsAmount'">GOODSAMOUNT</if>
+        <if test="rankingGist=='goodsProfitAmount'">GOODSPROFITAMOUNT</if>
     </sql>
     <!-- 公共字段 -->
     <sql id="commonFields">
-        TS.ID                                          AS SECTIONID,
-        TS.CODE                                        AS SECTIONCODE,
-        TS.NAME                                        AS SECTIONNAME,
-        TE.ID                                          AS SALESMANID,
-        TE.CODE                                        AS SALESMAMCODE,
-        TE.NAME                                        AS SALESMANNAME,
-        TG.GOODS_MODEL                                 AS GOODSMODELNAME,
-        TGB.ID                                         AS GOODSBRANDID,
-        TGB.CODE                                       AS GOODSBRANDCODE,
-        TGB.NAME                                       AS GOODSBRANDNAME,
+        <if test="groupField=='sectionName'">
+            TS.ID                                          AS ID,
+            TS.CODE                                        AS CODE,
+            TS.NAME                                        AS NAME,
+        </if>
+        <if test="groupField=='salesManName'">
+            TE.ID                                          AS ID,
+            TE.CODE                                        AS CODE,
+            TE.NAME                                        AS NAME,
+        </if>
+        <if test="groupField=='goodsBrandName'">
+            TGB.ID                                         AS ID,
+            TGB.CODE                                       AS CODE,
+            TGB.NAME                                       AS NAME,
+        </if>
+        <if test="groupField=='goodsModelName'">
+            NULL                                          AS ID,
+            NULL                                          AS CODE,
+            TG.GOODS_MODEL                                AS NAME,
+        </if>
     </sql>
 
     <!-- 公共关联表 -->
@@ -102,41 +111,42 @@
     </sql>
     <!-- 核心sql -->
     	<sql id="codeSqlAndQueryCondition">
-            <if test="NULL==salesType">
-                <include refid="retail"/>
-                UNION ALL
-                <include refid="sales"/>
-            </if>
-            <if test="salesType==1"><include refid="retail"/></if>
-            <if test="salesType==2"><include refid="sales"/></if>
+            SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY,SUM(GOODSAMOUNT) AS GOODSAMOUNT,SUM(GOODSPROFITAMOUNT)GOODSPROFITAMOUNT
+                FROM(
+                        <if test="NULL==salesType">
+                            <include refid="retail"/>
+                            UNION ALL
+                            <include refid="sales"/>
+                        </if>
+                        <if test="salesType==1"><include refid="retail"/></if>
+                        <if test="salesType==2"><include refid="sales"/></if>
+                 )
+                    GROUP BY ID,CODE,NAME
+                    ORDER BY <include refid="orders"/> DESC
     	</sql>
     <!-- 获取销售排行主页分页 -->
     <select id="getPageData" resultType="com.phone.erp.boss.vo.sales.SalesRankingVo">
         SELECT ID,CODE,NAME
         <choose>
             <when test="rankingGist=='goodsQuantity'">
-                ,SUM(GOODSQUANTITY)AS GOODSQUANTITY
+                ,GOODSQUANTITY
             </when>
             <otherwise>
+                <if test="rankingGist=='goodsAmount'">
+                    ,
+                    TO_CHAR(GOODSAMOUNT)AS GOODSAMOUNT
+                </if>
                 <if test="canSeeAmount==1">
-                    <if test="rankingGist=='goodsAmount'">
-                        ,
-                        TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
-                    </if>
                     <if test="rankingGist=='goodsProfitAmount'">
                         ,
-                        TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT
+                        TO_CHAR(GOODSPROFITAMOUNT)AS GOODSPROFITAMOUNT
                     </if>
                 </if>
             </otherwise>
         </choose>
             FROM(
-                SELECT <include refid="groups"/>,GOODSQUANTITY,GOODSAMOUNT,GOODSPROFITAMOUNT
-                    FROM(
-                    <include refid="codeSqlAndQueryCondition"/>
-                    )
+                          <include refid="codeSqlAndQueryCondition"/>
             )
-        GROUP BY ID,CODE,NAME
-        ORDER BY NAME
+
     </select>
 </mapper>

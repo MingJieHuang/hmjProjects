@@ -30,12 +30,7 @@ public class CurrentStockController extends ReportBaseController {
 	/**
 	 * 获取实时库存主页数据集合
 	 * @author hmj
-	 * @param keyWord 模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
-	 * @param goodsClassId 商品一级分类id
-	 * @param goodsBrandId 商品品牌id
-	 * @param menuCode 报表菜单码
+	 * @param queryVo
 	 * @version [版本,2018-7-13]
 	 */
 	@AuthValidate
@@ -52,12 +47,7 @@ public class CurrentStockController extends ReportBaseController {
 	/**
 	 * 获取实时库存主页总计行对象
 	 * @author hmj
-	 * @param keyWord 模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
-	 * @param goodsClassId 商品一级分类id
-	 * @param goodsBrandId 商品品牌id
-	 * @param menuCode 报表菜单码
+	 * @param queryVo
 	 * @version [版本,2018-7-13]
 	 */
 	@AuthValidate
@@ -75,12 +65,7 @@ public class CurrentStockController extends ReportBaseController {
 	/**
 	 * 获取实时库存详情页分页集合
 	 * @author hmj
-	 * @param keyWord 模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
-	 * @param companySectionParam 公司部门参数
-	 * @param goodsId 商品id
-	 * @param menuCode 报表菜单码
+	 * @param queryVo
 	 * @version [版本,2018-7-13]
 	 */
 	@AuthValidate
@@ -98,10 +83,7 @@ public class CurrentStockController extends ReportBaseController {
 	/**
 	 * 获取实时库存详情页总计行对象
 	 * @author hmj
-	 * @param keyWord 模糊查询
-	 * @param companySectionParam 公司部门参数
-	 * @param goodsId 商品id
-	 * @param menuCode 报表菜单码
+	 * @param queryVo
 	 * @version [版本,2018-7-13]
 	 */
 	@AuthValidate
