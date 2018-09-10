@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.phone.erp.base.Result;
 import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.utils.Assert;
-import com.phone.erp.base.vo.company.CompanyVo;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.boss.mapper.BossCommonMapper;
 import com.phone.erp.boss.service.BossCommonService;
@@ -221,18 +220,13 @@ public class BossCommonServiceImpl implements BossCommonService {
     public List<BossConditionVo> getAccountTypeList() throws Exception {
         return bossCommonMapper.getAccountTypeList();
     }
-    /**
-     * 获取公司集合
-     * @author hmj
-     * @version [版本,2018-9-07]
-     */
+
     @Override
     public List<BossCompanyVo> getCompanyList(LoginEmployeeVo employeeVo, String menuCode) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("menuCode", menuCode);
-        map.put("employeeId", employeeVo.getId());
-        List<BossCompanyVo> companyList = bossCommonMapper.getMenuCodeCompanyList(map);
-        return companyList;
+        Map<String,Object> map =new HashMap<String, Object>();
+        map.put("employeeId",employeeVo.getId());
+        map.put("menuCode",menuCode);
+        return bossCommonMapper.getMenuCodeCompanyList(map);
     }
 
 
@@ -588,10 +582,11 @@ public class BossCommonServiceImpl implements BossCommonService {
         if (null!=queryVo.getActivityNamesId()){
             map.put("activityNamesId",queryVo.getActivityNamesId());
         }
-        //设置增值服务id参数
-        if (null!=queryVo.getServiceId()){
-            map.put("serviceId",queryVo.getServiceId());
+        //设置id参数
+        if (null!=queryVo.getActivityNamesId()){
+            map.put("activityNamesId",queryVo.getActivityNamesId());
         }
         return map;
     }
+
 }
