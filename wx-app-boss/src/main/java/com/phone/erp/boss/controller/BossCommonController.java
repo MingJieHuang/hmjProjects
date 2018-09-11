@@ -350,6 +350,28 @@ public class BossCommonController extends BaseController {
 		return BossReportUtil.getSuccessResult(result, descStr);
 	}
 	/**
+	 * 获取增值服务名称集合
+	 * @author hmj
+	 * @version [版本,2018-9-11]
+	 */
+	@AuthValidate
+	@RequestMapping("/getAddValueServiceNameList")
+	@ResponseBody
+	public Result getAddValueServiceNameList(BossQueryVo queryVo){
+		Assert.notNull(queryVo.getMenuCode(),"权限码参数不能为空");//权限码参数不为空
+		setCurrentEmp(queryVo);
+		Result result = new Result();
+		String descStr = "获取增值服务名称集合";
+		List<BossConditionVo> dataList = new ArrayList<BossConditionVo>();
+		try {
+			dataList = bossCommonService.getAddValueServiceNameList(queryVo);
+			result.put("dataList", dataList);
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
+	/**
 	 * 获取资金账户类型集合
 	 * @author hmj
 	 * @version [版本,2018-8-30]

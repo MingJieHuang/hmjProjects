@@ -228,6 +228,17 @@ public class BossCommonServiceImpl implements BossCommonService {
         map.put("menuCode",menuCode);
         return bossCommonMapper.getMenuCodeCompanyList(map);
     }
+    /**
+     * 获取增值服务名称集合
+     * @author hmj
+     * @version [版本,2018-9-11]
+     * @param queryVo
+     */
+    @Override
+    public List<BossConditionVo> getAddValueServiceNameList(BossQueryVo queryVo) throws Exception {
+        Map<String, Object> map = getConditionMap(queryVo,false);
+        return bossCommonMapper.getAddValueServiceNameList(map);
+    }
 
 
     /********************************** BOSS公共组件区 END *********************************************/
@@ -582,9 +593,9 @@ public class BossCommonServiceImpl implements BossCommonService {
         if (null!=queryVo.getActivityNamesId()){
             map.put("activityNamesId",queryVo.getActivityNamesId());
         }
-        //设置id参数
-        if (null!=queryVo.getActivityNamesId()){
-            map.put("activityNamesId",queryVo.getActivityNamesId());
+        //设置增值服务id参数
+        if (null!=queryVo.getServiceId()){
+            map.put("sectionIds",queryVo.getServiceId());
         }
         return map;
     }

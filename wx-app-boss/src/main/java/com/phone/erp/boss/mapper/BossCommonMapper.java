@@ -124,4 +124,11 @@ public interface BossCommonMapper {
 	 * @version [版本,2018-8-30]
 	 */
     public List<BossConditionVo> getAccountTypeList();
+	/**
+	 * 获取增值服务名称集合
+	 * @author hmj
+	 * @version [版本,2018-9-11]
+	 * @param queryVo
+	 */
+    List<BossConditionVo> getAddValueServiceNameList(Map<String, Object> map);
 }

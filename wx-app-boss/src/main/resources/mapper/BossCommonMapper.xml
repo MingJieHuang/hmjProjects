@@ -205,6 +205,18 @@
 		  FROM T_PUBLICTABS T
 		  WHERE T.TYPE_CODE = 'ZJZHLX'
     </select>
+	<!-- 获取增值服务名称集合 -->
+    <select id="getAddValueServiceNameList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+				SELECT DISTINCT T.ID  AS ID,
+					   T.SERVICE_NAME AS NAME
+				  FROM M_ADD_SERVICE T
+				WHERE T.COMPANY_ID IN (${companyIds})
+					  AND T.IS_STOP = 0
+				<if test="keyWord!=null">
+					AND UPPER(T.SERVICE_NAME) LIKE UPPER('%${keyWord}%')
+				</if>
+				ORDER BY T.SERVICE_NAME
+    </select>
 
 
 

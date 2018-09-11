@@ -3,9 +3,7 @@ package com.phone.erp.boss.service;
 import java.util.List;
 import java.util.Map;
 
-import com.github.pagehelper.Page;
 import com.phone.erp.base.Result;
-import com.phone.erp.base.vo.company.CompanyVo;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.boss.vo.common.*;
 
@@ -162,4 +160,11 @@ public interface BossCommonService {
 	 * @version [版本,2018-9-07]
 	 */
     List<BossCompanyVo> getCompanyList(LoginEmployeeVo employeeVo, String menuCode);
+	/**
+	 * 获取增值服务名称集合
+	 * @author hmj
+	 * @version [版本,2018-9-11]
+	 * @param queryVo
+	 */
+    List<BossConditionVo> getAddValueServiceNameList(BossQueryVo queryVo) throws Exception;
 }
