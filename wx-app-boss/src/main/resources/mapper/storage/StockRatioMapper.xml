@@ -93,16 +93,10 @@
                         ORDER BY <include refid="orders"/> DESC
              ),total_tab AS (
                   SELECT SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT FROM base_tab
-             ),rowNum_tab AS (
-                  SELECT rownum rn,ID,CODE,NAME ,GOODSQUANTITY,GOODSAMOUNT FROM base_tab
-            ),top5_tab AS (
-                  SELECT ID,CODE,NAME,GOODSQUANTITY,GOODSAMOUNT FROM rowNum_tab WHERE RN &lt;=4
-                UNION ALL
-                  SELECT NULL ID,NULL CODE,'other'NAME ,SUM (GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT FROM rowNum_tab WHERE RN &gt;=4
-            ),t AS (
-                SELECT top5_tab.ID,top5_tab.CODE,top5_tab.NAME,top5_tab.GOODSQUANTITY,top5_tab.GOODSAMOUNT,
+             ),t AS (
+                SELECT base_tab.ID,base_tab.CODE,base_tab.NAME,base_tab.GOODSQUANTITY,base_tab.GOODSAMOUNT,
                         total_tab.GOODSQUANTITY TOTALQUANTITY, total_tab.GOODSAMOUNT TOTALAMOUNT
-                  FROM top5_tab,total_tab
+                  FROM base_tab,total_tab
             )
             SELECT * FROM t
      	</sql>

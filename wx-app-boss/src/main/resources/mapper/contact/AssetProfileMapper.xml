@@ -62,7 +62,7 @@
 <select id="getDataList" resultType="com.phone.erp.boss.vo.contact.AssetProfileVo">
      <include refid="codeSqlAndQueryCondition"/>
      SELECT NAME,ROUND(GOODSAMOUNT,2)GOODSAMOUNT,
-          TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(ROUND(GOODSAMOUNT,2),TOTALAMOUNT)*100,2),'fm99999990.00')||'%' AS GOODSAMOUNTRATIO
+          TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(ROUND(GOODSAMOUNT,2),TOTALAMOUNT)*100,2),'fm99999990.00') AS GOODSAMOUNTRATIO
         FROM T
 </select>
 
