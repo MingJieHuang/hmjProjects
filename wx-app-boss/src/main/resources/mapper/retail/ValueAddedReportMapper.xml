@@ -19,7 +19,7 @@
     	</sql>
     <sql id="commonFields">
         <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
-        <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMAMCODE AS CODE,SALESMANNAME AS NAME</if>
+        <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMANCODE AS CODE,SALESMANNAME AS NAME</if>
         <if test="groupField=='serviceName'">SERVICEID AS ID,SERVICENAME AS NAME </if>
     </sql>
     <!-- 汇总字段 -->
