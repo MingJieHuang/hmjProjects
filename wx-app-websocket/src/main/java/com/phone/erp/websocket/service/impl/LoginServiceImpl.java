@@ -5,7 +5,7 @@ import com.phone.erp.websocket.mapper.login.LoginMapper;
 import com.phone.erp.websocket.service.LoginService;
 import com.phone.erp.websocket.vo.WebSocketUser;
 import com.phone.erp.websocket.vo.login.LoginStatusVo;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.chrisli.utils.reflect.ReflectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -11,7 +11,7 @@ import com.phone.erp.base.utils.wechat.WechatUtil;
 import com.phone.erp.base.vo.company.CompanyVo;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.common.service.login.LoginService;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.chrisli.utils.encrypt.EncryptUtil;
 import org.chrisli.utils.encrypt.JwtUtil;
 import org.chrisli.utils.json.JsonUtil;

@@ -12,7 +12,7 @@ import com.phone.erp.websocket.vo.WebSocketUser;
 import com.phone.erp.websocket.vo.retail.ParamMessageVo;
 import com.phone.erp.websocket.vo.retail.PrintParamVo;
 import com.phone.erp.websocket.vo.retail.RetailOrderVo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.chrisli.utils.json.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

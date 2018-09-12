@@ -6,7 +6,7 @@ import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.enums.MiniApp;
 import com.phone.erp.base.utils.Assert;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.chrisli.utils.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

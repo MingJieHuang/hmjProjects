@@ -1,6 +1,7 @@
 package com.phone.erp.websocket.vo;
 
-import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * [调用发送消息方法的执行结果]

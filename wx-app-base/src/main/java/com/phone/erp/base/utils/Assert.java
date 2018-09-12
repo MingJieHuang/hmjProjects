@@ -1,8 +1,8 @@
 package com.phone.erp.base.utils;
 
 import com.phone.erp.base.enums.ErrorCode;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
