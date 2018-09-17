@@ -595,7 +595,11 @@ public class BossCommonServiceImpl implements BossCommonService {
         }
         //设置增值服务id参数
         if (null!=queryVo.getServiceId()){
-            map.put("sectionIds",queryVo.getServiceId());
+            map.put("serviceId",queryVo.getServiceId());
+        }
+        //设置查询调拨类型参数
+        if (null!=queryVo.getAllotType()){
+            map.put("allotType",queryVo.getAllotType());
         }
         return map;
     }
