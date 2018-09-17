@@ -53,6 +53,7 @@
                                 AND(UPPER(TS.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TS.CODE) LIKE UPPER('%${keyWord}%'))
                             </if>
                             AND TC.ID IN(${companyIds})
+                            AND TS.ID IN(${sectionIds})
             ),MAINTAB AS(<!-- MAINTAB表是根据部门汇总sql -->
                       SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)GOODSQUANTITY,SUM(GOODSAMOUNT)GOODSAMOUNT,SUM(GOODSPROFITAMOUNT)GOODSPROFITAMOUNT
                              FROM TEMP
