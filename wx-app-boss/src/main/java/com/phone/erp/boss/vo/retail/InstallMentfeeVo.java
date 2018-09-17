@@ -9,15 +9,12 @@ import com.phone.erp.base.vo.BaseResultVo;
  */
 public class InstallMentfeeVo extends BaseResultVo {
     /**
-     *分期商id
+     *分期业务id
      */
     private Long installmentfeesId;
+
     /**
-    *分期商Code
-    */
-    private String installmentfeesCode;
-    /**
-    *分期商名称
+    *分期业务名称
     */
     private String installmentfeesName;
 
@@ -47,14 +44,6 @@ public class InstallMentfeeVo extends BaseResultVo {
 
     public void setInstallmentfeesId(Long installmentfeesId) {
         this.installmentfeesId = installmentfeesId;
-    }
-
-    public String getInstallmentfeesCode() {
-        return installmentfeesCode;
-    }
-
-    public void setInstallmentfeesCode(String installmentfeesCode) {
-        this.installmentfeesCode = installmentfeesCode;
     }
 
     public String getInstallmentfeesName() {

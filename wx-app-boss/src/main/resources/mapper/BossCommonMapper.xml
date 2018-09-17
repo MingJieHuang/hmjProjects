@@ -67,6 +67,7 @@
 			    LEFT JOIN T_UNIT_CLASS TUC ON TCU.TYPE_ID = TUC.ID
 			    LEFT JOIN T_AREA TA ON TCU.DISTRICT_ID = TA.ID
 		    WHERE TCU.GROUP_ID = #{groupId}
+					AND TCU.STATUS = 0
 	           <if test="companyIds!=null">
 		          AND TC.ID IN (${companyIds})
 	           </if>
@@ -276,6 +277,7 @@
 		 select t.id,t.code,t.name,t.parent_id,T.COMPANY_ID AS COMPANYID 
 		  from t_section t
 		                    start with t.id =#{sectionId} connect by t.parent_id = prior t.id
+		   where t.status = 0
 		                
 	</select>
 

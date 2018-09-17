@@ -30,7 +30,7 @@
     <sql id="commonFields">
             <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
             <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMANCODE AS CODE,SALESMANNAME AS NAME</if>
-            <if test="groupField=='installmentBusinessName'">INSTALLMENTBUSINESSID AS ID,INSTALLMENTBUSINESSNAME AS NAME,INSTALLMENTFEESID,INSTALLMENTFEESCODE,INSTALLMENTFEESNAME</if>
+            <if test="groupField=='installmentBusinessName'">INSTALLMENTBUSINESSID AS ID,INSTALLMENTBUSINESSCODE AS CODE,INSTALLMENTBUSINESSNAME AS NAME, INSTALLMENTFEESID,INSTALLMENTFEESNAME</if>
             <if test="groupField=='installmentFeesName'">INSTALLMENTFEESID AS ID,INSTALLMENTFEESCODE AS CODE,INSTALLMENTFEESNAME AS NAME</if>
         </sql>
         <!-- 汇总字段 -->
@@ -49,11 +49,11 @@
                     TE.ID                  AS SALESMANID,
                     TE.CODE                AS SALESMANCODE,
                     TE.NAME                AS SALESMANNAME,
-                    TIF.ID                 AS INSTALLMENTBUSINESSID,
-                    TIF.INSTAL_VALUE_CODE AS INSTALLMENTBUSINESSNAME,
-                    TCU.ID                 AS INSTALLMENTFEESID,
-                    TCU.CODE               AS INSTALLMENTFEESCODE,
-                    TCU.NAME               AS INSTALLMENTFEESNAME,
+                    TIF.ID                 AS INSTALLMENTFEESID,
+                    TIF.INSTAL_VALUE_CODE AS INSTALLMENTFEESNAME,
+                    TCU.ID                 AS INSTALLMENTBUSINESSID,
+                    TCU.CODE               AS INSTALLMENTBUSINESSCODE,
+                    TCU.NAME               AS INSTALLMENTBUSINESSNAME,
                     DECODE(T.BILLS_TYPE,45,1,46,-1)AS GOODSQUANTITY,
                     IRI.INSTALLMENT_BALANCE        AS TALLYMANLOANAMOUNT,
                     IRI.COMMISSION_WILL            AS COMMISSIONESTIMATE
@@ -87,6 +87,7 @@
     <!-- 获取分期商业务战报主页总计行对象 -->
     <select id="getTotalVo" resultType="com.phone.erp.boss.vo.retail.InstallMentfeeVo">
         SELECT SUM(GOODSQUANTITY)AS GOODSQUANTITY,
+        TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE), SUM(GOODSQUANTITY)),2))AS COMMISSIONAVG,
                 SUM(TALLYMANLOANAMOUNT) AS TALLYMANLOANAMOUNT,
                 SUM(COMMISSIONESTIMATE) AS COMMISSIONESTIMATE
             FROM (
