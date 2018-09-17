@@ -46,6 +46,11 @@ public class StockRatioController extends ReportBaseController {
         Assert.notNull(queryVo.getOrderField(),"排序字段参数不为空!");
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
+        if ("goodsAmount".equals(queryVo.getOrderField())&&!queryVo.getCanSeeAmount()){
+            result.setCode("0000");
+            result.setDesc("您没有查看成本价权限,请联系公司管理员!!");
+            return result;
+        }
         return stockRatioService.getDataList(queryVo, paramMap, result);
     }
 }
