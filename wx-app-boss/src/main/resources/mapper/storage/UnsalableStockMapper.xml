@@ -18,7 +18,7 @@
                 START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
             </if>
               AND CEIL((TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS') -
-                  TO_DATE(TO_CHAR(T.PURCHASE_DATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS'))) >=#{stockAge}
+                  TO_DATE(TO_CHAR(ICI.LAST_INDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS'))) >=#{stockAge}
               AND T.COMPANY_ID IN(${companyIds})
               AND T.SECTION_ID IN(${sectionIds})
     	</sql>
@@ -35,6 +35,7 @@
                 SUM(T.COST_PRICE) * COUNT(T.GOODS_ID)                 AS GOODSAMOUNT
             </if>
         FROM I_STOCK_IM T
+            LEFT JOIN I_COMPANY_IMEI ICI ON ICI.COMPANY_ID = T.COMPANY_ID AND ICI.IMEI = T.IMEI
             LEFT JOIN T_IMEI_INFO TII  ON T.IMEI = TII.ID AND T.GROUP_ID = TII.GROUP_ID AND T.COMPANY_ID = TII.COMPANY_ID
             LEFT JOIN T_GOODSNAME TG   ON T.GOODS_ID=TG.ID AND T.GROUP_ID=TG.GROUP_ID
             LEFT JOIN T_GOODSCLASS TGC ON TG.GOODS_CATEGORY_ID = TGC.ID AND TG.GROUP_ID =TGC.GROUP_ID
@@ -67,11 +68,12 @@
                 TII.AUXILIARY_IMEI             AS AUXILIARYIMEI,
                 TG.CONFIGURE                   AS GOODSCONFIGURATION,
                 CEIL((TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS') -
-              TO_DATE(TO_CHAR(T.PURCHASE_DATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS')))  AS STOCKAGE
+              TO_DATE(TO_CHAR(ICI.LAST_INDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS')))  AS STOCKAGE
                 <if test="canSeeAmount==1">  ,
                     T.COST_PRICE                   AS GOODSAMOUNT
                 </if>
         FROM I_STOCK_IM T
+            LEFT JOIN I_COMPANY_IMEI ICI ON ICI.COMPANY_ID = T.COMPANY_ID AND ICI.IMEI = T.IMEI
             JOIN T_IMEI_INFO TII  ON T.IMEI = TII.ID AND T.GROUP_ID = TII.GROUP_ID AND T.COMPANY_ID = TII.COMPANY_ID
             JOIN T_GOODSNAME TG   ON T.GOODS_ID=TG.ID AND T.GROUP_ID=TG.GROUP_ID
            WHERE T.RESERVE2=1
@@ -81,7 +83,7 @@
                         UPPER(TII.AUXILIARY_IMEI) LIKE UPPER('%${detailKeyWord}%'))
               </if>
                AND  CEIL((TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS') -
-                  TO_DATE(TO_CHAR(T.PURCHASE_DATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS')))  >=#{stockAge}
+                  TO_DATE(TO_CHAR(ICI.LAST_INDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS')))  >=#{stockAge}
                AND T.COMPANY_ID IN(${companyIds})
                AND T.SECTION_ID IN(${sectionIds})
 
