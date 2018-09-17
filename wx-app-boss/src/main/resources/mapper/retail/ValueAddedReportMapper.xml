@@ -6,6 +6,12 @@
     	<sql id="queryCondition">
             where T.GROUP_ID =#{groupId}
                 AND R.BILLS_STATUS =6
+            <if test="null!=startDate">
+                AND R.BILLS_DATE &gt;= to_date(#{startDate},'YYYY-MM-DD')
+            </if>
+            <if test="null!=endDate">
+                AND R.BILLS_DATE &lt;= to_date(#{endDate},'YYYY-MM-DD')
+            </if>
             <if test="null!=serviceId">
                 AND MAS.ID=#{serviceId}
             </if>
