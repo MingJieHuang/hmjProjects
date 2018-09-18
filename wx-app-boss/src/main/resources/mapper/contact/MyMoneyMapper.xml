@@ -7,6 +7,9 @@
                   <if test="null!=accountTypeId">
                       AND TP0.ID =#{accountTypeId}
                   </if>
+            <if test="null!=keyWord">
+               AND(UPPER(TAC.CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TAC.NAME) LIKE UPPER('%${keyWord}%'))
+            </if>
                       AND T.COMPANY_ID IN(${companyIds})
                       AND T.SECTION_ID IN(${sectionIds})
     	</sql>
