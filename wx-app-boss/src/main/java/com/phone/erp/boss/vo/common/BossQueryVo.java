@@ -58,6 +58,10 @@ public class BossQueryVo {
 	private String startDate;
 	//24.查询截止时间endDate
 	private String endDate;
+	//23.查询起始时间startDate
+	private String startDate2;
+	//24.查询截止时间endDate
+	private String endDate2;
 	//25.nodeType 对象类型
 	private String nodeType;
 	//26.详情页模糊匹配
@@ -94,6 +98,8 @@ public class BossQueryVo {
 	private Long activityNamesId;
 	//41,增值服务id
 	private Long serviceId;
+	//42,调拨类型:0表示调出,1表示调入
+	private Long allotType;
 
 	public Long getGroupId() {
 		return groupId;
@@ -372,5 +378,29 @@ public class BossQueryVo {
 
 	public void setServiceId(Long serviceId) {
 		this.serviceId = serviceId;
+	}
+
+	public Long getAllotType() {
+		return allotType;
+	}
+
+	public void setAllotType(Long allotType) {
+		this.allotType = allotType;
+	}
+
+	public String getStartDate2() {
+		return startDate2;
+	}
+
+	public void setStartDate2(String startDate2) {
+		this.startDate2 = startDate2;
+	}
+
+	public String getEndDate2() {
+		return endDate2;
+	}
+
+	public void setEndDate2(String endDate2) {
+		this.endDate2 = endDate2;
 	}
 }
