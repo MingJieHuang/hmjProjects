@@ -32,7 +32,7 @@
             MIN(DECODE(T.AUXILIARY_IMEI,NULL,'SINGLE', 'DOUBLE')) AS IMEITYPE ,
             COUNT(T.GOODS_ID)                                      AS GOODSQUANTITY
             <if test="canSeeAmount==1">  ,
-                SUM(T.COST_PRICE) * COUNT(T.GOODS_ID)                 AS GOODSAMOUNT
+                SUM(T.COST_PRICE)                                  AS GOODSAMOUNT
             </if>
         FROM I_STOCK_IM T
             LEFT JOIN I_COMPANY_IMEI ICI ON ICI.COMPANY_ID = T.COMPANY_ID AND ICI.IMEI = T.IMEI
