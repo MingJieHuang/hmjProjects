@@ -246,17 +246,27 @@
 
 	<!-- 获取公司下所有有权限的部门子节点和全部父节点部门集合 -->
 	<select id="getAllUsableSections" resultType="com.phone.erp.boss.vo.common.BossSectionVo">
-		select t.id,t.code,t.name,t.parent_id,t.parent_id||','||t.name sectionPath,T.COMPANY_ID AS COMPANYID
-				from t_section t
-					start with t.id in
-									(select to_number(t1.value_code) id
+		select distinct id,code,name,parent_id, sectionPath,companyId from (
+				select t.id, t.code, t.name, t.parent_id, t.parent_id || ',' || t.name sectionPath, T.COMPANY_ID AS COMPANYID
+				   from t_section t
+				  start with t.id in (select to_number(t1.value_code) id
 										from t_employee_data t1
-										where t1.type_code = 'KSYBM'
-										and t1.employees_id = #{employeeId}
-										and t.COMPANY_ID = #{companyId}
-									)
-										connect by t.PARENT_ID = prior t.id
-  									and t.status = 0 
+									   where t1.type_code = 'KSYBM'
+										 and t1.employees_id = #{employeeId}
+										 and t.COMPANY_ID = #{companyId})
+				 connect by t.id = prior t.PARENT_ID
+						and t.status = 0
+			union all
+				  select t.id, t.code, t.name, t.parent_id, t.parent_id || ',' || t.name sectionPath, T.COMPANY_ID AS COMPANYID
+				   from t_section t
+				  start with t.id in (select to_number(t1.value_code) id
+										from t_employee_data t1
+									   where t1.type_code = 'KSYBM'
+										 and t1.employees_id = #{employeeId}
+										 and t.COMPANY_ID = #{companyId})
+				 connect by t.PARENT_ID = prior t.id
+						and t.status = 0
+		)order by id
 	</select>
 	
 	<!-- 获取公司下全部部门 -->
