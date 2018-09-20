@@ -31,7 +31,7 @@
             <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
             <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMANCODE AS CODE,SALESMANNAME AS NAME</if>
             <if test="groupField=='installmentBusinessName'">INSTALLMENTBUSINESSID AS ID,INSTALLMENTBUSINESSCODE AS CODE,INSTALLMENTBUSINESSNAME AS NAME, INSTALLMENTFEESID,INSTALLMENTFEESNAME</if>
-            <if test="groupField=='installmentFeesName'">INSTALLMENTFEESID AS ID,INSTALLMENTFEESCODE AS CODE,INSTALLMENTFEESNAME AS NAME</if>
+            <if test="groupField=='installmentFeesName'">INSTALLMENTFEESID AS ID,INSTALLMENTFEESNAME AS NAME</if>
         </sql>
         <!-- 汇总字段 -->
         <sql id="groups">
