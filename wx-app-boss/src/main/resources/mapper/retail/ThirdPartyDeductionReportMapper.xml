@@ -47,12 +47,12 @@
                       TE.CODE                        AS CODE,
                   </if>
                   <if test="groupField=='couponName'">
-                      IC.ID                          AS ID,
-                      IC.COUPON_NAME                 AS NAME,
-                      IC.COUPON_CODE                 AS CODE,
-                      TCU.ID                         AS CONTACTUNITID,
-                      TCU.NAME                       AS CONTACTUNITNAME,
-                      TCU.CODE                       AS CONTACTUNITCODE,
+                      IC.ID                          AS CONTACTUNITID,
+                      IC.COUPON_NAME                 AS CONTACTUNITNAME,
+                      IC.COUPON_CODE                 AS CONTACTUNITCODE,
+                      TCU.ID                         AS ID,
+                      TCU.NAME                       AS NAME,
+                      TCU.CODE                       AS CODE,
                   </if>
                   <if test="groupField=='contactunitName'">
                         TCU.ID                         AS ID,

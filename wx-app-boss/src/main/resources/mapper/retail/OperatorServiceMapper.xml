@@ -30,12 +30,6 @@
         AND T.COMPANY_ID IN(${companyIds})
         AND T.SECTION_ID IN(${sectionIds})
     </sql>
-    <sql id="commonFields">
-        <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
-        <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMAMCODE AS CODE,SALESMANNAME AS NAME</if>
-        <if test="groupField=='businessName'">BUSINESSID AS ID,BUSINESSCODE AS CODE,BUSINESSNAME AS NAME,OPERATORUNITID,OPERATORUNITNAME</if>
-        <if test="groupField=='operatorName'">OPERATORID AS ID,OPERATORCODE AS CODE,OPERATORNAME AS NAME</if>
-    </sql>
     <!-- 汇总字段 -->
     <sql id="groups">
         <if test="groupField=='sectionName'">ID,CODE,NAME</if>
@@ -47,31 +41,39 @@
     <!-- 核心sql片段 -->
     <sql id="codeSqlAndQueryCondition">
             SELECT
-                TS.ID   AS SECTIONID,
-                TS.CODE AS SECTIONCODE,
-                TS.NAME AS SECTIONNAME,
-                TE.ID   AS SALESMANID,
-                TE.CODE AS SALESMAMCODE,
-                TE.NAME AS SALESMANNAME,
-                TCU.ID  AS OPERATORUNITID,
-                TCU.NAME AS OPERATORUNITNAME,
-                TBA.ID   AS BUSINESSID,
-                TBA.BIZ_CODE AS BUSINESSCODE,
-                TBA.BIZ_NAME AS BUSINESSNAME,
-                TP3.ID AS OPERATORID,
-                TP3.CODE AS OPERATORCODE,
-                TP3.CONTENT_1 AS OPERATORNAME,
-                DECODE(T.BILLS_TYPE, 46, -IRB.QTY, IRB.QTY) AS GOODSQUANTITY,
-                IRB.BUS_AMOUNT AS ACTUALRECEIVABLES,
-                IRB.COMMISSION_WILL AS COMMISSIONESTIMATE
+            <if test="groupField=='sectionName'">
+                    TS.ID   AS ID,
+                    TS.CODE AS CODE,
+                    TS.NAME AS NAME,
+            </if>
+            <if test="groupField=='salesManName'">
+                    TE.ID   AS ID,
+                    TE.CODE AS CODE,
+                    TE.NAME AS NAME,
+            </if>
+            <if test="groupField=='businessName'">
+                    TCU.ID  AS ID,
+                    TCU.ID  AS CODE,
+                    TCU.NAME AS NAME,
+                    TBA.ID   AS OPERATORUNITID,
+                    TBA.BIZ_NAME AS OPERATORUNITNAME,
+            </if>
+            <if test="groupField=='operatorName'">
+                    TP3.ID AS ID,
+                    TP3.CODE AS CODE,
+                    TP3.CONTENT_1 AS NAME,
+            </if>
+                    DECODE(T.BILLS_TYPE, 46, -IRB.QTY, IRB.QTY) AS GOODSQUANTITY,
+                    IRB.BUS_AMOUNT AS ACTUALRECEIVABLES,
+                    IRB.COMMISSION_WILL AS COMMISSIONESTIMATE
               FROM I_RETAIL T
-                JOIN T_COMPANY TC ON T.COMPANY_ID = TC.ID
-                JOIN T_SECTION TS ON T.SECTION_ID = TS.ID
-                JOIN I_RETAIL_BUS IRB ON IRB.RETAIL_ID = T.ID
-                JOIN T_BUSINESS_ARCH TBA ON IRB.BUS_ID = TBA.ID
-                JOIN T_EMPLOYEE TE ON IRB.SALESMAN1 = TE.ID
-                LEFT JOIN T_CONTACT_UNIT TCU ON TBA.CONTACTSUNIT_ID = TCU.ID
-                LEFT JOIN (SELECT DECODE(P.CODE, '2', -2, '3', -3, -4) ID, P.CODE, P.CONTENT_1 FROM T_PUBLICTABS P WHERE P.TYPE_CODE = 'YYS') TP3 ON TBA.OPERATOR_CODE = TP3.CODE
+                    JOIN T_COMPANY TC ON T.COMPANY_ID = TC.ID
+                    JOIN T_SECTION TS ON T.SECTION_ID = TS.ID
+                    JOIN I_RETAIL_BUS IRB ON IRB.RETAIL_ID = T.ID
+                    JOIN T_BUSINESS_ARCH TBA ON IRB.BUS_ID = TBA.ID
+                    JOIN T_EMPLOYEE TE ON IRB.SALESMAN1 = TE.ID
+                    LEFT JOIN T_CONTACT_UNIT TCU ON TBA.CONTACTSUNIT_ID = TCU.ID
+                    LEFT JOIN (SELECT DECODE(P.CODE, '2', -2, '3', -3, -4) ID, P.CODE, P.CONTENT_1 FROM T_PUBLICTABS P WHERE P.TYPE_CODE = 'YYS') TP3 ON TBA.OPERATOR_CODE = TP3.CODE
                 <include refid="queryCondition"/>
     </sql>
 
@@ -84,10 +86,7 @@
                 TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE), SUM(GOODSQUANTITY)),2))AS COMMISSIONAVG
             </if>
             FROM(
-            SELECT <include refid="commonFields"/>,GOODSQUANTITY,ACTUALRECEIVABLES,COMMISSIONESTIMATE
-            FROM (
-            <include refid="codeSqlAndQueryCondition"/>
-            )
+                  <include refid="codeSqlAndQueryCondition"/>
             )
             GROUP BY <include refid="groups"/>
             ORDER BY <include refid="groups"/>

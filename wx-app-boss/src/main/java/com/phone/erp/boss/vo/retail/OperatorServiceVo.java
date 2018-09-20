@@ -10,12 +10,12 @@ import com.phone.erp.base.vo.BaseResultVo;
  */
 public class OperatorServiceVo extends BaseResultVo{
     /**
-    *运营商单位id
+    *运营商业务id
     */
     private Long operatorUnitId;
 
     /**
-    *运营商单位名称
+    *运营商业务名称
     */
     private String operatorUnitName;
 
