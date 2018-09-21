@@ -286,9 +286,7 @@
 	<select id="getLeafNodeSectionList" resultType="com.phone.erp.boss.vo.common.BossSectionVo">
 		 select t.id,t.code,t.name,t.parent_id,T.COMPANY_ID AS COMPANYID 
 		  from t_section t
-		                    start with t.id =#{sectionId} connect by t.parent_id = prior t.id
-		   where t.status = 0
-		                
+		         start with t.id =#{sectionId} connect by t.parent_id = prior t.id AND t.status = 0
 	</select>
 
 </mapper>
