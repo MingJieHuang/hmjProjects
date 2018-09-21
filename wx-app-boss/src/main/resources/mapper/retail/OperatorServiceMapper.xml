@@ -14,7 +14,9 @@
         <if test="null!=keyWord">
             <if test="groupField=='sectionName'">AND(UPPER(TS.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TS.CODE) LIKE UPPER('%${keyWord}%'))</if>
             <if test="groupField=='salesManName'">AND(UPPER(TE.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TE.CODE) LIKE UPPER('%${keyWord}%'))</if>
-            <if test="groupField=='businessName'">AND(UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%'))</if>
+            <if test="groupField=='businessName'">
+                AND(UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TBA.BIZ_NAME) LIKE UPPER('%${keyWord}%'))
+            </if>
             <if test="groupField=='operatorName'">AND(UPPER(TP3.CONTENT_1) LIKE UPPER('%${keyWord}%'))</if>
         </if>
         <if test="null!=operatorId">
