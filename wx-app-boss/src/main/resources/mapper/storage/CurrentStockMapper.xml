@@ -51,8 +51,10 @@
 	<!-- 查询实时库存主页结果集(分页) -->
 	<select id="getPageData" resultType="com.phone.erp.boss.vo.storage.CurrentStockVo">
 		SELECT goodsId,goodsName,goodsCode,goodsConfiguration,SUM(goodsQuantity)goodsQuantity
+	            <if test="canSeeAmount==1">
 	           ,to_char(SUM(goodsAmount)) AS goodsAmount,
 	             DECODE(SUM(goodsQuantity),0,'',TO_CHAR(SUM(goodsAmount) / SUM(goodsQuantity))) AS goodsPrice
+	            </if>
 				FROM(
 					<include refid="codeSqlAndQueryCondition"></include>
 				)
@@ -63,8 +65,10 @@
 	<!-- 查询实时库存主页结总计行对象 -->
 	<select id="getTotalVo" resultType="com.phone.erp.boss.vo.storage.CurrentStockVo">
 		SELECT  SUM(goodsQuantity)goodsQuantity
+	            <if test="canSeeAmount==1">
 	           ,to_char(SUM(goodsAmount)) AS goodsAmount,
 	             DECODE(SUM(goodsQuantity),0,'',TO_CHAR(SUM(goodsAmount) / SUM(goodsQuantity))) AS goodsPrice
+	            </if>
 				FROM(
 					<include refid="codeSqlAndQueryCondition"></include>
 				)
@@ -73,8 +77,10 @@
 	<!-- 查询实时库存分布详情_部门对象集合 -->
 	<select id="getCurrentStockDetailSectionData" resultType="com.phone.erp.boss.vo.storage.SectionGoodsVo">
 		SELECT id,name,code,sum(goodsQuantity)goodsQuantity
+			   <if test="canSeeAmount==1">
 	           ,to_char(SUM(goodsAmount)) AS goodsAmount,
 	             DECODE(SUM(goodsQuantity),0,'',TO_CHAR(SUM(goodsAmount) / SUM(goodsQuantity))) AS goodsPrice
+	           </if>
 	         FROM(
 				    SELECT   TS.ID   		     AS id,
 				             TS.NAME      		 AS name,
@@ -96,8 +102,10 @@
 	<!-- 查询实时库存分布详情_仓库对象集合 -->
 	<select id="getCurrentStockDetailStorageData" resultType="com.phone.erp.boss.vo.storage.StorageGoodsVo">
 		SELECT id,sectionId,name,code,sum(goodsQuantity)goodsQuantity
+			   <if test="canSeeAmount==1">
 	           ,to_char(SUM(goodsAmount)) AS goodsAmount,
 	             DECODE(SUM(goodsQuantity),0,'',TO_CHAR(SUM(goodsAmount) / SUM(goodsQuantity))) AS goodsPrice
+	           </if>
 	         FROM(
 				    SELECT   TS.ID   		     AS sectionId,
 				             ISO.ID   		     AS id,
@@ -120,8 +128,10 @@
 	<!-- 查询实时库存分布详情_商品合计对象 -->
 	<select id="getGoodsSumVo" resultType="com.phone.erp.boss.vo.storage.GoodsSumVo">
 		SELECT id,name,code,sum(goodsQuantity)goodsQuantity
+			   <if test="canSeeAmount==1">
 	           ,to_char(SUM(goodsAmount)) AS goodsAmount,
 	             DECODE(SUM(goodsQuantity),0,'',TO_CHAR(SUM(goodsAmount) / SUM(goodsQuantity))) AS goodsPrice
+	           </if>
 	         FROM(
 				    SELECT   
 				             TG.ID   		     AS id,
