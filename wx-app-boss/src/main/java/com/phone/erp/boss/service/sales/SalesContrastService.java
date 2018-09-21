@@ -8,4 +8,5 @@ import com.phone.erp.boss.service.ReportBaseService;
  * @create 2018-08-27 16:09
  */
 public interface SalesContrastService extends ReportBaseService {
+
 }

@@ -23,21 +23,21 @@ public class SalesContrastController extends ReportBaseController {
     @Autowired
     private SalesContrastService salesContrastService;
     /**
-     * [获取销售对比主页分页集合]
+     * [获取销售对比主页(不分页)集合]
      * 作者:hmj
      * 创建时间:2018/8/27
      */
     @AuthValidate
-    @RequestMapping("/getPageData")
+    @RequestMapping("/getDataList")
     @ResponseBody
-    public Result getPageData(BossQueryVo queryVo) throws Exception{
+    public Result getDataList(BossQueryVo queryVo) throws Exception{
         setCurrentEmp(queryVo);
         queryVo.setMenuCode("BOSS_XSDB");//设置菜单码
-        queryVo.setDestStr("获取销售对比主页分页数据");
+        queryVo.setDestStr("获取销售对比主页(不分页)数据");
         //这里设置断言和特殊查询参数
         Result result = new Result();
         Map<String, Object> paramMap = getParamMap(queryVo,result);
-        return salesContrastService.getPageData(queryVo, paramMap, result);
+        return salesContrastService.getDataList(queryVo, paramMap, result);
     }
     
 }

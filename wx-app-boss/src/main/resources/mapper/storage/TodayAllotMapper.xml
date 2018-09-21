@@ -2,9 +2,91 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.phone.erp.boss.mapper.storage.TodayAllotMapper">
 <!-- 今日调拨 -->
+    <!-- 公共查询条件 -->
+    	<sql id="queryCondition">
+            <if test="null!=goodsClassId">
+                AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
+                START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
+            </if>
+            <if test="null!=keyWord">
+                AND (UPPER(TGC.NAME) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TGB.NAME) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TG.GOODS_MODEL) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TG.NAME) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TG.REM_CODE) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TGS.NO) LIKE UPPER('%${keyWord}%')
+                )
+            </if>
+            AND T.COMPANY_ID IN(${companyIds})
+        </sql>
+    <!-- 公共字段 -->
+    <sql id="commonFields">
+            T.BILLS_CODE BILLCODE,
+            TP.CONTENT_1 BILLSTATUS,
+            TS.NAME  INSECTIONNAME,
+            TS1.NAME OUTSECTIONNAME,
+            TG.NAME GOODSNAME,
+            TE.NAME POSTMAN,
+            TO_CHAR(T.POST_DATE,'yyyy-mm-dd hh24:mi:ss') POSTTIME,
+            T1.GOODS_NUMBER GOODSQUANTITY
+    </sql>
+    <!-- 公共关联表 -->
+    <sql id="commonTables">
+            JOIN T_SECTION TS ON T.IN_DEPARTMENT_ID=TS.ID
+            JOIN T_SECTION TS1 ON T.OUT_DEPARTMENT_ID=TS1.ID
+            JOIN T_GOODSNAME TG ON T1.GOODS_ID=TG.ID
+        <if test="null!=keyWord">
+            JOIN T_GOODSCLASS TGC ON TG.GOODS_CATEGORY_ID=TGC.ID
+            LEFT JOIN T_GOODSBRAND TGB ON TG.GOODS_BRAND_ID=TGB.ID
+            LEFT JOIN T_GOODSALIAS TGS  ON TG.ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+        </if>
+            LEFT JOIN T_EMPLOYEE TE ON TE.ID = T.POST_BY
+            LEFT JOIN T_PUBLICTABS TP ON TP.CODE = T.BILLS_STATUS AND TP.TYPE_CODE = 'DJZT'
+    </sql>
+    <!-- 调入sql片段 -->
+    <sql id="allotIn">
+        <!-- 调入明细 -->
+        SELECT <include refid="commonFields"/>
+              FROM I_BILLS_MAIN T
+                JOIN I_INSTRORAGE_OTHERS_NUM T1 ON T.ID=T1.BILLS_MAIN_ID
+                <include refid="commonTables"/>
+        WHERE T.BILLS_TYPE IN ('7','8')AND T.BILLS_STATUS ='10'
+              <include refid="queryCondition"/>
+      UNION ALL
+          <!-- 调入在途 -->
+        SELECT <include refid="commonFields"/>
+            FROM I_BILLS_MAIN T
+                JOIN I_OUTSTRORAGE_OTHERS_NUM T1 ON T.ID=T1.BILLS_MAIN_ID
+                <include refid="commonTables"/>
+            WHERE T.BILLS_TYPE IN ('7','8') AND T.BILLS_STATUS ='8'
+                <include refid="queryCondition"/>
+    </sql>
+    <!-- 调出sql片段 -->
+    <sql id="allotOut">
+          SELECT
+            <include refid="commonFields"/>
+            FROM I_BILLS_MAIN T
+                JOIN I_OUTSTRORAGE_OTHERS_NUM T1 ON T.ID=T1.BILLS_MAIN_ID
+                <include refid="commonTables"/>
+            WHERE t.bills_type IN ('7','8') AND t.bills_status in ('10','8')
+                <include refid="queryCondition"/>
+    </sql>
+    <!-- 核心sql -->
+    	<sql id="codeSqlAndQueryCondition">
+            <choose>
+                <when test="allotType==0"><include refid="allotOut"/></when>
+                <otherwise><include refid="allotIn"/></otherwise>
+            </choose>
+    	</sql>
     <!-- 获取今日调拨主页分页集合 -->
     <select id="getPageData" resultType="com.phone.erp.boss.vo.storage.TodayAllotVo">
-         SELECT '今日调拨'NAME FROM dual
+         SELECT  BILLCODE,BILLSTATUS,INSECTIONNAME,OUTSECTIONNAME,GOODSNAME,POSTMAN,POSTTIME,
+                  SUM(GOODSQUANTITY)GOODSQUANTITY
+                FROM(
+                    <include refid="codeSqlAndQueryCondition"/>
+                )
+                  GROUP BY BILLCODE,BILLSTATUS,INSECTIONNAME,OUTSECTIONNAME,GOODSNAME,POSTMAN,POSTTIME
+                  ORDER BY BILLCODE,BILLSTATUS,INSECTIONNAME,OUTSECTIONNAME,GOODSNAME,POSTMAN,POSTTIME
     </select>
     
 </mapper>

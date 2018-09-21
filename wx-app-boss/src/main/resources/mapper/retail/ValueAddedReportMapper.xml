@@ -59,11 +59,9 @@
     	</sql>
     <!-- 获取增值服务战报主页分页集合 -->
     <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.ValueAddedReportVo">
-        SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY
-            <if test="canSeeAmount==1">  ,
+        SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY,
                 TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSPRICE,
                 TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
-            </if>
             FROM(
                 SELECT <include refid="commonFields"/>,GOODSQUANTITY,GOODSAMOUNT
                     FROM (
@@ -76,11 +74,9 @@
 
     <!-- 获取增值服务战报主页总计行对象 -->
     <select id="getTotalVo" resultType="com.phone.erp.boss.vo.retail.ValueAddedReportVo">
-        SELECT SUM (GOODSQUANTITY)GOODSQUANTITY
-        <if test="canSeeAmount==1">  ,
+        SELECT SUM (GOODSQUANTITY)GOODSQUANTITY ,
             TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSPRICE,
             TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
-        </if>
         FROM ( <include refid="codeSqlAndQueryCondition"/>)
     </select>
 </mapper>

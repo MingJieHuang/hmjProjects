@@ -38,11 +38,11 @@ public class ReportBaseServiceImpl<T,D extends ReportBaseMapper> implements Repo
 	@Override
 	public Result getPageData(BossQueryVo queryVo, Map<String, Object> paramMap, Result result) throws Exception {
 		String descStr = queryVo.getDestStr();
-		//设置分页参数
-		PageHelper.startPage(queryVo.getPage(), queryVo.getPageSize());
 		try {
+			//设置分页参数
+			PageHelper.startPage(queryVo.getPage(), queryVo.getPageSize());
 			Page<T> pageInfo =mapper.getPageData(paramMap);
-			result.put("dataList",pageInfo.getResult());
+            result.put("dataList",pageInfo.getResult());
 			result.put("canSeeAmount",queryVo.getCanSeeAmount());
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
