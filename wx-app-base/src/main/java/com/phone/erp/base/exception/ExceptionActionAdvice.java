@@ -1,5 +1,6 @@
 package com.phone.erp.base.exception;
 
+import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.phone.erp.base.Result;
 import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.exception.bussiness.*;
@@ -107,7 +108,20 @@ public class ExceptionActionAdvice {
 		logException(e);
 		return new Result().setError(ErrorCode.LOGIN_FAILED, e.getMessage());
 	}
-	
+
+	/**
+	 * [Token失效异常处理]
+	 *
+	 * @author Chris li[黎超]
+	 * @version [版本, 2017-04-12]
+	 */
+	@ExceptionHandler(InvalidClaimException.class)
+	@ResponseBody
+	public Result tokenInvalidException(HttpServletRequest request, Exception e) {
+		logException(e);
+		return new Result().setError(ErrorCode.NOT_LOGGED_IN, e.getMessage());
+	}
+
 	/**
 	 * [自动登陆失败异常处理]
 	 * 

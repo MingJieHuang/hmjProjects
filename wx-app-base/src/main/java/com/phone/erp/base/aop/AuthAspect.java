@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 
 /**
  * [权限切面]
- * 
+ *
  * @author Chris li[黎超]
  * @version [版本, 2017-04-12]
  * @see
