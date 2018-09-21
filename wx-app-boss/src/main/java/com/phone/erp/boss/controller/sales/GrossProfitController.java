@@ -79,9 +79,8 @@ public class GrossProfitController extends ReportBaseController {
 	@AuthValidate
 	@RequestMapping("/getGrossProfitDetailData")
 	@ResponseBody
-	public Result getGrossProfitDetailData(BossQueryVo queryVo,String nodeName,Long nodeId) throws Exception{
+	public Result getGrossProfitDetailData(BossQueryVo queryVo,String nodeName,String nodeId) throws Exception{
 		setCurrentEmp(queryVo);
-		Assert.notNull(nodeId,"节点id不能为空!!");//节点id不为空
 		String groupFields ="goodsClassName,goodsBrandName,sectionName,salesManName,goodsName";
 		Assert.isTrue(groupFields.contains(queryVo.getGroupField()), "分组字段不合法!!");
 		queryVo.setMenuCode("BOSS_MLZB");
@@ -94,7 +93,11 @@ public class GrossProfitController extends ReportBaseController {
 			paramMap.put("goodsId", nodeId);
 		}
 		else if ("goodsBrandName".equals(groupField)) {
-			paramMap.put("goodsBrandId", nodeId);
+			if ("null".equals(nodeId)){
+				paramMap.put("goodsBrandIdIsNull",1);
+			}else{
+				paramMap.put("goodsBrandId", nodeId);
+			}
 		}
 		else if ("sectionName".equals(groupField)) {
 			paramMap.put("sectionIds", nodeId);
@@ -116,9 +119,8 @@ public class GrossProfitController extends ReportBaseController {
 	@AuthValidate
 	@RequestMapping("/getGrossProfitDetailTotalVo")
 	@ResponseBody
-	public Result getGrossProfitDetailTotalVo(BossQueryVo queryVo,String nodeName,Long nodeId) throws Exception{
+	public Result getGrossProfitDetailTotalVo(BossQueryVo queryVo,String nodeName,String nodeId) throws Exception{
 		setCurrentEmp(queryVo);
-		Assert.notNull(nodeId,"节点id不能为空!!");//节点id不为空
 		String groupFields ="goodsClassName,goodsBrandName,sectionName,salesManName,goodsName";
 		Assert.isTrue(groupFields.contains(queryVo.getGroupField()), "分组字段不合法!!");
 		queryVo.setMenuCode("BOSS_MLZB");
@@ -131,7 +133,11 @@ public class GrossProfitController extends ReportBaseController {
 			paramMap.put("goodsId", nodeId);
 		}
 		else if ("goodsBrandName".equals(groupField)) {
-			paramMap.put("goodsBrandId", nodeId);
+			if ("null".equals(nodeId)){
+				paramMap.put("goodsBrandIdIsNull",1);
+			}else{
+				paramMap.put("goodsBrandId", nodeId);
+			}
 		}
 		else if ("sectionName".equals(groupField)) {
 			paramMap.put("sectionIds", nodeId);
