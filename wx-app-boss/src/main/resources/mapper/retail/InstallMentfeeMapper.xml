@@ -68,12 +68,10 @@
     	</sql>
     <!-- 获取分期商业务战报主页分页集合 -->
     <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.InstallMentfeeVo">
-        SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY
-        <if test="canSeeAmount==1">  ,
+        SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY,
             TO_CHAR(SUM(TALLYMANLOANAMOUNT))AS TALLYMANLOANAMOUNT,
             TO_CHAR(SUM(COMMISSIONESTIMATE))AS COMMISSIONESTIMATE,
             TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE), SUM(GOODSQUANTITY)),2))AS COMMISSIONAVG
-        </if>
             FROM(
                   SELECT <include refid="commonFields"/>,GOODSQUANTITY,TALLYMANLOANAMOUNT,COMMISSIONESTIMATE
                         FROM (
