@@ -81,12 +81,10 @@
 
         <!-- 运营商业务战报获取主页分页集合 -->
         <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.OperatorServiceVo">
-            SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY
-            <if test="canSeeAmount==1">  ,
+            SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY,
                 TO_CHAR(SUM(ACTUALRECEIVABLES))AS ACTUALRECEIVABLES,
                 TO_CHAR(SUM(COMMISSIONESTIMATE))AS COMMISSIONESTIMATE,
                 TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE), SUM(GOODSQUANTITY)),2))AS COMMISSIONAVG
-            </if>
             FROM(
                   <include refid="codeSqlAndQueryCondition"/>
             )
