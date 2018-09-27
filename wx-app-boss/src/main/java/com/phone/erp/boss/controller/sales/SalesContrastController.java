@@ -2,6 +2,8 @@ package com.phone.erp.boss.controller.sales;
 
 import com.phone.erp.base.Result;
 import com.phone.erp.base.annotation.AuthValidate;
+import com.phone.erp.base.enums.ErrorCode;
+import com.phone.erp.base.utils.Assert;
 import com.phone.erp.boss.controller.ReportBaseController;
 import com.phone.erp.boss.service.sales.SalesContrastService;
 import com.phone.erp.boss.vo.common.BossQueryVo;
@@ -32,6 +34,7 @@ public class SalesContrastController extends ReportBaseController {
     @ResponseBody
     public Result getDataList(BossQueryVo queryVo) throws Exception{
         setCurrentEmp(queryVo);
+        Assert.notNull(queryVo.getGroupField(), "分组参数不能为空!");
         queryVo.setMenuCode("BOSS_XSDB");//设置菜单码
         queryVo.setDestStr("获取销售对比主页(不分页)数据");
         //这里设置断言和特殊查询参数
