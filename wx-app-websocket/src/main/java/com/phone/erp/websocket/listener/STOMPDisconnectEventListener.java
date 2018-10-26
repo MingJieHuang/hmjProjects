@@ -22,7 +22,7 @@ public class STOMPDisconnectEventListener implements ApplicationListener<Session
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
         WebSocketUser webSocketUser = (WebSocketUser) event.getUser();
-        // 将用户注册到在线用户集合中去
+        // 将用户移出在线集合
         webSocketSessionRegistryService.removeWebSocketUser(webSocketUser);
     }
 
