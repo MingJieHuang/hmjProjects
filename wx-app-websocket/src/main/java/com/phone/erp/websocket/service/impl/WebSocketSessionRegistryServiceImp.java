@@ -180,6 +180,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 Assert.notBlank(messageVo.getParam(), "[打印]参数不允许为空!");
                 ParamMessageVo paramMessageVo = JsonUtil.jsonToBean(messageVo.getParam(), ParamMessageVo.class);
                 Assert.notBlank(paramMessageVo.getComputerCode(), "[打印]参数中{computerCode}参数不允许为空!");
+                Assert.isFalse(WebsocketConstants.ABERRANT_COMPUTER_ID.equals(messageVo.getParam()), String.format("电脑编号[%s]存在异常!", messageVo.getParam()));
                 // 遍历所有在线用户,检查其登录的电脑编号,如果匹配到需要打印的电脑编号,则给该用户发送打印零售单据消息
                 synchronized (WebSocketUser.class) {
                     for (String userKey : onlineUserMap.keySet()) {
