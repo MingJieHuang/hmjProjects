@@ -3,6 +3,7 @@ package com.phone.erp.websocket.service.impl;
 import com.phone.erp.base.Constants;
 import com.phone.erp.base.utils.Assert;
 import com.phone.erp.base.vo.employee.EmployeeVo;
+import com.phone.erp.websocket.common.WebsocketConstants;
 import com.phone.erp.websocket.enums.Action;
 import com.phone.erp.websocket.enums.Client;
 import com.phone.erp.websocket.service.LoginService;
@@ -160,6 +161,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
             } else if (messageVo.getCommand().equalsIgnoreCase(Action.BIND_LOGIN_COMPUTER.getCode())) {
                 // 绑定用户登录的电脑
                 Assert.notBlank(messageVo.getParam(), "{computerCode}参数不允许为空!");
+                Assert.isFalse(WebsocketConstants.ABERRANT_COMPUTER_ID.equals(messageVo.getParam()), String.format("电脑编号[%s]存在异常!", messageVo.getParam()));
                 // 获取匹配的在线用户
                 String matchedUserKey = String.format("[%s-%s]", webSocketUser.getClient().getCode(), webSocketUser.getUserId());
                 synchronized (WebSocketUser.class) {
