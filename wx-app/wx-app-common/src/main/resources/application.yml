@@ -9,7 +9,7 @@ project:
 # 开发者模式相关配置
 dev:
   model:
-    enable: true
+    enable: false
     groupId: 826
     companyId: 762
     sectionId: 1167
@@ -24,7 +24,7 @@ wechat:
       code: '0000'
   # 登录失效时间(单位s)
   login:
-    timeout: 3600
+    timeout: 57600
     
 # druid数据库连接池相关配置
 druid:

@@ -1,14 +1,9 @@
 package com.phone.erp.boss.mapper;
 
+import com.phone.erp.boss.vo.common.*;
+
 import java.util.List;
 import java.util.Map;
-
-import com.phone.erp.boss.vo.common.BossCompanyVo;
-import com.phone.erp.boss.vo.common.BossContactUnitVo;
-import com.phone.erp.boss.vo.common.BossMenuVo;
-import com.phone.erp.boss.vo.common.BossSectionVo;
-import com.phone.erp.boss.vo.common.GoodsBrandVo;
-import com.phone.erp.boss.vo.common.GoodsClassVo;
 
 /**
  * [Boss小程序mapper接口]
@@ -82,4 +77,58 @@ public interface BossCommonMapper {
 	 */
 	public List<BossContactUnitVo> getContactUnits(Map<String, Object> map);
 
+	/**
+	 * [获取运营商名称集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-22]
+	 * @param map
+	 */
+	public List<BossConditionVo> getOperatorList(Map<String, Object> map);
+
+	/**
+	 * [获取运营商单位集合]
+	 * @param map
+	 * @return
+	 */
+	public List<BossConditionVo> getOperatorUnitList(Map<String, Object> map);
+	/**
+	 * [获取运营商业务名称分页集合]
+	 * @param map
+	 * @return
+	 */
+	public List<BossConditionVo> getOperatorNameList(Map<String, Object> map);
+
+	/**
+	 * 获取抵扣单位集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+    public List<BossConditionVo> getDeductionUnitsList(Map<String, Object> map);
+
+	public List<BossConditionVo> getActivityNamesList(Map<String, Object> map);
+	/**
+	 * 获取分期商名称集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	public List<BossConditionVo> getInstallmentfeesList(Map<String, Object> map);
+    /**
+     * 获取分期业务名称集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    public List<InstallmentBusinessVo> getInstallmentBusinessList(Map<String, Object> map);
+	/**
+	 * 获取资金账户类型集合
+	 * @author hmj
+	 * @version [版本,2018-8-30]
+	 */
+    public List<BossConditionVo> getAccountTypeList();
+	/**
+	 * 获取增值服务名称集合
+	 * @author hmj
+	 * @version [版本,2018-9-11]
+	 * @param queryVo
+	 */
+    List<BossConditionVo> getAddValueServiceNameList(Map<String, Object> map);
 }

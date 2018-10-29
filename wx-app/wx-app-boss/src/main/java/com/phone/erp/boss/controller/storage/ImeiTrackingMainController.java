@@ -28,10 +28,7 @@ public class ImeiTrackingMainController extends ReportBaseController {
 	/**
 	 * 获取串号跟踪主页分页集合
 	 * @author hmj
-	 * @param keyWord 模糊查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
-	 * @param menuCode 报表菜单码
+	 * @param queryVo
 	 * @version [版本,2018-7-13]
 	 */
 	@AuthValidate
@@ -52,8 +49,7 @@ public class ImeiTrackingMainController extends ReportBaseController {
 	/**
 	 * 获取串号跟踪流水表集合
 	 * @author hmj
-	 * @param imeiId 串号id必填
-	 * @param menuCode 报表菜单码
+	 * @param queryVo
 	 * @version [版本,2018-7-13]
 	 */
 	@AuthValidate

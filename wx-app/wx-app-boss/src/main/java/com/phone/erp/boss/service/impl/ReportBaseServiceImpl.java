@@ -1,5 +1,6 @@
 package com.phone.erp.boss.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -37,11 +38,11 @@ public class ReportBaseServiceImpl<T,D extends ReportBaseMapper> implements Repo
 	@Override
 	public Result getPageData(BossQueryVo queryVo, Map<String, Object> paramMap, Result result) throws Exception {
 		String descStr = queryVo.getDestStr();
-		//设置分页参数
-		PageHelper.startPage(queryVo.getPage(), queryVo.getPageSize());
 		try {
+			//设置分页参数
+			PageHelper.startPage(queryVo.getPage(), queryVo.getPageSize());
 			Page<T> pageInfo =mapper.getPageData(paramMap);
-			result.put("dataList",pageInfo.getResult());
+            result.put("dataList",pageInfo.getResult());
 			result.put("canSeeAmount",queryVo.getCanSeeAmount());
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);
@@ -103,6 +104,24 @@ public class ReportBaseServiceImpl<T,D extends ReportBaseMapper> implements Repo
 		try {
 			T totalVo = (T) mapper.getDetailTotalVo(paramMap);
 			result.put("totalVo", totalVo);
+			result.put("canSeeAmount",queryVo.getCanSeeAmount());
+		} catch (Exception e) {
+			return BossReportUtil.getFailingResult(result, descStr);
+		}
+		return BossReportUtil.getSuccessResult(result, descStr);
+	}
+	/**
+	 * [获取主页集合(不分页)]
+	 * @author HMJ
+	 * @version [版本,2018-9-03]
+	 * @throws Exception
+	 */
+	@Override
+	public Result getDataList(BossQueryVo queryVo, Map<String, Object> paramMap, Result result) throws Exception {
+		String descStr = queryVo.getDestStr();
+		try {
+			List<T> dataList =mapper.getDataList(paramMap);
+			result.put("dataList",dataList);
 			result.put("canSeeAmount",queryVo.getCanSeeAmount());
 		} catch (Exception e) {
 			return BossReportUtil.getFailingResult(result, descStr);

@@ -5,12 +5,7 @@ import java.util.Map;
 
 import com.phone.erp.base.Result;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
-import com.phone.erp.boss.vo.common.BossCompanyVo;
-import com.phone.erp.boss.vo.common.BossContactUnitVo;
-import com.phone.erp.boss.vo.common.BossMenuVo;
-import com.phone.erp.boss.vo.common.BossQueryVo;
-import com.phone.erp.boss.vo.common.GoodsBrandVo;
-import com.phone.erp.boss.vo.common.GoodsClassVo;
+import com.phone.erp.boss.vo.common.*;
 
 /**
  * [Boos公共业务层]
@@ -56,10 +51,6 @@ public interface BossCommonService {
 	 * @author hmj
 	 * @param keyWord
 	 *            模糊查询
-	 * @param page
-	 *            当前页码
-	 * @param pageSize
-	 *            每页最大显示数
 	 * @version [版本,2018-7-10]
 	 */
 	public List<GoodsBrandVo> getGoodsBrandList(LoginEmployeeVo employeeVo,String keyWord);
@@ -108,4 +99,72 @@ public interface BossCommonService {
 	 */
 	public Map<String, Object> getParamMap(BossQueryVo queryVo) throws Exception;
 
+	/**
+	 * [获取运营商名称集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-22]
+	 * @throws Exception
+	 * @param queryVo
+	 */
+	public List<BossConditionVo> getOperatorList(BossQueryVo queryVo) throws Exception;
+
+	/**
+	 * [获取运营商单位集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-22]
+	 * @throws Exception
+	 * @param queryVo
+	 */
+	List<BossConditionVo> getOperatorUnitList(BossQueryVo queryVo) throws Exception;
+	/**
+	 * [获取运营商业务名称集合]
+	 * @author HMJ
+	 * @version [版本,2018-8-23]
+	 * @throws Exception
+	 * @param queryVo
+	 */
+	List<BossConditionVo> getOperatorNameList(BossQueryVo queryVo) throws Exception;
+	/**
+	 * 获取抵扣单位集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+    List<BossConditionVo> getDeductionUnitsList(BossQueryVo queryVo) throws Exception;
+	/**
+	 * 获取抵扣活动集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	List<BossConditionVo> getActivityNamesList(BossQueryVo queryVo) throws Exception;
+	/**
+	 * 获取分期商名称集合
+	 * @author hmj
+	 * @version [版本,2018-8-28]
+	 */
+	List<BossConditionVo> getInstallmentfeesList(BossQueryVo queryVo) throws Exception;
+    /**
+     * 获取分期业务名称集合
+     * @author hmj
+     * @version [版本,2018-8-28]
+     */
+    List<InstallmentBusinessVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception;
+	/**
+	 * 获取资金账户类型集合
+	 * @author hmj
+	 * @version [版本,2018-8-30]
+	 */
+    List<BossConditionVo> getAccountTypeList() throws Exception;
+	/**
+	 * 获取公司集合
+	 * @author hmj
+	 * @version [版本,2018-9-07]
+	 */
+    List<BossCompanyVo> getCompanyList(LoginEmployeeVo employeeVo, String menuCode);
+	/**
+	 * 获取增值服务名称集合
+	 * @author hmj
+	 * @version [版本,2018-9-11]
+	 * @param queryVo
+	 */
+    List<BossConditionVo> getAddValueServiceNameList(BossQueryVo queryVo) throws Exception;
 }

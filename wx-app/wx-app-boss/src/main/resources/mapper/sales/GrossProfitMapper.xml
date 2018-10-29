@@ -176,7 +176,10 @@
 		        FROM(
 					  	<include refid="codeSqlAndQueryCondition"/>
 		        )
-		  )
+				<if test="goodsBrandIdIsNull==1">
+					WHERE GOODSBRANDID IS NULL
+				</if>
+		)
 		  		 GROUP BY ID,CODE,NAME
 		         ORDER BY ID,CODE,NAME
 </select>
@@ -193,6 +196,9 @@
 		        FROM(
 					  	<include refid="codeSqlAndQueryCondition"/>
 		        )
+				<if test="goodsBrandIdIsNull==1">
+					WHERE GOODSBRANDID IS NULL
+				</if>
 		  )
 		  		 GROUP BY ID,CODE,NAME
 		         ORDER BY ID,CODE,NAME

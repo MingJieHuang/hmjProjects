@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Boss项目启动类
- * 
+ *
  * @author Chris li[黎超]
  * @version [版本, 2017-04-12]
  * @see
@@ -17,13 +17,13 @@ import org.springframework.context.annotation.ComponentScan;
 @MapperScan("com.phone.erp.common.mapper")
 public class CommonApplication {
 
-	/**
-	 * [SpringBoot启动的方法]
-	 * 
-	 * @author Chris li[黎超]
-	 * @version [版本, 2017-04-12]
-	 */
-	public static void main(String[] args) {
-		SpringApplication.run(CommonApplication.class, args);
-	}
+    /**
+     * [SpringBoot启动的方法]
+     *
+     * @author Chris li[黎超]
+     * @version [版本, 2017-04-12]
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(CommonApplication.class, args);
+    }
 }

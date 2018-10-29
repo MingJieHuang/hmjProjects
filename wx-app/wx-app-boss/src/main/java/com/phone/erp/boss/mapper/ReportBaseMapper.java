@@ -1,10 +1,18 @@
 package com.phone.erp.boss.mapper;
 
-import java.util.Map;
-
 import com.github.pagehelper.Page;
 
+import java.util.List;
+import java.util.Map;
+
 public interface ReportBaseMapper<T> {
+
+	/**
+	 * [获取主页集合(不分页)]
+	 * @author HMJ
+	 * @version [版本,2018-9-03]
+	 */
+	List<T> getDataList(Map<String, Object> map);
 	/**
 	 * 
 	 * [获取主页分页结果集]
@@ -36,4 +44,5 @@ public interface ReportBaseMapper<T> {
 	 * @version [版本,2018-8-4]
 	 */
 	T getDetailTotalVo(Map<String, Object> map);
+
 }

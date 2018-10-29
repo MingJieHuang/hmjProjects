@@ -58,6 +58,10 @@ public class BossQueryVo {
 	private String startDate;
 	//24.查询截止时间endDate
 	private String endDate;
+	//23.查询起始时间startDate
+	private String startDate2;
+	//24.查询截止时间endDate
+	private String endDate2;
 	//25.nodeType 对象类型
 	private String nodeType;
 	//26.详情页模糊匹配
@@ -70,7 +74,33 @@ public class BossQueryVo {
 	private Long imeiId;
 	//29.destStr 方法描述 
 	private String destStr;
-	
+	//30,operatorId 运营商名称id
+	private Long operatorId;
+	//31,operatorUnitId 运营商单位id
+	private Long operatorUnitId;
+	//32,operatorNameId 运营商业务id
+	private Long operatorNameId;
+	//33,installmentBusinessId 分期业务id
+	private Long installmentBusinessId;
+	//34,installmentfeesId 分期商id
+	private Long installmentfeesId;
+	//35,accountTypeId 资金账户类型id
+	private Long accountTypeId;
+	//36,rankingGist 排行依据goodsQuantity数量,goodsAmount金额,goodsProfitAmount毛利
+	private String rankingGist;
+	//37,排序字段
+	private String orderField;
+	//38,库龄天数
+	private Long stockAge;
+	//39,第三方抵扣单位id
+	private Long deductionUnitsId;
+	//40,第三方抵扣活动id
+	private Long activityNamesId;
+	//41,增值服务id
+	private Long serviceId;
+	//42,调拨类型:0表示调出,1表示调入
+	private Long allotType;
+
 	public Long getGroupId() {
 		return groupId;
 	}
@@ -253,5 +283,124 @@ public class BossQueryVo {
 	public void setDestStr(String destStr) {
 		this.destStr = destStr;
 	}
-	
+
+	public Long getOperatorId() {
+		return operatorId;
+	}
+
+	public void setOperatorId(Long operatorId) {
+		this.operatorId = operatorId;
+	}
+
+	public Long getOperatorUnitId() {
+		return operatorUnitId;
+	}
+
+	public void setOperatorUnitId(Long operatorUnitId) {
+		this.operatorUnitId = operatorUnitId;
+	}
+
+	public Long getOperatorNameId() {
+		return operatorNameId;
+	}
+
+	public void setOperatorNameId(Long operatorNameId) {
+		this.operatorNameId = operatorNameId;
+	}
+
+	public Long getInstallmentBusinessId() {
+		return installmentBusinessId;
+	}
+
+	public void setInstallmentBusinessId(Long installmentBusinessId) {
+		this.installmentBusinessId = installmentBusinessId;
+	}
+
+	public Long getInstallmentfeesId() {
+		return installmentfeesId;
+	}
+
+	public void setInstallmentfeesId(Long installmentfeesId) {
+		this.installmentfeesId = installmentfeesId;
+	}
+
+	public Long getAccountTypeId() {
+		return accountTypeId;
+	}
+
+	public void setAccountTypeId(Long accountTypeId) {
+		this.accountTypeId = accountTypeId;
+	}
+
+	public String getRankingGist() {
+		return rankingGist;
+	}
+
+	public void setRankingGist(String rankingGist) {
+		this.rankingGist = rankingGist;
+	}
+
+	public String getOrderField() {
+		return orderField;
+	}
+
+	public void setOrderField(String orderField) {
+		this.orderField = orderField;
+	}
+
+	public Long getStockAge() {
+		return stockAge;
+	}
+
+	public void setStockAge(Long stockAge) {
+		this.stockAge = stockAge;
+	}
+
+	public Long getDeductionUnitsId() {
+		return deductionUnitsId;
+	}
+
+	public void setDeductionUnitsId(Long deductionUnitsId) {
+		this.deductionUnitsId = deductionUnitsId;
+	}
+
+	public Long getActivityNamesId() {
+		return activityNamesId;
+	}
+
+	public void setActivityNamesId(Long activityNamesId) {
+		this.activityNamesId = activityNamesId;
+	}
+
+	public Long getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
+	}
+
+	public Long getAllotType() {
+		return allotType;
+	}
+
+	public void setAllotType(Long allotType) {
+		this.allotType = allotType;
+	}
+
+	public String getStartDate2() {
+		return startDate2;
+	}
+
+	public void setStartDate2(String startDate2) {
+		this.startDate2 = startDate2;
+	}
+
+	public String getEndDate2() {
+		return endDate2;
+	}
+
+	public void setEndDate2(String endDate2) {
+		this.endDate2 = endDate2;
+	}
 }

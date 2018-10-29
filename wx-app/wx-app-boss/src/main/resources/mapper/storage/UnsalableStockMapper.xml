@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.storage.UnsalableStockMapper">
+    <!-- 滞销库存 -->
+    <!-- 公共查询条件 -->
+    	<sql id="queryCondition">
+              AND T.RESERVE2 =1
+            <if test="null!=keyWord">
+                AND (UPPER(TGC.NAME) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TGB.NAME) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TG.GOODS_MODEL) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TG.NAME) LIKE UPPER('%${keyWord}%')OR
+                UPPER(TGS.NO) LIKE UPPER('%${keyWord}%')
+                )
+            </if>
+            <if test="null!=goodsClassId">
+                AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
+                START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
+            </if>
+              AND CEIL((TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS') -
+                  TO_DATE(TO_CHAR(ICI.LAST_INDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS'))) >=#{stockAge}
+              AND T.COMPANY_ID IN(${companyIds})
+              AND T.SECTION_ID IN(${sectionIds})
+    	</sql>
+    <!-- 主页核心sql -->
+    <sql id="codeSqlAndQueryCondition">
+        SELECT
+            TG.ID                                                   AS ID,
+            TG.CODE                                                 AS CODE,
+            TG.NAME                                                 AS NAME,
+            TG.CONFIGURE                                           AS GOODSCONFIGURATION,
+            MIN(DECODE(T.AUXILIARY_IMEI,NULL,'SINGLE', 'DOUBLE')) AS IMEITYPE ,
+            COUNT(T.GOODS_ID)                                      AS GOODSQUANTITY
+            <if test="canSeeAmount==1">  ,
+                SUM(T.COST_PRICE)                                  AS GOODSAMOUNT
+            </if>
+        FROM I_STOCK_IM T
+            LEFT JOIN I_COMPANY_IMEI ICI ON ICI.COMPANY_ID = T.COMPANY_ID AND ICI.IMEI = T.IMEI
+            LEFT JOIN T_IMEI_INFO TII  ON T.IMEI = TII.ID AND T.GROUP_ID = TII.GROUP_ID AND T.COMPANY_ID = TII.COMPANY_ID
+            LEFT JOIN T_GOODSNAME TG   ON T.GOODS_ID=TG.ID AND T.GROUP_ID=TG.GROUP_ID
+            LEFT JOIN T_GOODSCLASS TGC ON TG.GOODS_CATEGORY_ID = TGC.ID AND TG.GROUP_ID =TGC.GROUP_ID
+            LEFT JOIN T_GOODSBRAND TGB ON TG.GOODS_BRAND_ID=TGB.ID AND TG.GROUP_ID=TGB.GROUP_ID
+            LEFT JOIN T_GOODSALIAS TGS ON T.GOODS_ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+        WHERE T.GROUP_ID =#{groupId}
+            <include refid="queryCondition"/>
+            GROUP BY TG.ID,TG.CODE,TG.NAME,TG.CONFIGURE
+            ORDER BY TG.NAME
+    </sql>
+    <!-- 获取滞销库存主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+         <include refid="codeSqlAndQueryCondition"/>
+    </select>
+    <!-- 获取滞销库存主页总计行 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+         SELECT SUM (GOODSQUANTITY)GOODSQUANTITY
+            <if test="canSeeAmount==1">  ,
+                SUM (GOODSAMOUNT)GOODSAMOUNT
+            </if>
+            FROM ( <include refid="codeSqlAndQueryCondition"/>)
+    </select>
+    <!-- 获取滞销库存详情页分页集合 -->
+    <select id="getDetailPageData" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+           SELECT
+                TG.ID                          AS ID,
+                TG.CODE                        AS CODE,
+                TG.NAME                        AS NAME,
+                TII.IMEI                       AS IMEI,
+                TII.AUXILIARY_IMEI             AS AUXILIARYIMEI,
+                TG.CONFIGURE                   AS GOODSCONFIGURATION,
+                CEIL((TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS') -
+              TO_DATE(TO_CHAR(ICI.LAST_INDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS')))  AS STOCKAGE
+                <if test="canSeeAmount==1">  ,
+                    T.COST_PRICE                   AS GOODSAMOUNT
+                </if>
+        FROM I_STOCK_IM T
+            LEFT JOIN I_COMPANY_IMEI ICI ON ICI.COMPANY_ID = T.COMPANY_ID AND ICI.IMEI = T.IMEI
+            JOIN T_IMEI_INFO TII  ON T.IMEI = TII.ID AND T.GROUP_ID = TII.GROUP_ID AND T.COMPANY_ID = TII.COMPANY_ID
+            JOIN T_GOODSNAME TG   ON T.GOODS_ID=TG.ID AND T.GROUP_ID=TG.GROUP_ID
+           WHERE T.RESERVE2=1
+               AND T.GOODS_ID = #{goodsId}
+              <if test="null!=detailKeyWord">
+                  AND ( UPPER(TII.IMEI) LIKE UPPER('%${detailKeyWord}%')OR
+                        UPPER(TII.AUXILIARY_IMEI) LIKE UPPER('%${detailKeyWord}%'))
+              </if>
+               AND  CEIL((TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS') -
+                  TO_DATE(TO_CHAR(ICI.LAST_INDATE,'YYYY-MM-DD HH24-MI-SS'), 'YYYY-MM-DD HH24-MI-SS')))  >=#{stockAge}
+               AND T.COMPANY_ID IN(${companyIds})
+               AND T.SECTION_ID IN(${sectionIds})
+
+    </select>
+    <!-- 获取滞销库存详情页总计行对象 -->
+    <select id="getDetailTotalVo" resultType="com.phone.erp.boss.vo.storage.UnsalableStockVo">
+         SELECT '详情页总计行对象'NAME FROM dual
+    </select>
+    
+
+</mapper>

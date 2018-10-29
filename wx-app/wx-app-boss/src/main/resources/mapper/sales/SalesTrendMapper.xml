@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.sales.SalesTrendMapper">
+<!-- 销售走势 -->
+     <!-- 公共查询条件 -->
+     	<sql id="queryCondition">
+             <if test="null!=goodsClassId">
+                  AND TG.GOODS_CATEGORY_ID IN(SELECT C.ID  FROM T_GOODSCLASS C WHERE C.GROUP_ID = #{groupId} AND C.STATUS = 0
+                  START WITH C.ID =#{goodsClassId}  CONNECT BY PRIOR C.ID = C.PARENT_ID)
+             </if>
+             <if test="null!=keyWord">
+                  AND (UPPER(TGC.NAME) LIKE UPPER('%${keyWord}%')OR
+                  UPPER(TGB.NAME) LIKE UPPER('%${keyWord}%')OR
+                  UPPER(TG.GOODS_MODEL) LIKE UPPER('%${keyWord}%')OR
+                  UPPER(TG.NAME) LIKE UPPER('%${keyWord}%')OR
+                  UPPER(TG.REM_CODE) LIKE UPPER('%${keyWord}%')OR
+                  UPPER(TGS.NO) LIKE UPPER('%${keyWord}%'))
+             </if>
+             <if test='groupField == "day"'>
+                  AND to_char(t.bills_date,'yyyy-mm-dd') between  to_char(trunc(sysdate)-31,'yyyy-mm-dd') and to_char(trunc(sysdate),'yyyy-mm-dd')
+             </if>
+             <if test='groupField == "week"'>
+                  AND to_char(t.bills_date, 'yyyy-mm-dd') between	to_char(trunc(sysdate) - 35, 'yyyy-mm-dd') and	to_char(trunc(sysdate), 'yyyy-mm-dd')
+             </if>
+             <if test='groupField == "month"'>
+                  AND to_char(t.bills_date,'yyyy-mm-dd') between  to_char(add_months(trunc(sysdate),-12),'yyyy-mm-dd') and to_char(trunc(sysdate),'yyyy-mm-dd')
+             </if>
+             <if test='groupField == "season"'>
+                  AND to_char(t.bills_date,'yyyy-mm-dd') between  to_char(add_months(trunc(sysdate),-21),'yyyy-mm-dd') and to_char(trunc(sysdate),'yyyy-mm-dd')
+             </if>
+             <if test='groupField == "year"'>
+                  AND to_char(t.bills_date,'yyyy-mm-dd') between  to_char(add_months(trunc(sysdate),-47),'yyyy-mm-dd') and to_char(trunc(sysdate),'yyyy-mm-dd')
+             </if>            
+                  AND T.COMPANY_ID IN(${companyIds})
+                  AND T.SECTION_ID IN(${sectionIds})
+     	</sql>
+     <!-- 公共关联表 -->
+     <sql id="commonTables">
+          JOIN T_COMPANY TC ON T.COMPANY_ID = TC.ID
+          JOIN I_STORAGE IST ON T1.STORAGE_ID = IST.ID
+          JOIN T_SECTION TS  ON IST.SECTION_ID = TS.ID
+          JOIN T_GOODSNAME TG  ON T1.GOODS_ID = TG.ID
+          LEFT JOIN T_GOODSALIAS TGS  ON TG.ID = TGS.GOODS_ID AND T.COMPANY_ID=TGS.COMPANY_ID
+          LEFT JOIN T_GOODSCLASS TGC  ON TG.GOODS_CATEGORY_ID =TGC.ID AND TGC.STATUS = 0
+          LEFT JOIN T_GOODSBRAND TGB  ON TG.GOODS_BRAND_ID =TGB.ID
+          <if test='groupField == "week"'>
+               JOIN
+               (SELECT level,
+               to_char(sysdate - to_char(sysdate, 'd') + 1 - 7 * (level - 1),'yyyy-mm-dd') date1,
+               to_char(sysdate - to_char(sysdate, 'd') + 1 - 7 * level + 1,'yyyy-mm-dd') date2
+               FROM dual	connect by level &lt;= 4
+               UNION ALL
+               SELECT 0,to_char(sysdate, 'yyyy-mm-dd') date1,
+               to_char(sysdate - to_char(sysdate, 'd') + 1 + 1,'yyyy-mm-dd')  date2
+               FROM dual) b on to_char(t.bills_date, 'yyyy-mm-dd') between b.date2 and b.date1
+          </if>
+
+          <if test='groupField == "month"'>
+               JOIN(SELECT to_char(sysdate - to_char(sysdate, 'd') + 1 - 30 * (level - 1),'yyyy-mm') month FROM dual connect by level &lt; = 12) b on to_char(t.bills_date, 'yyyy-mm') = b.month
+          </if>
+
+          <if test='groupField == "season"'>
+               JOIN(SELECT TO_CHAR(add_months(SYSDATE,-3*(level-1)),'YYYY-Q') season  FROM DUAL connect by level &lt;=8) b on to_char(t.bills_date, 'yyyy-Q') = b.season
+          </if>
+
+          <if test='groupField == "year"'>
+               JOIN(SELECT TO_CHAR(add_months(SYSDATE,-12*(level-1)),'YYYY') year  FROM DUAL connect by level &lt; =4) b on to_char(t.bills_date, 'yyyy') = b.year
+          </if>
+     </sql>
+    <sql id="commonFields">
+         <if test="groupField=='day'">to_char(t.bills_date,'yyyy-mm-dd') as billsDate,</if>
+         <if test="groupField=='week'">date2 || '  --  ' || date1 	as billsDate,</if>
+         <if test="groupField=='month'">month as billsDate,</if>
+         <if test="groupField=='season'">season as billsDate,</if>
+         <if test="groupField=='year'">year as billsDate,</if>
+    </sql>
+     <!-- 销售走势主页零售部分代码 -->
+     <sql id="retail">
+          SELECT
+          <include refid="commonFields"/>
+          DECODE(TG.IF_MANAGE_IMEI, '0',T1.GOODS_NUMBER,
+          JXC_ALL_PCK.CHECK_DIVIDE(T1.GOODS_NUMBER,ABS(T1.GOODS_NUMBER)))AS GOODSQUANTITY,
+          NVL(T1.AMOUNT, 0)			                                         AS GOODSAMOUNT,
+          NVL(T1.AMOUNT, 0) - NVL(T1.AMTCOST, 0)				             AS GOODSPROFITAMOUNT
+          FROM I_RETAIL T
+          JOIN I_RETAIL_DETAIL T1 ON T1.RETAIL_ID = T.ID
+          LEFT JOIN T_EMPLOYEE TE ON TE.ID =T.SALESMAN_ID
+          <include refid="commonTables"/>
+          WHERE T.BILLS_STATUS=6
+          <include refid="queryCondition"/>
+     </sql>
+
+     <!-- 销售走势主页批发部分代码 -->
+     <sql id="sales">
+          SELECT        <include refid="commonFields"/>
+          T1.GOODS_NUMBER                                     AS GOODSQUANTITY,
+          NVL(T1.DISCOUNTED_AMOUNT,0)                         AS GOODSAMOUNT,
+          NVL(T1.DISCOUNTED_AMOUNT,0) - NVL(T1.COST_PRICE,0) AS GOODSPROFITAMOUNT
+          FROM I_SALES_MAIN T
+          JOIN I_SALES_OUTSTRORAGE_NUM T1 ON T.ID=T1.BILLS_MAIN_ID
+          LEFT JOIN T_EMPLOYEE         TE ON T.MANAGERS_UID=TE.ID
+          <include refid="commonTables"/>
+          WHERE  T.BILLS_TYPE IN ('19','20')
+          AND T.BILLS_STATUS=6
+          <include refid="queryCondition"/>
+          UNION ALL
+          SELECT         <include refid="commonFields"/>
+          -T1.GOODS_NUMBER                                        AS GOODSQUANTITY,
+          -NVL(T1.DISCOUNTED_AMOUNT,0)                           AS GOODSAMOUNT,
+          -(NVL(T1.DISCOUNTED_AMOUNT,0) - NVL(T1.COST_PRICE,0)) AS GOODSPROFITAMOUNT
+          FROM I_SALES_MAIN T
+          JOIN I_SALES_INSTRORAGE_NUM T1 ON T.ID=T1.BILLS_MAIN_ID
+          LEFT JOIN T_EMPLOYEE         TE ON T.MANAGERS_UID=TE.ID
+          <include refid="commonTables"/>
+          WHERE  T.BILLS_TYPE IN ('21','20')
+          AND T.BILLS_STATUS=6
+          <include refid="queryCondition"/>
+     </sql>
+     <!-- 核心sql -->
+     <sql id="codeSqlAndQueryCondition">
+          SELECT billsDate,SUM(GOODSQUANTITY)AS GOODSQUANTITY,SUM(GOODSAMOUNT) AS GOODSAMOUNT,SUM(GOODSPROFITAMOUNT)GOODSPROFITAMOUNT
+               FROM(
+                    <if test="NULL==salesType">
+                         <include refid="retail"/>
+                         UNION ALL
+                         <include refid="sales"/>
+                    </if>
+                    <if test="salesType==1"><include refid="retail"/></if>
+                    <if test="salesType==2"><include refid="sales"/></if>
+               )
+          GROUP BY billsDate
+          ORDER BY billsDate
+     </sql>
+<!-- 获取销售走势主页分页集合 -->
+<select id="getDataList" resultType="com.phone.erp.boss.vo.sales.SalesTrendVo">
+     SELECT billsDate
+     <choose>
+          <when test="rankingGist=='goodsQuantity'">
+               ,GOODSQUANTITY
+          </when>
+          <otherwise>
+               <if test="rankingGist=='goodsAmount'">
+                    ,
+                    TO_CHAR(ROUND(GOODSAMOUNT)AS GOODSAMOUNT
+               </if>
+               <if test="canSeeAmount==1">
+                    <if test="rankingGist=='goodsProfitAmount'">
+                         ,
+                         TO_CHAR(GOODSPROFITAMOUNT)AS GOODSPROFITAMOUNT
+                    </if>
+               </if>
+          </otherwise>
+     </choose>
+     FROM(
+     <include refid="codeSqlAndQueryCondition"/>
+     )
+</select>
+
+</mapper>

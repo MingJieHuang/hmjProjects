@@ -1,6 +1,6 @@
 server:
   port: 8802
-  
+
 # 项目链接前缀
 project:
   url:
@@ -9,7 +9,7 @@ project:
 # 开发者模式相关配置
 dev:
   model:
-    enable: true
+    enable: false
     groupId: 826
     companyId: 762
     sectionId: 1167
@@ -50,7 +50,7 @@ mybatis:
 # 分页插件相关配置
 pagehelper:
   helperDialect: oracle
-  reasonable: true
+  # reasonable 参数是否合理化处理 ftue
+  reasonable: false
   supportMethodsArguments: true
   params: count=countSql
-  

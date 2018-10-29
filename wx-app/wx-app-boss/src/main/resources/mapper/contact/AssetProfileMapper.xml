@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.contact.AssetProfileMapper">
+<!-- 资产概要 -->
+     <!-- 核心sql -->
+     	<sql id="codeSqlAndQueryCondition">
+               WITH BASE_TAB AS(
+               <!-- 应收,应付,预收,预付 -->
+                     SELECT
+                         CASE T.PAY_TYPE
+                               WHEN 4 THEN 'a_receivableAmount'
+                               WHEN 3 THEN 'b_payableAmount'
+                               WHEN 2 THEN 'c_preReceivment'
+                               WHEN 1 THEN 'd_prePayment'
+                              END NAME,
+                        CASE
+                                WHEN T.PAY_TYPE IN (4,2) THEN NVL(T.AMOUNT * T.RATIO,0)
+                                WHEN T.PAY_TYPE IN (1,3) THEN -NVL(T.AMOUNT * T.RATIO,0)
+                              END GOODSAMOUNT
+                        FROM I_CASH_ACCOUNT_MAIN T
+                          WHERE T.COMPANY_ID IN (${companyIds})
+               <!-- 资金 -->
+               UNION ALL
+                       SELECT
+                               'e_qtAmount'                        AS      NAME,
+                               DECODE(T.RATIO, 1, T1.PAYRECEIPT_AMOUT, 0) - DECODE(T.RATIO, -1, T1.PAYRECEIPT_AMOUT, 0) AS GOODSAMOUNT
+                        FROM I_PAYRECEIPT_MAIN T
+                             JOIN I_PAYRECEIPT_DETAIL T1 ON T.ID =  T1.PAYRECEIPT_MAIL_ID
+                             JOIN T_COMPANY TC ON T.COMPANY_ID = TC.ID
+                             JOIN T_PUBLICTABS TP ON T.TYPE = TP.CODE AND TP.TYPE_CODE = 'SFKLX'
+                             JOIN T_PUBLICTABS TP1 ON TP.CONTENT_3 = TP1.CODE AND TP1.TYPE_CODE = 'DJLX'
+                             JOIN T_PUBLICTABS TP2 ON TP2.CODE=T1.ACCOUNT_TYPE AND TP2.TYPE_CODE='ZJZHLX'
+                             JOIN T_ACCOUNT TA ON T1.ACCOUNT_ID=TA.ID AND  TA.STATUS=0
+                        WHERE T.BILLS_STATUS =6
+                            AND T.COMPANY_ID IN (${companyIds})
+               <!-- 库存金额 -->
+               UNION ALL
+                       SELECT
+                               'f_kcAmount'                        AS      NAME,
+                               T.AMOUNT                          AS    GOODSAMOUNT
+                          FROM I_STOCK_NUM T
+                       WHERE T.COMPANY_ID IN (${companyIds})
+               UNION ALL
+               <!-- 在途金额 -->
+                      SELECT
+                               'f_kcAmount'                        AS      NAME,
+                               T1.COST_PRICE                       AS    GOODSAMOUNT
+                          FROM I_BILLS_MAIN T
+                            JOIN I_OUTSTRORAGE_OTHERS_NUM T1 ON T1.BILLS_MAIN_ID = T.ID
+                        WHERE T.BILLS_TYPE IN (7,8)
+                           AND T.BILLS_STATUS IN (8)
+                           AND T.COMPANY_ID IN (${companyIds})
+               ),GROUP_TAB AS (
+                 SELECT NAME,SUM(GOODSAMOUNT) GOODSAMOUNT FROM BASE_TAB GROUP BY NAME ORDER BY NAME
+               ),TOTAL_TAB AS (
+                  SELECT ROUND(SUM (GOODSAMOUNT),2)TOTALAMOUNT FROM BASE_TAB
+            ),T AS(
+                 SELECT GROUP_TAB.NAME,GROUP_TAB.GOODSAMOUNT,TOTAL_TAB.TOTALAMOUNT FROM GROUP_TAB,TOTAL_TAB
+               )
+     	</sql>
+<!-- 获取资产概要主页数据 -->
+<select id="getDataList" resultType="com.phone.erp.boss.vo.contact.AssetProfileVo">
+     <include refid="codeSqlAndQueryCondition"/>
+     SELECT NAME,ROUND(GOODSAMOUNT,2)GOODSAMOUNT,
+          TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(ROUND(GOODSAMOUNT,2),TOTALAMOUNT)*100,2),'fm99999990.00') AS GOODSAMOUNTRATIO
+        FROM T
+</select>
+
+     <!-- 获取资产总额 -->
+     <select id="getTotalVo" resultType="com.phone.erp.boss.vo.contact.AssetProfileVo">
+          <include refid="codeSqlAndQueryCondition"/>
+          SELECT TOTALAMOUNT AS GOODSAMOUNT FROM TOTAL_TAB
+     </select>
+
+</mapper>

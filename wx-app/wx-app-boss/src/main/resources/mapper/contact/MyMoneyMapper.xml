@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 我的资金 -->
+<mapper namespace="com.phone.erp.boss.mapper.contact.MyMoneyMapper">
+    <!-- 公共查询条件 -->
+    	<sql id="queryCondition">
+                  <if test="null!=accountTypeId">
+                      AND TP0.ID =#{accountTypeId}
+                  </if>
+            <if test="null!=keyWord">
+               AND(UPPER(TAC.CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TAC.NAME) LIKE UPPER('%${keyWord}%'))
+            </if>
+                      AND T.COMPANY_ID IN(${companyIds})
+                      AND T.SECTION_ID IN(${sectionIds})
+    	</sql>
+    <!-- 核心sql -->
+    	<sql id="codeSqlAndQueryCondition">
+            SELECT ID,CODE,NAME,ACCOUNTTYPE,
+                SUM(TODAYINCOMEAMOUNT)TODAYINCOMEAMOUNT,SUM(TODAYPAYAMOUNT)TODAYPAYAMOUNT,(SUM(TODAYINCOMEAMOUNT)-SUM(TODAYPAYAMOUNT))BALANCE
+                FROM (
+                    SELECT
+                        TAC.ID               AS ID,
+                        TAC.CODE             AS CODE,
+                        TAC.NAME             AS NAME,
+                        TP0.CONTENT_1        AS ACCOUNTTYPE,
+                        TO_NUMBER(T.AMOUNT)  AS TODAYINCOMEAMOUNT,
+                        0                    AS TODAYPAYAMOUNT
+                    FROM I_CASH_DETAIL_DRAFTBEG T
+                        JOIN T_ACCOUNT TAC ON T.ACCOUNT_ID=TAC.ID
+                        JOIN T_PUBLICTABS TP0 ON TAC.ACCOUN_TYPE_CODE=TP0.CODE AND TP0.TYPE_CODE='ZJZHLX'
+                        JOIN T_COMPANY TC ON T.COMPANY_ID=TC.ID
+                        JOIN T_SECTION TS ON T.SECTION_ID=TS.ID
+                    WHERE t.DATEBEG = to_date(#{startDate},'YYYY-MM-DD')
+                        <include refid="queryCondition"/>
+                UNION ALL
+                    SELECT
+                        TAC.ID                                 AS ID,
+                        TAC.CODE                               AS CODE,
+                        TAC.NAME                               AS NAME,
+                        TP0.CONTENT_1                          AS ACCOUNTTYPE,
+                        DECODE(T.RATIO, 1, PAYRECEIPT_AMOUT, 0)AS TODAYINCOMEAMOUNT,
+                        DECODE(T.RATIO, -1, PAYRECEIPT_AMOUT, 0)AS TODAYPAYAMOUNT
+                    FROM I_PAYRECEIPT_MAIN T
+                        JOIN I_PAYRECEIPT_DETAIL T1 ON T.ID = T1.PAYRECEIPT_MAIL_ID
+                        JOIN T_ACCOUNT TAC ON T1.ACCOUNT_ID = TAC.ID
+                        JOIN T_PUBLICTABS TP0 ON TAC.ACCOUN_TYPE_CODE = TP0.CODE AND TP0.TYPE_CODE = 'ZJZHLX'
+                        JOIN T_COMPANY TC ON T.COMPANY_ID = TC.ID
+                        JOIN T_SECTION TS ON T.SECTION_ID = TS.ID
+                    WHERE T.BILLS_DATE=to_date(#{startDate},'YYYY-MM-DD')
+                          AND T.BILLS_STATUS =6
+                        <include refid="queryCondition"/>
+                )
+                GROUP BY ID,CODE,NAME,ACCOUNTTYPE
+                ORDER BY NAME
+
+
+
+
+    	</sql>
+    <!-- 我的资金获取主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.contact.MyMoneyVo">
+        <include refid="codeSqlAndQueryCondition"/>
+    </select>
+    <!-- 我的资金获取主页总计行对象 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.contact.MyMoneyVo">
+         SELECT SUM (BALANCE) BALANCE
+              FROM (
+                  <include refid="codeSqlAndQueryCondition"/>
+              )
+    </select>
+    
+</mapper>

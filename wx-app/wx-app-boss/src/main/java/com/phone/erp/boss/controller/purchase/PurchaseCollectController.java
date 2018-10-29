@@ -24,20 +24,11 @@ import com.phone.erp.boss.vo.common.BossQueryVo;
 @RequestMapping("${project.url.prefix}/report/purchase/purchaseCollect")
 public class PurchaseCollectController extends ReportBaseController {
 	@Autowired
-	private PurchaseCollectService PurchaseCollectService; 
+	private PurchaseCollectService PurchaseCollectService;
 	/**
 	 * 获取采购汇总主页数据
 	 * @author hmj
-	 * @param CompanySectionParam 公司部门参数
-	 * @param keyWord 模糊(商品,类别,型号,品牌,条码)查询
-	 * @param page 当前页码
-	 * @param pageSize 每页最大显示数
-	 * @param goodsClassId 商品一级分类id
-	 * @param supplierId 供应商id
-	 * @param groupField 分组字段 切换 按商品,按部门,按供应商 时分别传goodsName,sectionName,supplierName
-	 * @param menuCode 报表菜单码
-	 * @param startDate 查询起始时间
-	 * @param endDate 查询截止时间
+	 * @param queryVo
 	 * @version [版本,2018-7-16]
 	 * @throws Exception 
 	 */
@@ -58,13 +49,7 @@ public class PurchaseCollectController extends ReportBaseController {
 	/**
 	 * 获取采购汇总总计行数据
 	 * @author hmj
-	 * @param CompanySectionParam 公司部门参数
-	 * @param keyWord 模糊(商品,类别,型号,品牌,条码)查询
-	 * @param goodsClassId 商品一级分类id
-	 * @param supplierId 供应商id
-	 * @param menuCode 报表菜单码
-	 * @param startDate 查询起始时间
-	 * @param endDate 查询截止时间
+	 * @param queryVo
 	 * @version [版本,2018-7-16]
 	 * @throws Exception 
 	 */
