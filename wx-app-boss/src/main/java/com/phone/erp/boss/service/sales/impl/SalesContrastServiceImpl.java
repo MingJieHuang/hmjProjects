@@ -46,12 +46,18 @@ public class SalesContrastServiceImpl extends ReportBaseServiceImpl<SalesContras
         try {
             //查询date1 ,并设置date
             SalesContrastVo salesContrastVo1 = mapper.getDataList(paramMap).get(0);
+            if (null == salesContrastVo1){
+                salesContrastVo1 = new SalesContrastVo();
+            }
             salesContrastVo1.setBillsDate(queryVo.getStartDate()+" 至 "+queryVo.getEndDate());
             dataList.add(salesContrastVo1);
             //设置data2.并查询
             paramMap.put("startDate",queryVo.getStartDate2());
             paramMap.put("endDate",queryVo.getEndDate2());
             SalesContrastVo salesContrastVo2 = mapper.getDataList(paramMap).get(0);
+            if (null == salesContrastVo2){
+                salesContrastVo2 = new SalesContrastVo();
+            }
             salesContrastVo2.setBillsDate(queryVo.getStartDate2()+" 至 "+queryVo.getEndDate2());
             dataList.add(salesContrastVo2);
             result.put("dataList",dataList);
