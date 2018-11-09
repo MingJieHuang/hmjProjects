@@ -141,7 +141,7 @@
           <otherwise>
                <if test="rankingGist=='goodsAmount'">
                     ,
-                    TO_CHAR(ROUND(GOODSAMOUNT)AS GOODSAMOUNT
+                    TO_CHAR(GOODSAMOUNT)AS GOODSAMOUNT
                </if>
                <if test="canSeeAmount==1">
                     <if test="rankingGist=='goodsProfitAmount'">

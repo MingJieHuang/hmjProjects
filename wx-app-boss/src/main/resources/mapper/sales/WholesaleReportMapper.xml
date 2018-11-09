@@ -38,7 +38,7 @@
     <!-- 公共字段 -->
     <sql id="commonFields">
         <if test="groupField=='customerName'">
-           TCU.ID AS ID,TCU.CODE AS CODE,TCU.NAM AS NAME,
+           TCU.ID AS ID,TCU.CODE AS CODE,TCU.NAME AS NAME,
         </if>
         <if test="groupField=='salesManName'">
            TE.ID AS ID,TE.CODE AS CODE,TE.NAME AS NAME,

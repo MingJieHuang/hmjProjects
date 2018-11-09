@@ -31,7 +31,7 @@ public class SalesTrendController extends ReportBaseController {
     @AuthValidate
     @RequestMapping("/getDataList")
     @ResponseBody
-    public Result getPageData(BossQueryVo queryVo) throws Exception{
+    public Result getDataList(BossQueryVo queryVo) throws Exception{
         Assert.notNull(queryVo.getRankingGist(), "排行依据参数不能为空!!");
         Assert.notNull(queryVo.getGroupField(), "分组参数不能为空!!");
         setCurrentEmp(queryVo);

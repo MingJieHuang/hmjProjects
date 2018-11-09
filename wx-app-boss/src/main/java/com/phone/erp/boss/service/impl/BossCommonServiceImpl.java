@@ -369,7 +369,7 @@ public class BossCommonServiceImpl implements BossCommonService {
             throws Exception {
         List<BossSectionVo> sectionList = new ArrayList<BossSectionVo>();
         List<BossCompanyVo> companyList = new ArrayList<BossCompanyVo>();
-        if (StringUtils.isBlank(companySectionParam)) {// 传的是全部
+        if (StringUtils.isBlank(companySectionParam) ||"undefined".equals(companySectionParam)) {// 传的是全部
             companyList = getMenuCodeCompanyList(employeeVo, menuCode);
             if (CollectionUtils.isNotEmpty(companyList)) {
                 for (BossCompanyVo bossCompanyVo : companyList) {
