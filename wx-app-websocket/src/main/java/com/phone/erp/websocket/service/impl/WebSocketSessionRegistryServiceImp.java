@@ -68,7 +68,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 forceOffLinePreviousLogin(webSocketUser, onlineUserSet);
             }
         } catch (Exception e) {
-            logger.error("注册websocket用户" + webSocketUser + "时出现异常", e);
+            logger.error(String.format("注册websocket用户【%s】时出现异常【%s】!", webSocketUser, e.getMessage()));
         }
     }
 
@@ -90,6 +90,10 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
 
     @Override
     public void removeWebSocketUser(WebSocketUser webSocketUser) {
+        if (webSocketUser == null) {
+            logger.info("被移除的websocket用户为空!");
+            return;
+        }
         try {
             String onlineUserKey = String.format("[%s-%s]", webSocketUser.getClient().getCode(), webSocketUser.getUserId());
             synchronized (WebSocketUser.class) {
@@ -111,7 +115,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 }
             }
         } catch (Exception e) {
-            logger.error("移除websocket用户" + webSocketUser + "时出现异常", e);
+            logger.error(String.format("移除websocket用户【%s】时出现异常【%s】!", webSocketUser, e.getMessage()));
         }
     }
 
@@ -202,7 +206,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 }
             }
         } catch (Exception e) {
-            logger.error("处理客户端消息出现异常!", e);
+            logger.error(String.format("处理客户端消息【%s】出现异常【%s】!", messageVo, e.getMessage()));
             sendedResult.setErrorMsg(e.getMessage());
         }
         return sendedResult;
@@ -230,7 +234,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 }
             }
         } catch (Exception e) {
-            logger.error("系统自动踢出过期用户中出现异常!", e);
+            logger.error(String.format("系统自动踢出过期用户中出现异常【%s】!", e.getMessage()));
             sendedResult.setErrorMsg(e.getMessage());
         }
         return sendedResult;
