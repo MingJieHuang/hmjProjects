@@ -3,6 +3,7 @@ package com.phone.erp.websocket.service.impl;
 import com.phone.erp.base.Constants;
 import com.phone.erp.base.utils.Assert;
 import com.phone.erp.base.vo.employee.EmployeeVo;
+import com.phone.erp.websocket.common.WebsocketConstants;
 import com.phone.erp.websocket.enums.Action;
 import com.phone.erp.websocket.enums.Client;
 import com.phone.erp.websocket.service.LoginService;
@@ -48,13 +49,13 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
     /**
      * [存储在线用户信息]
      */
-    private final ConcurrentMap<String, Set<OnlineUserVo>> onlineUserMap = new ConcurrentHashMap<String, Set<OnlineUserVo>>();
+    private ConcurrentMap<String, Set<OnlineUserVo>> onlineUserMap = new ConcurrentHashMap<String, Set<OnlineUserVo>>();
 
     @Override
     public void registerWebSocketUser(WebSocketUser webSocketUser) {
         try {
             String onlineUserKey = String.format("[%s-%s]", webSocketUser.getClient().getCode(), webSocketUser.getUserId());
-            synchronized (onlineUserKey) {
+            synchronized (WebSocketUser.class) {
                 Set<OnlineUserVo> onlineUserSet = onlineUserMap.get(onlineUserKey);
                 if (CollectionUtils.isEmpty(onlineUserSet)) {
                     onlineUserSet = new HashSet<OnlineUserVo>();
@@ -67,7 +68,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 forceOffLinePreviousLogin(webSocketUser, onlineUserSet);
             }
         } catch (Exception e) {
-            logger.error("注册websocket用户时出现异常", e);
+            logger.error(String.format("注册websocket用户【%s】时出现异常【%s】!", webSocketUser, e.getMessage()));
         }
     }
 
@@ -89,14 +90,18 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
 
     @Override
     public void removeWebSocketUser(WebSocketUser webSocketUser) {
+        if (webSocketUser == null) {
+            logger.info("被移除的websocket用户为空!");
+            return;
+        }
         try {
             String onlineUserKey = String.format("[%s-%s]", webSocketUser.getClient().getCode(), webSocketUser.getUserId());
-            synchronized (onlineUserKey) {
+            synchronized (WebSocketUser.class) {
                 Set<OnlineUserVo> onlineUserSet = onlineUserMap.get(onlineUserKey);
                 if (CollectionUtils.isNotEmpty(onlineUserSet)) {
                     // 用户信息存在,移除当前用户信息
                     for (Iterator<OnlineUserVo> iterator = onlineUserSet.iterator(); iterator.hasNext(); ) {
-                        OnlineUserVo onlineUserVo = (OnlineUserVo) iterator.next();
+                        OnlineUserVo onlineUserVo = iterator.next();
                         if (webSocketUser.getName().equals(onlineUserVo.getClientName())) {
                             logger.info(String.format("从在线用户集合中移除%s...", onlineUserVo.getClientName()));
                             iterator.remove();
@@ -110,7 +115,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 }
             }
         } catch (Exception e) {
-            logger.error("移出websocket用户时出现异常", e);
+            logger.error(String.format("移除websocket用户【%s】时出现异常【%s】!", webSocketUser, e.getMessage()));
         }
     }
 
@@ -124,7 +129,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 Assert.isLong(messageVo.getParam(), String.format("{employeeId}参数[%s]不合法,必须是Long!", messageVo.getParam()));
                 // 获取匹配的在线用户
                 String matchedUserKey = String.format("[%s-%s]", webSocketUser.getClient().getCode(), messageVo.getParam());
-                synchronized (matchedUserKey) {
+                synchronized (WebSocketUser.class) {
                     Set<OnlineUserVo> onlineUserSet = onlineUserMap.get(matchedUserKey);
                     if (CollectionUtils.isNotEmpty(onlineUserSet)) {
                         for (OnlineUserVo onlineUserVo : onlineUserSet) {
@@ -145,7 +150,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 for (EmployeeVo employeeVo : employeeVoList) {
                     // 遍历每个在线员工,踢下线
                     String matchedUserKey = String.format("[%s-%s]", webSocketUser.getClient().getCode(), employeeVo.getId().toString());
-                    synchronized (matchedUserKey) {
+                    synchronized (WebSocketUser.class) {
                         Set<OnlineUserVo> onlineUserSet = onlineUserMap.get(matchedUserKey);
                         if (CollectionUtils.isNotEmpty(onlineUserSet)) {
                             for (OnlineUserVo onlineUserVo : onlineUserSet) {
@@ -160,9 +165,10 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
             } else if (messageVo.getCommand().equalsIgnoreCase(Action.BIND_LOGIN_COMPUTER.getCode())) {
                 // 绑定用户登录的电脑
                 Assert.notBlank(messageVo.getParam(), "{computerCode}参数不允许为空!");
+                Assert.isFalse(WebsocketConstants.ABERRANT_COMPUTER_ID.equals(messageVo.getParam()), String.format("电脑编号[%s]存在异常!", messageVo.getParam()));
                 // 获取匹配的在线用户
                 String matchedUserKey = String.format("[%s-%s]", webSocketUser.getClient().getCode(), webSocketUser.getUserId());
-                synchronized (matchedUserKey) {
+                synchronized (WebSocketUser.class) {
                     Set<OnlineUserVo> onlineUserSet = onlineUserMap.get(matchedUserKey);
                     if (CollectionUtils.isNotEmpty(onlineUserSet)) {
                         for (OnlineUserVo onlineUserVo : onlineUserSet) {
@@ -178,8 +184,9 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 Assert.notBlank(messageVo.getParam(), "[打印]参数不允许为空!");
                 ParamMessageVo paramMessageVo = JsonUtil.jsonToBean(messageVo.getParam(), ParamMessageVo.class);
                 Assert.notBlank(paramMessageVo.getComputerCode(), "[打印]参数中{computerCode}参数不允许为空!");
+                Assert.isFalse(WebsocketConstants.ABERRANT_COMPUTER_ID.equals(messageVo.getParam()), String.format("电脑编号[%s]存在异常!", messageVo.getParam()));
                 // 遍历所有在线用户,检查其登录的电脑编号,如果匹配到需要打印的电脑编号,则给该用户发送打印零售单据消息
-                synchronized (paramMessageVo.getComputerCode()) {
+                synchronized (WebSocketUser.class) {
                     for (String userKey : onlineUserMap.keySet()) {
                         Set<OnlineUserVo> onlineUserSet = onlineUserMap.get(userKey);
                         if (CollectionUtils.isNotEmpty(onlineUserSet)) {
@@ -191,6 +198,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                                             JsonUtil.beanToJson(new MessageVo(Action.PRINT_RETAIL_ORDER.getCode(), JsonUtil
                                                     .beanToJsonAll(paramMessageVo))));
                                     sendedResult.addSendedCount();
+                                    return sendedResult;
                                 }
                             }
                         }
@@ -198,7 +206,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 }
             }
         } catch (Exception e) {
-            logger.error("处理客户端消息出现异常!", e);
+            logger.error(String.format("处理客户端消息【%s】出现异常【%s】!", messageVo, e.getMessage()));
             sendedResult.setErrorMsg(e.getMessage());
         }
         return sendedResult;
@@ -213,7 +221,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
             for (EmployeeVo employeeVo : employeeVoList) {
                 // 遍历每个过期的在线员工,踢下线
                 String matchedUserKey = String.format("[%s-%s]", client.getCode(), employeeVo.getId().toString());
-                synchronized (matchedUserKey) {
+                synchronized (WebSocketUser.class) {
                     Set<OnlineUserVo> onlineUserSet = onlineUserMap.get(matchedUserKey);
                     if (CollectionUtils.isNotEmpty(onlineUserSet)) {
                         for (OnlineUserVo onlineUserVo : onlineUserSet) {
@@ -226,7 +234,7 @@ public class WebSocketSessionRegistryServiceImp implements WebSocketSessionRegis
                 }
             }
         } catch (Exception e) {
-            logger.error("系统自动踢出过期用户中出现异常!", e);
+            logger.error(String.format("系统自动踢出过期用户中出现异常【%s】!", e.getMessage()));
             sendedResult.setErrorMsg(e.getMessage());
         }
         return sendedResult;
