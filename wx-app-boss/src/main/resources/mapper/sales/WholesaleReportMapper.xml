@@ -3,7 +3,7 @@
 <mapper namespace="com.phone.erp.boss.mapper.sales.WholesaleReportMapper">
 
 <!-- 批发战报 -->
-    <!-- 毛利战报公共查询条件 -->
+    <!-- 批发战报公共查询条件 -->
     <sql id="queryCondition">
         AND T.GROUP_ID = #{groupId}
         <if test="null!=startDate">
@@ -87,7 +87,7 @@
         SELECT ID,CODE,NAME,SUM(GOODSQUANTITY)AS GOODSQUANTITY,SUM(GOODSAMOUNT)AS GOODSAMOUNT
         <if test="canSeeAmount==1">  ,
             TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
-            TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSAVGPROFITAMOUNT
+            TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), ABS(SUM(GOODSQUANTITY))),2))AS GOODSAVGPROFITAMOUNT
         </if>
             FROM(
                    <include refid="codeSqlAndQueryCondition"/>
@@ -101,7 +101,7 @@
         SELECT SUM(GOODSQUANTITY)AS GOODSQUANTITY,SUM(GOODSAMOUNT)AS GOODSAMOUNT
         <if test="canSeeAmount==1">  ,
             TO_CHAR(SUM(GOODSPROFITAMOUNT))AS GOODSPROFITAMOUNT,
-            TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSAVGPROFITAMOUNT
+            TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSPROFITAMOUNT), ABS(SUM(GOODSQUANTITY))),2))AS GOODSAVGPROFITAMOUNT
         </if>
         FROM(
             <include refid="codeSqlAndQueryCondition"/>
