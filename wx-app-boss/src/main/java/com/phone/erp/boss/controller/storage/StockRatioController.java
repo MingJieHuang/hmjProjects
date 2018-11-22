@@ -41,7 +41,7 @@ public class StockRatioController extends ReportBaseController {
         queryVo.setMenuCode("BOSS_KCZB");//设置菜单码
         queryVo.setDestStr("获取库存占比主页分页数据");
         //这里设置断言和特殊查询参数,设置当前日期
-        queryVo.setStartDate(BossReportUtil.getCurDate());
+        queryVo.setStartDate(BossReportUtil.getCurDate(null));
         Assert.notNull(queryVo.getGroupField(),"分组字段参数不为空!");
         Assert.notNull(queryVo.getOrderField(),"排序字段参数不为空!");
         Result result = new Result();

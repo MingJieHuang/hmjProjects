@@ -5,10 +5,10 @@ import com.phone.erp.base.annotation.AuthValidate;
 import com.phone.erp.base.controller.BaseController;
 import com.phone.erp.base.enums.ErrorCode;
 import com.phone.erp.base.utils.Assert;
-import com.phone.erp.base.vo.company.CompanyVo;
 import com.phone.erp.base.vo.employee.LoginEmployeeVo;
 import com.phone.erp.boss.service.BossCommonService;
 import com.phone.erp.boss.util.BossReportUtil;
+import com.phone.erp.boss.util.RedisUtil;
 import com.phone.erp.boss.vo.common.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +30,8 @@ import java.util.List;
 @RequestMapping("${project.url.prefix}/common")
 public class BossCommonController extends BaseController {
 
+	@Autowired
+	private RedisUtil redisUtil;
 	@Autowired
 	private BossCommonService bossCommonService;
 	/**

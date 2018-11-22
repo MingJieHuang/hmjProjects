@@ -70,7 +70,7 @@ public class BossCommonServiceImpl implements BossCommonService {
     /**
      * 获取商品品牌集合(分页)
      *
-     * @param keyWord  模糊查询
+     * @param keyWord 模糊查询
      * @author hmj
      * @version [版本, 2018-7-10]
      */
@@ -135,22 +135,23 @@ public class BossCommonServiceImpl implements BossCommonService {
     /**
      * [获取运营商名称集合]
      *
+     * @param queryVo
      * @author hmj
      * @version [版本, 2018-8-22]
-     * @param queryVo
      */
     @Override
     public List<BossConditionVo> getOperatorList(BossQueryVo queryVo) throws Exception {
         //如果keyWord非空设置参数
-        Map<String,Object> map = map = new HashMap<String, Object>();
-        if (StringUtils.isNotBlank(queryVo.getKeyWord())){
-            map.put("keyWord",queryVo.getKeyWord());
+        Map<String, Object> map = map = new HashMap<String, Object>();
+        if (StringUtils.isNotBlank(queryVo.getKeyWord())) {
+            map.put("keyWord", queryVo.getKeyWord());
         }
         return bossCommonMapper.getOperatorList(map);
     }
 
     /**
      * 获取运营商单位集合
+     *
      * @param queryVo
      * @return
      */
@@ -162,6 +163,7 @@ public class BossCommonServiceImpl implements BossCommonService {
 
     /**
      * 获取运营商业务名称集合
+     *
      * @param queryVo
      * @return
      * @throws Exception
@@ -171,50 +173,60 @@ public class BossCommonServiceImpl implements BossCommonService {
         Map<String, Object> map = getConditionMap(queryVo, false);
         return bossCommonMapper.getOperatorNameList(map);
     }
+
     /**
      * 获取抵扣单位集合
+     *
      * @author hmj
-     * @version [版本,2018-8-28]
+     * @version [版本, 2018-8-28]
      */
     @Override
     public List<BossConditionVo> getDeductionUnitsList(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,false);
+        Map<String, Object> map = getConditionMap(queryVo, false);
         return bossCommonMapper.getDeductionUnitsList(map);
     }
+
     /**
      * 获取抵扣活动集合
+     *
      * @author hmj
-     * @version [版本,2018-8-28]
+     * @version [版本, 2018-8-28]
      */
     @Override
     public List<BossConditionVo> getActivityNamesList(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,false);
+        Map<String, Object> map = getConditionMap(queryVo, false);
         return bossCommonMapper.getActivityNamesList(map);
     }
+
     /**
      * 获取分期商名称集合
+     *
      * @author hmj
-     * @version [版本,2018-8-28]
+     * @version [版本, 2018-8-28]
      */
     @Override
     public List<BossConditionVo> getInstallmentfeesList(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,false);
+        Map<String, Object> map = getConditionMap(queryVo, false);
         return bossCommonMapper.getInstallmentfeesList(map);
     }
+
     /**
      * 获取分期业务名称集合
+     *
      * @author hmj
-     * @version [版本,2018-8-28]
+     * @version [版本, 2018-8-28]
      */
     @Override
     public List<InstallmentBusinessVo> getInstallmentBusinessList(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,false);
+        Map<String, Object> map = getConditionMap(queryVo, false);
         return bossCommonMapper.getInstallmentBusinessList(map);
     }
+
     /**
      * 获取资金账户类型集合
+     *
      * @author hmj
-     * @version [版本,2018-8-30]
+     * @version [版本, 2018-8-30]
      */
     @Override
     public List<BossConditionVo> getAccountTypeList() throws Exception {
@@ -223,20 +235,22 @@ public class BossCommonServiceImpl implements BossCommonService {
 
     @Override
     public List<BossCompanyVo> getCompanyList(LoginEmployeeVo employeeVo, String menuCode) {
-        Map<String,Object> map =new HashMap<String, Object>();
-        map.put("employeeId",employeeVo.getId());
-        map.put("menuCode",menuCode);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("employeeId", employeeVo.getId());
+        map.put("menuCode", menuCode);
         return bossCommonMapper.getMenuCodeCompanyList(map);
     }
+
     /**
      * 获取增值服务名称集合
-     * @author hmj
-     * @version [版本,2018-9-11]
+     *
      * @param queryVo
+     * @author hmj
+     * @version [版本, 2018-9-11]
      */
     @Override
     public List<BossConditionVo> getAddValueServiceNameList(BossQueryVo queryVo) throws Exception {
-        Map<String, Object> map = getConditionMap(queryVo,false);
+        Map<String, Object> map = getConditionMap(queryVo, false);
         return bossCommonMapper.getAddValueServiceNameList(map);
     }
 
@@ -244,28 +258,30 @@ public class BossCommonServiceImpl implements BossCommonService {
     /********************************** BOSS公共组件区 END *********************************************/
     /**
      * 获取报表组件查询map
+     *
      * @param queryVo
      * @param isQueryPage 是否分页
      * @return
      * @throws Exception
      */
-    private Map<String, Object> getConditionMap(BossQueryVo queryVo,Boolean isQueryPage) throws Exception {
+    private Map<String, Object> getConditionMap(BossQueryVo queryVo, Boolean isQueryPage) throws Exception {
         List<BossCompanyVo> menuCodeCompanyList = getMenuCodeCompanyList(queryVo.getEmployeeVo(), queryVo.getMenuCode());
-        Map<String,Object> map = new HashMap<String, Object>();
-        if (CollectionUtils.isNotEmpty(menuCodeCompanyList)){
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (CollectionUtils.isNotEmpty(menuCodeCompanyList)) {
             map.put("companyIds", BossReportUtil.getFieldStr(menuCodeCompanyList, "id"));
         }
-        if (StringUtils.isNotBlank(queryVo.getKeyWord())){
-            map.put("keyWord",queryVo.getKeyWord());
+        if (StringUtils.isNotBlank(queryVo.getKeyWord())) {
+            map.put("keyWord", queryVo.getKeyWord());
         }
-        if (isQueryPage){
+        if (isQueryPage) {
             //设置分页参数
             Integer page = queryVo.getPage();
             Integer pageSize = queryVo.getPageSize();
-            PageHelper.startPage(page==null?1:page,pageSize==null?20:pageSize);
+            PageHelper.startPage(page == null ? 1 : page, pageSize == null ? 20 : pageSize);
         }
         return map;
     }
+
     /**
      * [获取报表权限]
      *
@@ -369,7 +385,7 @@ public class BossCommonServiceImpl implements BossCommonService {
             throws Exception {
         List<BossSectionVo> sectionList = new ArrayList<BossSectionVo>();
         List<BossCompanyVo> companyList = new ArrayList<BossCompanyVo>();
-        if (StringUtils.isBlank(companySectionParam) ||"undefined".equals(companySectionParam)) {// 传的是全部
+        if (StringUtils.isBlank(companySectionParam) || "undefined".equals(companySectionParam)) {// 传的是全部
             companyList = getMenuCodeCompanyList(employeeVo, menuCode);
             if (CollectionUtils.isNotEmpty(companyList)) {
                 for (BossCompanyVo bossCompanyVo : companyList) {
@@ -402,7 +418,9 @@ public class BossCommonServiceImpl implements BossCommonService {
         }
         // 最后判断部门集合不为空就存SectionIds,否则存员工部门id
         if (CollectionUtils.isNotEmpty(sectionList)) {
-            map.put("sectionIds", BossReportUtil.getFieldStr(sectionList, "id"));
+            String sectionIds = BossReportUtil.getFieldStr(sectionList, "id");
+            map.put("sectionIds", sectionIds);
+            //map.put("sectionIdsArray", sectionIds.split(","));
         } else {
             map.put("sectionIds", employeeVo.getSectionId().toString());
         }
@@ -411,6 +429,7 @@ public class BossCommonServiceImpl implements BossCommonService {
 
     /**
      * 给部门加路径
+     *
      * @author hmj
      * @version [版本, 2018-7-12]
      */
@@ -451,6 +470,7 @@ public class BossCommonServiceImpl implements BossCommonService {
 
     /**
      * 报表查询先验证访问权限和查看成本价权限
+     *
      * @author hmj
      * @version [版本, 2018-7-12]
      */
@@ -466,6 +486,7 @@ public class BossCommonServiceImpl implements BossCommonService {
 
     /**
      * 加工查询参数
+     *
      * @throws Exception
      * @author hmj
      * @version [版本, 2018-7-12]
@@ -503,7 +524,7 @@ public class BossCommonServiceImpl implements BossCommonService {
         }
         // 设置模糊查询关键字参数
         if (StringUtils.isNotBlank(queryVo.getKeyWord())) {
-            map.put("keyWord", queryVo.getKeyWord());
+            map.put("keyWord",queryVo.getKeyWord());
         }
         // 设置是否公开库存量参数
         if (null != queryVo.getKcFalg() && queryVo.getKcFalg()) {
@@ -550,57 +571,59 @@ public class BossCommonServiceImpl implements BossCommonService {
             map.put("imeiId", queryVo.getImeiId());
         }
         //设置运营商名称ID参数
-        if (null!= queryVo.getOperatorId()){
-            map.put("operatorId",queryVo.getOperatorId());
+        if (null != queryVo.getOperatorId()) {
+            map.put("operatorId", queryVo.getOperatorId());
         }
         //设置运营商单位ID参数
-        if (null!= queryVo.getOperatorUnitId()){
-            map.put("operatorUnitId",queryVo.getOperatorUnitId());
+        if (null != queryVo.getOperatorUnitId()) {
+            map.put("operatorUnitId", queryVo.getOperatorUnitId());
         }
         //设置运营商业务ID参数
-        if (null!= queryVo.getOperatorNameId()){
-            map.put("operatorNameId",queryVo.getOperatorNameId());
+        if (null != queryVo.getOperatorNameId()) {
+            map.put("operatorNameId", queryVo.getOperatorNameId());
         }
         //设置分期商ID参数
-        if (null!= queryVo.getInstallmentfeesId()){
-            map.put("installmentfeesId",queryVo.getInstallmentfeesId());
+        if (null != queryVo.getInstallmentfeesId()) {
+            map.put("installmentfeesId", queryVo.getInstallmentfeesId());
         }
         //设置分期业务ID参数
-        if (null!= queryVo.getInstallmentBusinessId()){
-            map.put("installmentBusinessId",queryVo.getInstallmentBusinessId());
+        if (null != queryVo.getInstallmentBusinessId()) {
+            map.put("installmentBusinessId", queryVo.getInstallmentBusinessId());
         }
         //设置资金账户类型ID参数
-        if (null!= queryVo.getAccountTypeId()){
-            map.put("accountTypeId",queryVo.getAccountTypeId());
+        if (null != queryVo.getAccountTypeId()) {
+            map.put("accountTypeId", queryVo.getAccountTypeId());
         }
         //设置排行依据参数
-        if (StringUtils.isNotBlank(queryVo.getRankingGist())){
-            map.put("rankingGist",queryVo.getRankingGist());
+        if (StringUtils.isNotBlank(queryVo.getRankingGist())) {
+            map.put("rankingGist", queryVo.getRankingGist());
         }
         //设置排序字段参数
-        if (StringUtils.isNotBlank(queryVo.getOrderField())){
-            map.put("orderField",queryVo.getOrderField());
+        if (StringUtils.isNotBlank(queryVo.getOrderField())) {
+            map.put("orderField", queryVo.getOrderField());
         }
         //设置库龄天数参数
-        if (null!=queryVo.getStockAge()){
-            map.put("stockAge",queryVo.getStockAge());
+        if (null != queryVo.getStockAge()) {
+            map.put("stockAge", queryVo.getStockAge());
         }
         //设置第三方抵扣单位id参数
-        if (null!=queryVo.getDeductionUnitsId()){
-            map.put("deductionUnitsId",queryVo.getDeductionUnitsId());
+        if (null != queryVo.getDeductionUnitsId()) {
+            map.put("deductionUnitsId", queryVo.getDeductionUnitsId());
         }
         //设置第三方抵扣活动id参数
-        if (null!=queryVo.getActivityNamesId()){
-            map.put("activityNamesId",queryVo.getActivityNamesId());
+        if (null != queryVo.getActivityNamesId()) {
+            map.put("activityNamesId", queryVo.getActivityNamesId());
         }
         //设置增值服务id参数
-        if (null!=queryVo.getServiceId()){
-            map.put("serviceId",queryVo.getServiceId());
+        if (null != queryVo.getServiceId()) {
+            map.put("serviceId", queryVo.getServiceId());
         }
         //设置查询调拨类型参数
-        if (null!=queryVo.getAllotType()){
-            map.put("allotType",queryVo.getAllotType());
+        if (null != queryVo.getAllotType()) {
+            map.put("allotType", queryVo.getAllotType());
         }
+        //设置报表的redis缓存的key 格式为:员工id_menuCode_currentTime
+           // map.put("rpDataRedisKey",BossReportUtil.getRpDataRedisKey(queryVo));
         return map;
     }
 

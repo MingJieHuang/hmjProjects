@@ -1,7 +1,9 @@
 package com.phone.erp.boss.util;
 
 import com.phone.erp.base.Result;
+import com.phone.erp.boss.vo.common.BossQueryVo;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,11 +29,23 @@ public class BossReportUtil {
 	 */
     /**
      * 获取当前服务器日期 yyyy-mm-dd
+     * 时间的格式:YYYY/MM/dd HH:mm:ss
      */
-    public static String getCurDate(){
+    public static String getCurDate(String timeFormat){
+        timeFormat= StringUtils.isBlank(timeFormat)?"yyyy-MM-dd":timeFormat;
         Calendar cale = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat(timeFormat);
         return format.format(cale.getTime());
+    }
+
+    /**
+     * 获取rpDataRedisKey
+     */
+    public static String getRpDataRedisKey(BossQueryVo queryVo){
+        StringBuffer sb = new StringBuffer();
+        String rpDataRedisKey = sb.append(queryVo.getEmployeeVo().getId()).append("_").
+                append(queryVo.getMenuCode()).append("_").append(getCurDate("YYYY/MM/dd HH:mm:ss")).toString();
+        return rpDataRedisKey;
     }
     /**
      * 拼接一个集合中对象的某一个字段,已逗号分隔,如:获取公司ids

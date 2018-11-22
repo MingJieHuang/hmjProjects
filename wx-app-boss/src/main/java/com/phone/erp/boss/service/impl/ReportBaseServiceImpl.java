@@ -3,6 +3,9 @@ package com.phone.erp.boss.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.phone.erp.boss.util.RedisUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,8 @@ public class ReportBaseServiceImpl<T,D extends ReportBaseMapper> implements Repo
 	public void setMapper(D mapper) {
 		this.mapper = mapper;
 	}
+	@Autowired
+	private RedisUtil redisUtil;
 	/**
 	 * [获取主页分页集合]
 	 * @author HMJ
@@ -39,6 +44,7 @@ public class ReportBaseServiceImpl<T,D extends ReportBaseMapper> implements Repo
 	public Result getPageData(BossQueryVo queryVo, Map<String, Object> paramMap, Result result) throws Exception {
 		String descStr = queryVo.getDestStr();
 		try {
+
 			//设置分页参数
 			PageHelper.startPage(queryVo.getPage(), queryVo.getPageSize());
 			Page<T> pageInfo =mapper.getPageData(paramMap);
