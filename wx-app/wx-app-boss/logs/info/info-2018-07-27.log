@@ -1,0 +1,23 @@
+2018-07-27 09:19:17.898 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 6988 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 09:19:17.908 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 09:19:22.714 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.325 seconds (JVM running for 5.72)
+2018-07-27 13:36:22.997 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 6784 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 13:36:23.002 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 13:36:27.991 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.481 seconds (JVM running for 5.897)
+2018-07-27 14:05:07.866 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 6964 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 14:05:07.870 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 14:05:12.463 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.058 seconds (JVM running for 5.473)
+2018-07-27 14:14:13.291 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 5520 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 14:14:13.296 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 14:14:18.191 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.38 seconds (JVM running for 5.809)
+2018-07-27 15:04:45.721 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 8112 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 15:04:45.725 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 15:05:28.985 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 5468 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 15:05:28.990 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 15:05:33.586 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.055 seconds (JVM running for 5.472)
+2018-07-27 15:10:39.565 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 7532 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 15:10:39.570 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 15:10:44.250 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.144 seconds (JVM running for 5.557)
+2018-07-27 17:25:35.963 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarting - Starting BossApplication on HMJ with PID 8864 (F:\workspaces\trunk\wx-app\wx-app-boss\target\classes started by wxm in F:\workspaces\trunk\wx-app\wx-app-boss)
+2018-07-27 17:25:35.971 logback [main] INFO  com.phone.erp.boss.BossApplication.logStartupProfileInfo - No active profile set, falling back to default profiles: default
+2018-07-27 17:25:40.764 logback [main] INFO  com.phone.erp.boss.BossApplication.logStarted - Started BossApplication in 5.28 seconds (JVM running for 5.773)

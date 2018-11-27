@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.retail.ValueAddedReportMapper">
+<!-- 增值服务战报 -->
+    <!-- 公共查询条件 -->
+    	<sql id="queryCondition">
+            where T.GROUP_ID =#{groupId}
+                AND R.BILLS_STATUS =6
+            <if test="null!=startDate">
+                AND R.BILLS_DATE &gt;= to_date(#{startDate},'YYYY-MM-DD')
+            </if>
+            <if test="null!=endDate">
+                AND R.BILLS_DATE &lt;= to_date(#{endDate},'YYYY-MM-DD')
+            </if>
+            <if test="null!=serviceId">
+                AND MAS.ID=#{serviceId}
+            </if>
+            <if test="null!=keyWord">
+                <if test="groupField=='sectionName'">AND(UPPER(TS.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TS.CODE) LIKE UPPER('%${keyWord}%'))</if>
+                <if test="groupField=='salesManName'">AND(UPPER(TE.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TE.CODE) LIKE UPPER('%${keyWord}%'))</if>
+                <if test="groupField=='serviceName'">AND UPPER(MAS.SERVICE_NAME) LIKE UPPER('%${keyWord}%')</if>
+            </if>
+            AND R.COMPANY_ID IN(${companyIds})
+            AND R.SECTION_ID IN(${sectionIds})
+    	</sql>
+    <sql id="commonFields">
+        <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
+        <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMANCODE AS CODE,SALESMANNAME AS NAME</if>
+        <if test="groupField=='serviceName'">SERVICEID AS ID,SERVICENAME AS NAME </if>
+    </sql>
+    <!-- 汇总字段 -->
+    <sql id="groups">
+        <if test="groupField=='sectionName'">ID,CODE,NAME</if>
+        <if test="groupField=='salesManName'">ID,CODE,NAME</if>
+        <if test="groupField=='serviceName'">ID,NAME</if>
+    </sql>
+    <!-- 核心sql -->
+    	<sql id="codeSqlAndQueryCondition">
+                SELECT DISTINCT T.ID,
+                    TS.ID                          AS SECTIONID,
+                    TS.NAME                        AS SECTIONNAME,
+                    TS.CODE                        AS SECTIONCODE,
+                    TE.ID                          AS SALESMANID,
+                    TE.NAME                        AS SALESMANNAME,
+                    TE.CODE                        AS SALESMANCODE,
+                    MAS.ID                          AS SERVICEID,
+                    MAS.SERVICE_NAME               AS SERVICENAME,
+                    DECODE(R.BILLS_TYPE,45,1,-1)   AS GOODSQUANTITY,
+                    T.SERVICE_AMOUNT               AS GOODSAMOUNT
+                FROM I_RETAIL_SERVICE T
+                    JOIN M_ADD_SERVICE MAS ON T.SERVICE_ID = MAS.ID
+                    JOIN I_RETAIL R ON T.RETAIL_ID = R.ID
+                    LEFT JOIN I_RETAIL_DETAIL T1 ON R.ID = T1.RETAIL_ID
+                    LEFT JOIN T_EMPLOYEE TE ON T.SALESMAN1 = TE.ID
+                    LEFT JOIN I_STORAGE IST ON T1.STORAGE_ID = IST.ID
+                    LEFT JOIN T_COMPANY TC ON R.COMPANY_ID = TC.ID
+                    LEFT JOIN T_SECTION TS ON R.SECTION_ID = TS.ID
+    	         <include refid="queryCondition"/>
+    	</sql>
+    <!-- 获取增值服务战报主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.ValueAddedReportVo">
+        SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY,
+                TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSPRICE,
+                TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
+            FROM(
+                SELECT <include refid="commonFields"/>,GOODSQUANTITY,GOODSAMOUNT
+                    FROM (
+                      <include refid="codeSqlAndQueryCondition"/>
+                    )
+            )
+            GROUP BY <include refid="groups"/>
+            ORDER BY <include refid="groups"/>
+    </select>
+
+    <!-- 获取增值服务战报主页总计行对象 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.retail.ValueAddedReportVo">
+        SELECT SUM (GOODSQUANTITY)GOODSQUANTITY ,
+            TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(GOODSAMOUNT), SUM(GOODSQUANTITY)),2))AS GOODSPRICE,
+            TO_CHAR(SUM(GOODSAMOUNT))AS GOODSAMOUNT
+        FROM ( <include refid="codeSqlAndQueryCondition"/>)
+    </select>
+</mapper>

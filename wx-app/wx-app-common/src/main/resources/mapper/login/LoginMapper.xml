@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.common.mapper.login.LoginMapper">
+    <!-- 通过账号获取登录账号信息 -->
+    <select id="getLoginEmployeeVoByUserName" resultType="com.phone.erp.base.vo.employee.LoginEmployeeVo">
+		SELECT E.ID,
+		       E.CODE,
+		       E.NAME,
+		       E.PASSWD 		AS password,
+		       E.GROUP_ID 		AS groupId,
+		       G.NAME 			AS groupName,
+		       G.STATUS 		AS groupStatus,
+		       E.COMPANY_ID 	AS companyId,
+		       C.NAME 			AS companyName,
+		       C.STATUS 		AS companyStatus,
+		       E.SECTION_ID 	AS sectionId,
+		       S.NAME 			AS sectionName,
+		       E.IS_OPR 		AS operatorFlag,
+		       EE.MOBILE_NUM 	AS telephone,
+		       E.STATUS,
+		       E.REMARK
+		  FROM T_EMPLOYEE E
+		  JOIN T_GROUP G ON E.GROUP_ID = G.ID
+		  JOIN T_COMPANY C ON E.COMPANY_ID = C.ID
+	 LEFT JOIN T_SECTION S ON E.SECTION_ID = S.ID
+	 LEFT JOIN T_EMPLOYEE_EXT EE ON E.ID = EE.EMPLOYEE_ID
+		 WHERE E.LOGIN = #{userName}
+		   AND E.STATUS &lt;&gt; 2
+	</select>
+
+    <!-- 通过员工id获取可使用公司集合 -->
+    <select id="getAccessCompanyVoListByEmployeeId" resultType="com.phone.erp.base.vo.company.CompanyVo">
+		SELECT DISTINCT R.COMPANY_ID AS id,
+		                C.CODE,
+		                C.NAME,
+		                C.STATUS,
+		                C.REMARK
+		  FROM T_EMPLOYEE_ROLE R
+		  JOIN T_COMPANY C ON R.COMPANY_ID = C.ID
+		 WHERE R.EMPLOYEE_ID = #{employeeId}
+	</select>
+
+    <!-- 通过openid获取登录账号信息 -->
+    <select id="getLoginEmployeeVoByOpenid" resultType="com.phone.erp.base.vo.employee.LoginEmployeeVo">
+		SELECT E.ID,
+		       E.CODE,
+		       E.NAME,
+		       E.PASSWD 		AS password,
+		       E.GROUP_ID    	AS groupId,
+		       G.NAME 			AS groupName,
+		       G.STATUS 		AS groupStatus,
+		       E.COMPANY_ID  	AS companyId,
+		       C.NAME 			AS companyName,
+		       C.STATUS 		AS companyStatus,
+		       E.SECTION_ID 	AS sectionId,
+		       S.NAME 			AS sectionName,
+		       E.IS_OPR 		AS operatorFlag,
+		       EE.MOBILE_NUM 	AS telephone,
+		       E.STATUS,
+		       E.REMARK,
+		       W.MINI_APP_CODE	AS loginMiniAppCode
+		  FROM T_EMPLOYEE_WECHAT W
+		  JOIN T_EMPLOYEE E ON W.EMPLOYEE_ID = E.ID
+		  JOIN T_GROUP G ON E.GROUP_ID = G.ID
+		  JOIN T_COMPANY C ON E.COMPANY_ID = C.ID
+	 LEFT JOIN T_SECTION S ON E.SECTION_ID = S.ID
+	 LEFT JOIN T_EMPLOYEE_EXT EE ON E.ID = EE.EMPLOYEE_ID
+		 WHERE W.OPENID = #{openid}
+		   AND W.MINI_APP_CODE = #{loginMiniAppCode}
+	</select>
+
+    <!-- 删除微信账号与ERP员工登录信息绑定 -->
+    <delete id="deleteWechatEmployeeLogin">
+		DELETE T_EMPLOYEE_WECHAT W WHERE W.OPENID = #{openid} AND W.MINI_APP_CODE = #{loginMiniAppCode}
+	</delete>
+
+    <insert id="insertWechatEmployeeLogin">
+		INSERT INTO T_EMPLOYEE_WECHAT
+		VALUES
+		  (T_EMPLOYEE_WECHAT_SEQ.NEXTVAL,
+		   #{groupId},
+		   #{companyId},
+		   #{employeeId},
+		   #{openid},
+		   #{employeeId},
+		   SYSDATE,
+		   #{loginMiniAppCode})
+	</insert>
+</mapper>

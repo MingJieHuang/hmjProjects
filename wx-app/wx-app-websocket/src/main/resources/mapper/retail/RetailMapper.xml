@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.websocket.mapper.retail.RetailMapper">
+	
+	<!-- 通过零售单id获取零售单信息 -->
+	<select id="getRetailOrderVoById" resultType="com.phone.erp.websocket.vo.retail.RetailOrderVo">
+		SELECT R.ID,
+		       R.BILLS_CODE AS billsCode,
+		       ROUND(NVL(D.PAYRECEIPT_AMOUT * M.RATIO, 0), 2) AS unionPayAmount
+		  FROM I_RETAIL R
+	 LEFT JOIN I_PAYRECEIPT_MAIN M ON M.BILLS_ID = R.ID AND M.REF_MAIN_TABLE = 'I_RETAIL'
+	 LEFT JOIN I_PAYRECEIPT_DETAIL D ON D.PAYRECEIPT_MAIL_ID = M.ID AND D.ACCOUNT_TYPE = '8'
+		 WHERE R.ID = #{billsId}
+	</select>
+	
+	<!-- 通过零售单id获取打印参数对象 -->
+	<select id="getPrintParamVoByBillsId" resultType="com.phone.erp.websocket.vo.retail.PrintParamVo">
+		SELECT M.SECTION_ID 	AS sectionId,
+		       P.COMPUTER_CODE 	AS computerCode,
+		       P.PRINTER_INDEX 	AS printerIndex,
+		       P.PRINTER_NAME 	AS printerName,
+		       P.PAPER_TYPE 	AS paperType,
+		       P.STATUS
+		  FROM I_RETAIL M
+	 LEFT JOIN T_WECHAT_PRINT_PARAMS P ON M.SECTION_ID = P.SECTION_ID
+		 WHERE M.BILLS_TYPE = 45
+		   AND M.BILLS_STATUS = 6
+		   AND M.ID = #{billsId}
+	</select>
+</mapper>

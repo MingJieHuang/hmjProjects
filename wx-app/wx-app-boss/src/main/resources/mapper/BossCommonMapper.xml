@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phone.erp.boss.mapper.BossCommonMapper">
+<!--  BOSS公共组件区START  -->
+	<!-- 获取有报表菜单权限的公司集合 -->
+	<select id="getMenuCodeCompanyList" resultType="com.phone.erp.boss.vo.common.BossCompanyVo">
+		SELECT DISTINCT
+		T.ID,T.CODE,T.NAME,T.ID AS COMPANYID
+		FROM T_COMPANY T
+		JOIN T_AUTH_COMPANY_MENU_REF CMR ON T.ID = CMR.COMPANY_ID
+		JOIN T_AUTH_MENU M ON M.MODULE_CODE = CMR.MODULE_CODE
+		JOIN T_AUTH_MENU_FUN_TEMPLATE MFT ON M.CODE = MFT.MENU_CODE
+		JOIN T_AUTH_ROLE_FUN_REF RFR ON MFT.AUTH_CODE = RFR.AUTH_CODE AND
+		RFR.COMPANY_ID = CMR.COMPANY_ID
+		JOIN T_EMPLOYEE_ROLE ER ON RFR.ROLE_ID = ER.ROLE_ID AND ER.COMPANY_ID=T.ID
+		AND ER.EMPLOYEE_ID = #{employeeId}
+		WHERE M.STATUS = 0
+		AND M.IS_NAV = 0
+		AND M.ENV_TYPE = 'APP_BOSS' AND M.MODULE_CODE='YS_BOSS' AND M.CODE
+		=#{menuCode}	
+	 </select>
+
+	<!-- 获取商品类别树集合 -->
+	<select id="getGoodsClassVoList" resultType="com.phone.erp.boss.vo.common.GoodsClassVo">
+		SELECT C.ID,C.NAME,C.CODE,C.REMARK
+		   FROM T_GOODSCLASS C
+		WHERE C.GROUP_ID = #{groupId}
+		    AND C.STATUS = 0
+		<if test="onlyQueryOneLevelGoodsclass!=null">
+			AND C.PARENT_ID = -1
+		</if>
+		START WITH C.PARENT_ID = -1
+		CONNECT BY PRIOR C.ID = C.PARENT_ID
+	</select>
+	
+	<!-- 获取商品品牌集合 -->
+	<select id="getGoodsBrandList" resultType="com.phone.erp.boss.vo.common.GoodsBrandVo">
+		select tgb.id,tgb.code,tgb.name
+		   from t_goodsbrand tgb
+		  where tgb.group_id = #{groupId}
+				AND tgb.STATUS = 0
+			<if test="keyWord!=null">
+				and (upper(tgb.code) like upper('%${keyWord}%') or
+				upper(tgb.name) like upper('%${keyWord}%'))
+			</if>
+		order by tgb.code
+	</select>
+	
+	<!-- 获取往来单位(供应商)集合 -->
+	<select id="getContactUnits"  resultType="com.phone.erp.boss.vo.common.BossContactUnitVo">
+		    SELECT TCU.ID      AS ID,
+		           TCU.CODE    AS CODE,
+		           TCU.NAME    AS NAME,
+		           TUC.NAME    AS CONTACTUNITCLASSNAME,
+		           TC.NAME     AS COMPANYNAME,
+		           TA.NAME     AS AREANAME,
+		           TCU.LINKMAN AS LINKMAN,
+		           TCU.CONTACT AS TELEPHONE
+		    FROM T_CONTACT_UNIT TCU
+		       JOIN T_COMPANY TC ON TCU.COMPANY_ID = TC.ID
+				    AND TC.ID IN (
+				    SELECT DISTINCT (T.COMPANY_ID) AS ID
+				      FROM T_EMPLOYEE_ROLE T
+				      JOIN T_COMPANY TC ON T.COMPANY_ID = TC.ID
+				     WHERE T.EMPLOYEE_ID = #{employeeId} AND TC.STATUS = 0
+				    )
+			    LEFT JOIN T_UNIT_CLASS TUC ON TCU.TYPE_ID = TUC.ID
+			    LEFT JOIN T_AREA TA ON TCU.DISTRICT_ID = TA.ID
+		    WHERE TCU.GROUP_ID = #{groupId}
+					AND TCU.STATUS = 0
+	           <if test="companyIds!=null">
+		          AND TC.ID IN (${companyIds})
+	           </if>
+	           <if test="companyId!=null">
+	           	  AND TC.ID = #{companyId}
+	           </if>
+			    <if test="keyWord!=null">
+			      AND (UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%') 
+			      OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
+			      )
+			    </if>	
+	</select>
+
+	<!-- 运营商名称组件 -->
+	<select id="getOperatorList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT DECODE(P.CODE, '2', -2, '3', -3, -4) ID, P.CODE AS CODE, P.CONTENT_1 AS NAME FROM T_PUBLICTABS P
+			WHERE P.TYPE_CODE = 'YYS'
+				<if test="keyWord!=null">
+					AND P.CONTENT_1 LIKE UPPER('%${keyWord}%')
+				</if>
+	</select>
+	<!-- 运营商单位集合 -->
+	<select id="getOperatorUnitList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT DISTINCT TCU.ID AS ID, TCU.CODE AS CODE, TCU.NAME AS NAME
+			FROM T_BUSINESS_ARCH T
+			JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
+			WHERE T.COMPANY_ID IN (${companyIds})
+			AND TCU.STATUS = 0
+			<if test="keyWord!=null">
+				AND (UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')
+				OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
+				)
+			</if>
+		ORDER BY TCU.CODE
+
+	</select>
+    <!-- 运营商业务名称集合 -->
+    <select id="getOperatorNameList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+        SELECT C.ID              AS id,
+                C.BIZ_NAME       AS name,
+                C.BIZ_CODE       AS code,
+                C.REMARK
+          FROM T_BUSINESS_ARCH C
+         LEFT JOIN T_BUSINESS_CLASS CL ON C.BUSINESS_CLASS_ID = CL.ID
+         LEFT JOIN T_CONTACT_UNIT CU ON C.CONTACTSUNIT_ID = CU.ID
+        where C.STATUS = 0
+           AND C.COMPANY_ID in (${companyIds})
+        <if test="keyWord!=null">
+            AND (UPPER(C.BIZ_NAME) LIKE UPPER('%${keyWord}%')
+            OR UPPER( C.BIZ_CODE) LIKE UPPER('%${keyWord}%')
+            )
+        </if>
+    </select>
+    <!-- 获取抵扣单位集合 -->
+    <select id="getDeductionUnitsList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT
+			DISTINCT TCU.ID AS ID,
+			TCU.CODE         AS CODE,
+			TCU.NAME         AS NAME
+		FROM I_COUPON T
+			JOIN T_CONTACT_UNIT TCU ON T.CONTACT_UNIT_ID = TCU.ID AND T.COMPANY_ID = TCU.COMPANY_ID
+        where T.STATUS = 0
+           AND T.COMPANY_ID in (${companyIds})
+        <if test="keyWord!=null">
+            AND (UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')
+            OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
+            )
+        </if>
+		ORDER BY TCU.NAME
+    </select>
+	<!-- 获取抵扣活动集合 -->
+    <select id="getActivityNamesList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+		SELECT
+			   DISTINCT T.ID          AS ID,
+			   T.COUPON_CODE          AS CODE,
+			   T.COUPON_NAME          AS NAME,
+			   TCU.NAME                AS DEDUCTIONUNITNAME
+		FROM I_COUPON T
+		    JOIN T_CONTACT_UNIT TCU ON T.CONTACT_UNIT_ID = TCU.ID AND T.COMPANY_ID = TCU.COMPANY_ID
+		where T.STATUS = 0
+		AND T.COMPANY_ID in (${companyIds})
+		<if test="keyWord!=null">
+			AND (UPPER(T.COUPON_CODE) LIKE UPPER('%${keyWord}%')
+			OR UPPER(T.COUPON_NAME) LIKE UPPER('%${keyWord}%')
+			)
+		</if>
+		ORDER BY T.COUPON_NAME
+    </select>
+	<!-- 获取分期商名称集合 -->
+    <select id="getInstallmentfeesList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+        SELECT DISTINCT TCU.ID   AS ID,
+            TCU.CODE          AS CODE,
+            TCU.NAME          AS NAME
+        FROM T_INSTALLMENTFEE T
+           JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
+		where T.STATUS = 0
+		AND T.COMPANY_ID in (${companyIds})
+		<if test="keyWord!=null">
+			AND (UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')
+			OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%')
+			)
+		</if>
+		ORDER BY TCU.NAME
+    </select>
+	<!-- 获取分期业务名称集合 -->
+		<resultMap id="InstallmentBusiness_RM" type="com.phone.erp.boss.vo.common.InstallmentBusinessVo">
+			<id column="INSTALLMENTFEESID" property="id"/>
+			<result column="INSTALLMENTFEESCODE" property="name"/>
+			<result column="INSTALLMENTFEESNAME" property="code"/>
+			<collection property="installmentBusinessList" ofType="com.phone.erp.boss.vo.common.BossConditionVo">
+				<id column="ID" property="id"/>
+				<result column="NAME" property="name"/>
+			</collection>
+		</resultMap>
+    <select id="getInstallmentBusinessList" resultMap="InstallmentBusiness_RM">
+		SELECT DISTINCT    T.ID AS ID,
+			T.INSTAL_VALUE_CODE AS NAME,
+			TCU.ID             AS  INSTALLMENTFEESID,
+			TCU.CODE             AS  INSTALLMENTFEESCODE,
+			TCU.NAME             AS  INSTALLMENTFEESNAME
+		FROM T_INSTALLMENTFEE T
+			JOIN T_CONTACT_UNIT TCU ON T.CONTACTSUNIT_ID = TCU.ID
+		where T.STATUS = 0
+			AND T.COMPANY_ID in (${companyIds})
+			<if test="keyWord!=null">
+				AND UPPER(T.INSTAL_VALUE_CODE) LIKE UPPER('%${keyWord}%')
+			</if>
+		ORDER BY  T.INSTAL_VALUE_CODE
+    </select>
+	<!-- 获取资金账户类型集合 -->
+    <select id="getAccountTypeList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+			SELECT
+			   ID          AS ID,
+			   CODE        AS CODE,
+			   T.CONTENT_1 AS NAME
+		  FROM T_PUBLICTABS T
+		  WHERE T.TYPE_CODE = 'ZJZHLX'
+    </select>
+	<!-- 获取增值服务名称集合 -->
+    <select id="getAddValueServiceNameList" resultType="com.phone.erp.boss.vo.common.BossConditionVo">
+				SELECT DISTINCT T.ID  AS ID,
+					   T.SERVICE_NAME AS NAME
+				  FROM M_ADD_SERVICE T
+				WHERE T.COMPANY_ID IN (${companyIds})
+					  AND T.IS_STOP = 0
+				<if test="keyWord!=null">
+					AND UPPER(T.SERVICE_NAME) LIKE UPPER('%${keyWord}%')
+				</if>
+				ORDER BY T.SERVICE_NAME
+    </select>
+
+
+
+<!--  BOSS公共组件区END  -->
+
+	<!-- 获取报表权限记录数量（有权限会有一条记录，返回值为1，没有权限返回值为0） -->
+	<select id="getAuthCodeNumber" resultType="long">
+		select count(1)from T_AUTH_ROLE_FUN_REF T
+			join T_EMPLOYEE_ROLE ter on ter.role_id=t.role_id and ter.company_id=t.company_id
+			join T_AUTH_MENU_FUN_TEMPLATE ta on T.AUTH_CODE= ta.auth_code
+			join t_auth_menu tam on ta.menu_code = tam.code and tam.status = 0
+		where ter.EMPLOYEE_ID = #{employeeId}
+			and ter.company_id = #{companyId}
+			and ta.fun_code = #{fun_code}
+			and t.group_id = #{groupId}
+			and tam.code = #{menuCode}
+			and tam.module_code='YS_BOSS'
+			and tam.Env_Type='APP_BOSS'
+	</select>
+
+	<!-- 获取Boss小程序菜单集合 -->
+	<select id="getBossMenuList" resultType="com.phone.erp.boss.vo.common.BossMenuVo">
+		select t.id,t.name,t.code,t.status from t_auth_menu t
+		where t.module_code='YS_BOSS'and t.env_type='APP_BOSS'
+	</select>
+
+	<!-- 获取公司下所有有权限的部门子节点和全部父节点部门集合 -->
+	<select id="getAllUsableSections" resultType="com.phone.erp.boss.vo.common.BossSectionVo">
+		select distinct id,code,name,parent_id, sectionPath,companyId from (
+				select t.id, t.code, t.name, t.parent_id, t.parent_id || ',' || t.name sectionPath, T.COMPANY_ID AS COMPANYID
+				   from t_section t
+				  start with t.id in (select to_number(t1.value_code) id
+										from t_employee_data t1
+									   where t1.type_code = 'KSYBM'
+										 and t1.employees_id = #{employeeId}
+										 and t.COMPANY_ID = #{companyId})
+				 connect by t.id = prior t.PARENT_ID
+						and t.status = 0
+			union all
+				  select t.id, t.code, t.name, t.parent_id, t.parent_id || ',' || t.name sectionPath, T.COMPANY_ID AS COMPANYID
+				   from t_section t
+				  start with t.id in (select to_number(t1.value_code) id
+										from t_employee_data t1
+									   where t1.type_code = 'KSYBM'
+										 and t1.employees_id = #{employeeId}
+										 and t.COMPANY_ID = #{companyId})
+				 connect by t.PARENT_ID = prior t.id
+						and t.status = 0
+		)order by id
+	</select>
+	
+	<!-- 获取公司下全部部门 -->
+	<select id="getAllSectionsInConmpany" resultType="com.phone.erp.boss.vo.common.BossSectionVo">
+	select t.id 										   as id,
+		   t.name 										   as name,
+		   t.code 										   as code,
+		   t.PARENT_ID									   as pid,
+		   t.parent_id||','||t.name 					   as sectionPath,
+		   T.COMPANY_ID 								   AS COMPANYID 
+		  from t_section t 
+		  where t.COMPANY_ID = #{companyId,jdbcType=BIGINT}
+		  and t.status = 0
+	</select>
+	
+	<!-- 获取部门下所有叶子节点集合-->
+	<select id="getLeafNodeSectionList" resultType="com.phone.erp.boss.vo.common.BossSectionVo">
+		 select t.id,t.code,t.name,t.parent_id,T.COMPANY_ID AS COMPANYID 
+		  from t_section t
+		         start with t.id =#{sectionId} connect by t.parent_id = prior t.id AND t.status = 0
+	</select>
+
+</mapper>

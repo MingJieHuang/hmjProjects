@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 分期业务战报 -->
+<mapper namespace="com.phone.erp.boss.mapper.retail.InstallMentfeeMapper">
+    <!-- 公共查询条件 -->
+    	<sql id="queryCondition">
+    			 where T.GROUP_ID =#{groupId}
+                    <if test="null!=startDate">
+                        AND t.BILLS_DATE &gt;= to_date(#{startDate},'YYYY-MM-DD')
+                    </if>
+                    <if test="null!=endDate">
+                        AND t.BILLS_DATE &lt;= to_date(#{endDate},'YYYY-MM-DD')
+                    </if>
+                    <if test="null!=installmentfeesId"><!-- 分期商id -->
+                        AND tcu.id = #{installmentfeesId}
+                    </if>
+                    <if test="null!=installmentBusinessId"><!-- 分期业务id -->
+                        AND tif.id = #{installmentBusinessId}
+                    </if>
+                    <if test="null!=keyWord">
+                        <if test="groupField=='sectionName'">AND(UPPER(TS.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TS.CODE) LIKE UPPER('%${keyWord}%'))</if>
+                        <if test="groupField=='salesManName'">AND(UPPER(TE.NAME) LIKE UPPER('%${keyWord}%')OR UPPER(TE.CODE) LIKE UPPER('%${keyWord}%'))</if>
+                        <if test="groupField=='installmentBusinessName'">AND(UPPER(TIF.INSTAL_VALUE_CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%'))</if>
+                        <if test="groupField=='installmentFeesName'">AND(UPPER(TCU.CODE) LIKE UPPER('%${keyWord}%')OR UPPER(TCU.NAME) LIKE UPPER('%${keyWord}%'))</if>
+                    </if>
+    			  AND T.BILLS_STATUS =6
+                  AND T.COMPANY_ID IN(${companyIds})
+                  AND T.SECTION_ID IN(${sectionIds})
+    	</sql>
+    <sql id="commonFields">
+            <if test="groupField=='sectionName'">SECTIONID AS ID,SECTIONCODE AS CODE,SECTIONNAME AS NAME</if>
+            <if test="groupField=='salesManName'">SALESMANID AS ID,SALESMANCODE AS CODE,SALESMANNAME AS NAME</if>
+            <if test="groupField=='installmentBusinessName'">INSTALLMENTBUSINESSID AS ID,INSTALLMENTBUSINESSCODE AS CODE,INSTALLMENTBUSINESSNAME AS NAME, INSTALLMENTFEESID,INSTALLMENTFEESNAME</if>
+            <if test="groupField=='installmentFeesName'">INSTALLMENTBUSINESSNAME AS NAME</if>
+        </sql>
+        <!-- 汇总字段 -->
+        <sql id="groups">
+            <if test="groupField=='sectionName'">NAME</if>
+            <if test="groupField=='salesManName'">NAME</if>
+            <if test="groupField=='installmentBusinessName'">NAME,INSTALLMENTFEESNAME</if>
+            <if test="groupField=='installmentFeesName'">NAME</if>
+        </sql>
+    <!-- 核心sql -->
+    	<sql id="codeSqlAndQueryCondition">
+            SELECT
+                    TS.ID                  AS SECTIONID,
+                    TS.CODE                AS SECTIONCODE,
+                    TS.NAME                AS SECTIONNAME,
+                    TE.ID                  AS SALESMANID,
+                    TE.CODE                AS SALESMANCODE,
+                    TE.NAME                AS SALESMANNAME,
+                    TIF.ID                 AS INSTALLMENTFEESID,
+                    TIF.INSTAL_VALUE_CODE AS INSTALLMENTFEESNAME,
+                    TCU.ID                 AS INSTALLMENTBUSINESSID,
+                    TCU.CODE               AS INSTALLMENTBUSINESSCODE,
+                    TCU.NAME               AS INSTALLMENTBUSINESSNAME,
+                    DECODE(T.BILLS_TYPE,45,1,46,-1)AS GOODSQUANTITY,
+                    IRI.INSTALLMENT_BALANCE        AS TALLYMANLOANAMOUNT,
+                    IRI.COMMISSION_WILL            AS COMMISSIONESTIMATE
+            FROM I_RETAIL T
+                    JOIN T_COMPANY         TC ON T.COMPANY_ID = TC.ID
+                    JOIN T_SECTION         TS ON T.SECTION_ID = TS.ID
+                    JOIN I_RETAIL_INSTALL IRI ON IRI.RETAIL_ID = T.ID
+                    JOIN T_INSTALLMENTFEE TIF ON IRI.INSTALL_ID = TIF.ID
+                    JOIN T_CONTACT_UNIT   TCU ON TIF.CONTACTSUNIT_ID = TCU.ID
+                    JOIN T_EMPLOYEE        TE ON IRI.SALESMAN1 = TE.ID
+    	         <include refid="queryCondition"/>
+    	</sql>
+    <!-- 获取分期商业务战报主页分页集合 -->
+    <select id="getPageData" resultType="com.phone.erp.boss.vo.retail.InstallMentfeeVo">
+        SELECT <include refid="groups"/>,SUM(GOODSQUANTITY)AS GOODSQUANTITY,
+            TO_CHAR(SUM(TALLYMANLOANAMOUNT))AS TALLYMANLOANAMOUNT,
+            TO_CHAR(SUM(COMMISSIONESTIMATE))AS COMMISSIONESTIMATE,
+            TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE), SUM(GOODSQUANTITY)),2))AS COMMISSIONAVG
+            FROM(
+                  SELECT <include refid="commonFields"/>,GOODSQUANTITY,TALLYMANLOANAMOUNT,COMMISSIONESTIMATE
+                        FROM (
+                        <include refid="codeSqlAndQueryCondition"/>
+                        )
+            )
+        GROUP BY <include refid="groups"/>
+        ORDER BY <include refid="groups"/>
+    </select>
+
+    <!-- 获取分期商业务战报主页总计行对象 -->
+    <select id="getTotalVo" resultType="com.phone.erp.boss.vo.retail.InstallMentfeeVo">
+        SELECT SUM(GOODSQUANTITY)AS GOODSQUANTITY,
+        TO_CHAR(ROUND(JXC_ALL_PCK.CHECK_DIVIDE(SUM(COMMISSIONESTIMATE), SUM(GOODSQUANTITY)),2))AS COMMISSIONAVG,
+                SUM(TALLYMANLOANAMOUNT) AS TALLYMANLOANAMOUNT,
+                SUM(COMMISSIONESTIMATE) AS COMMISSIONESTIMATE
+            FROM (
+                <include refid="codeSqlAndQueryCondition"/>
+            )
+    </select>
+</mapper>
