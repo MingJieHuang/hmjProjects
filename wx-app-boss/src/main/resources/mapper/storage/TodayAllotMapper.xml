@@ -55,6 +55,8 @@
                 <include refid="commonTables"/>
         WHERE T.BILLS_TYPE IN ('7','8')AND T.BILLS_STATUS ='10'
               <include refid="queryCondition"/>
+               AND TS.ID IN(${sectionIds})
+               AND TS1.ID IN (SELECT T.ID FROM T_SECTION T WHERE T.COMPANY_ID IN (${companyIds}))
       UNION ALL
           <!-- 调入在途 -->
         SELECT <include refid="commonFields"/>
@@ -63,6 +65,8 @@
                 <include refid="commonTables"/>
             WHERE T.BILLS_TYPE IN ('7','8') AND T.BILLS_STATUS ='8'
                 <include refid="queryCondition"/>
+                AND TS.ID IN(${sectionIds})
+                AND TS1.ID IN (SELECT T.ID FROM T_SECTION T WHERE T.COMPANY_ID IN (${companyIds}))
     </sql>
     <!-- 调出sql片段 -->
     <sql id="allotOut">
@@ -73,11 +77,13 @@
                 <include refid="commonTables"/>
             WHERE t.bills_type IN ('7','8') AND t.bills_status in ('10','8')
                 <include refid="queryCondition"/>
+                AND TS1.ID IN(${sectionIds})
+                AND TS.ID IN (SELECT T.ID FROM T_SECTION T WHERE T.COMPANY_ID IN (${companyIds}))
     </sql>
     <!-- 核心sql -->
     	<sql id="codeSqlAndQueryCondition">
             <choose>
-                <when test="allotType==0"><include refid="allotOut"/></when>
+                <when test="allotType==1"><include refid="allotOut"/></when>
                 <otherwise><include refid="allotIn"/></otherwise>
             </choose>
     	</sql>
