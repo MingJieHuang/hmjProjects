@@ -1,5 +1,0 @@
-2018-08-04 15:48:28.036 logback [http-nio-8802-exec-2] ERROR c.p.e.b.e.h.ExceptionActionAdvice.logException - Exception ===== [File][NativeConstructorAccessorImpl.java][Method][newInstance0][Line][-2] ===== [用户未登录!].
-2018-08-04 15:48:50.491 logback [http-nio-8802-exec-4] ERROR c.p.e.b.e.h.ExceptionActionAdvice.logException - Exception ===== [File][NativeConstructorAccessorImpl.java][Method][newInstance0][Line][-2] ===== [用户未登录!].
-2018-08-04 16:38:42.951 logback [http-nio-8802-exec-1] ERROR c.p.e.b.e.h.ExceptionActionAdvice.logException - Exception ===== [File][BossCommonServiceImpl.java][Method][getBossAuthValidate][Line][168] ===== [null].
-2018-08-04 16:39:51.661 logback [http-nio-8802-exec-3] ERROR c.p.e.b.e.h.ExceptionActionAdvice.logException - Exception ===== [File][BossCommonServiceImpl.java][Method][getBossAuthValidate][Line][168] ===== [null].
-2018-08-04 16:40:51.654 logback [http-nio-8802-exec-6] ERROR c.p.e.b.e.h.ExceptionActionAdvice.logException - Exception ===== [File][BossCommonServiceImpl.java][Method][getBossAuthValidate][Line][168] ===== [null].
